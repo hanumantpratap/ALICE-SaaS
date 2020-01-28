@@ -1,88 +1,85 @@
 <?php
+
 declare(strict_types=1);
 
-namespace App\Domain\User;
+namespace Alice\VisitorManagement\Domain;
 
-use JsonSerializable;
-
-class User implements JsonSerializable
+/**
+ * The User class demonstrates how to annotate a simple
+ * PHP class to act as a Doctrine entity.
+ *
+ * @Entity()
+ * @Table(name="users")
+ */
+class User implements \JsonSerializable
 {
     /**
-     * @var int|null
+     * @var int
+     *
+     * @Id
+     * @Column(type="integer")
+     * @GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var string
+     *
+     * @Column(type="string", nullable=false, unique=true)
      */
     private $username;
 
     /**
      * @var string
+     *
+     * @Column(type="string", length=60, nullable=false)
      */
-    private $firstName;
+    private $hash;
 
     /**
-     * @var string
+     * @var \DateTimeImmutable
+     *
+     * @Column(type="datetimetz_immutable", nullable=false)
      */
-    private $lastName;
+    private $registeredAt;
 
-    /**
-     * @param int|null  $id
-     * @param string    $username
-     * @param string    $firstName
-     * @param string    $lastName
-     */
-    public function __construct(?int $id, string $username, string $firstName, string $lastName)
+    public function __construct(string $username, string $password)
     {
-        $this->id = $id;
-        $this->username = strtolower($username);
-        $this->firstName = ucfirst($firstName);
-        $this->lastName = ucfirst($lastName);
+        $this->username = $username;
+        $this->hash = password_hash($password, PASSWORD_BCRYPT);
+        $this->registeredAt = new \DateTimeImmutable('now');
     }
 
-    /**
-     * @return int|null
-     */
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @return string
-     */
-    public function getFirstName(): string
+    public function getHash(): string
     {
-        return $this->firstName;
+        return $this->hash;
+    }
+
+    public function getRegisteredAt(): \DateTimeImmutable
+    {
+        return $this->registeredAt;
     }
 
     /**
-     * @return string
-     */
-    public function getLastName(): string
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @return array
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
         return [
-            'id' => $this->id,
-            'username' => $this->username,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
+            'id' => $this->getId(),
+            'username' => $this->getUsername(),
+            'registered_at' => $this->getRegisteredAt()
+                ->format(\DateTime::ATOM)
         ];
     }
 }
