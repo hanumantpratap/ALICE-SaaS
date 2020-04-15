@@ -25,6 +25,7 @@ services:
             - POSTGRES_PASSWORD=password
             - POSTGRES_PORT=5432
             - ENV=dev
+            - LOG_TARGET=/var/www/logs/app.log
     postgres:
         image: postgres:12.1-alpine
         restart: "always"
@@ -35,15 +36,5 @@ services:
             - POSTGRES_PASSWORD=password
         networks:
             - visitor-management
-    pgadmin:
-        image: dpage/pgadmin4
-        restart: "always"
-        ports:
-            - 8081:80
-        networks:
-            - visitor-management
-        environment:
-            - PGADMIN_DEFAULT_EMAIL=test@test.com
-            - PGADMIN_DEFAULT_PASSWORD=test
 networks:
     visitor-management:

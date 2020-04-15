@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+//TODO: http://php-di.org/doc/lazy-injection.html - interesting concept of lazy injecting other container services into an object
+
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;

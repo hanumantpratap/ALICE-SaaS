@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Application\Actions\User;
+namespace App\Actions\User;
 
 use Psr\Http\Message\ResponseInterface as Response;
+use App\Actions\Action;
 
-class ListUsersAction extends UserAction
+class ListUsersAction extends Action
 {
     /**
      * {@inheritdoc}
