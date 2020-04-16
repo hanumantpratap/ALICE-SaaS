@@ -28,6 +28,11 @@ class ActionError implements JsonSerializable
     private $description;
 
     /**
+     * @var array
+     */
+    protected $fields = null;
+
+    /**
      * @param string        $type
      * @param string|null   $description
      */
@@ -74,6 +79,16 @@ class ActionError implements JsonSerializable
     }
 
     /**
+     * @param array|null $description
+     * @return self
+     */
+    public function setFields(?array $fields = null): self
+    {
+        $this->fields = $fields;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function jsonSerialize()
@@ -82,6 +97,10 @@ class ActionError implements JsonSerializable
             'type' => $this->type,
             'description' => $this->description,
         ];
+
+        if ($this->fields !== null) {
+            $payload['fields'] = $this->fields;
+        }
 
         return $payload;
     }

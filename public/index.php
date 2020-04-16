@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-define('APP_ROOT', __DIR__);
+define('APP_ROOT', realpath(__DIR__ . '/../') . '/');
 
 use App\Handlers\HttpErrorHandler;
 use App\ResponseEmitter\ResponseEmitter;
@@ -56,7 +56,7 @@ $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
 $app->addRoutingMiddleware();
 
 // Add Error Middleware
-$errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, false, false);
+$errorMiddleware = $app->addErrorMiddleware($displayErrorDetails, true, true);
 $errorMiddleware->setDefaultErrorHandler($errorHandler);
 
 // Run App & Emit Response

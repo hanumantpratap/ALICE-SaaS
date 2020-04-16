@@ -7,6 +7,8 @@ use App\Actions\ActionError;
 use App\Actions\ActionPayload;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
+use App\Exceptions\AppException;
+use App\Exceptions\BadRequestException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpException;
 use Slim\Exception\HttpForbiddenException;
@@ -30,8 +32,18 @@ class HttpErrorHandler extends SlimErrorHandler
             ActionError::SERVER_ERROR,
             'An internal error has occurred while processing your request.'
         );
-
-        if ($exception instanceof HttpException) {
+	
+        // Custom Exceptions
+        if ($exception instanceof AppException) {
+            $statusCode = $exception->getStatusCode();
+            $error->setDescription($exception->getMessage());
+            $error->setType($exception->getType());
+            
+            if ($exception instanceof BadRequestException) {
+                $error->setFields($exception->getFields());
+            }
+        }
+        else if ($exception instanceof HttpException) {
             $statusCode = $exception->getCode();
             $error->setDescription($exception->getMessage());
 
@@ -49,8 +61,7 @@ class HttpErrorHandler extends SlimErrorHandler
                 $error->setType(ActionError::NOT_IMPLEMENTED);
             }
         }
-
-        if (
+         else if (
             !($exception instanceof HttpException)
             && ($exception instanceof Exception || $exception instanceof Throwable)
             && $this->displayErrorDetails

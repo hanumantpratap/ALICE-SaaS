@@ -26,5 +26,9 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
+
+        'Foo' => function (ContainerInterface $c) {
+            return 'Hello World';
+        },
     ]);
 };
