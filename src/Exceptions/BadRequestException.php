@@ -28,10 +28,10 @@ class BadRequestException extends AppException
         parent::__construct($this->message, $this->statusCode, null);
     }
 
-    /**
-     * @return array
+     /**
+     * @return array|null
      */
-    public function getFields(): array
+    public function getFields()
     {
         return $this->fields;
     }

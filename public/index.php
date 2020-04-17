@@ -7,6 +7,7 @@ use App\ResponseEmitter\ResponseEmitter;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
+use Psr\Log\LoggerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -48,9 +49,11 @@ $displayErrorDetails = $container->get('settings')['displayErrorDetails'];
 $serverRequestCreator = ServerRequestCreatorFactory::create();
 $request = $serverRequestCreator->createServerRequestFromGlobals();
 
+$logger = $container->get(LoggerInterface::class);
+
 // Create Error Handler
 $responseFactory = $app->getResponseFactory();
-$errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
+$errorHandler = new HttpErrorHandler($callableResolver, $responseFactory, $logger);
 
 // Add Routing Middleware
 $app->addRoutingMiddleware();

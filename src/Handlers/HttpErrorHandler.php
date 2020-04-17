@@ -6,6 +6,7 @@ namespace App\Handlers;
 use App\Actions\ActionError;
 use App\Actions\ActionPayload;
 use Exception;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Exceptions\AppException;
 use App\Exceptions\BadRequestException;
@@ -17,10 +18,18 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 use Slim\Exception\HttpUnauthorizedException;
 use Slim\Handlers\ErrorHandler as SlimErrorHandler;
+use Slim\Interfaces\CallableResolverInterface;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 class HttpErrorHandler extends SlimErrorHandler
 {
+    public function __construct(CallableResolverInterface $callableResolver, ResponseFactoryInterface $responseFactory, LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+        parent::__construct($callableResolver, $responseFactory);
+    }
+
     /**
      * @inheritdoc
      */
@@ -76,5 +85,11 @@ class HttpErrorHandler extends SlimErrorHandler
         $response->getBody()->write($encodedPayload);
 
         return $response->withHeader('Content-Type', 'application/json');
+    }
+
+    protected function logError(string $error): void
+    {
+        error_log($error);
+        $this->logger->error($error);
     }
 }
