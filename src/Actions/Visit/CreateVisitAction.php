@@ -9,7 +9,24 @@ use App\Actions\Action;
 class CreateVisitAction extends Action
 {
     /**
-     * {@inheritdoc}
+     * @OA\Post(
+     *     path="/visits",
+     *     tags={"visits"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Create Visitor",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             example={"id": 10, "name": "Jessica Smith"}
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             example={"name": "Jessica Smith"}
+     *         )
+     *     )
+     * )
      */
     protected function action(): Response
     {

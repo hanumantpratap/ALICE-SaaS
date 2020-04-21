@@ -13,6 +13,9 @@ use Psr\Log\LoggerInterface;
 
 
 use App\Classes\DatabaseConnection;
+use App\Classes\RedisConnector;
+use App\Classes\TokenProcessor;
+
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
         'Logger' => function (ContainerInterface $c) {
@@ -38,8 +41,16 @@ return function (ContainerBuilder $containerBuilder) {
             return $db;
         },
         DatabaseConnection::class => DI\get('CoreDB'),
-        'Foo' => function (ContainerInterface $c) {
-            return 'Hello World';
+
+        RedisConnector::class => function (ContainerInterface $c) {
+            $config = $c->get('settings')['redis'];
+            $redis = new RedisConnector(null, $config, $logger);
+            return $redis;
         },
+
+        TokenProcessor::class => function (ContainerInterface $c, RedisConnector $redis) {
+            return new TokenProcessor($redis);
+        },
+
     ]);
 };

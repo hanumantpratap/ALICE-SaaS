@@ -38,4 +38,8 @@ return function (App $app) {
         $group->get('', ListUsersAction::class);
         $group->get('/{id}', ViewUserAction::class);
     });
+
+    $app->group('/dev', function (Group $group) {
+        $group->get('/generate-docs', \App\Actions\Dev\GenerateOpenAPIDocs::class);
+    });
 };
