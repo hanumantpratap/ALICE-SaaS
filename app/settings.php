@@ -28,6 +28,13 @@ return function (ContainerBuilder $containerBuilder) {
                         'user' => $_ENV['POSTGRES_USER'],
                         'password' => $_ENV['POSTGRES_PASSWORD']
                     ]
+                ],
+                'database' => [
+                    'host' => $_ENV['POSTGRES_HOST'] ?? 'localhost',
+                    'port' => $_ENV['POSTGRES_PORT'] ?? 3306,
+                    'dbname' => $_ENV['POSTGRES_DB'],
+                    'user' => $_ENV['POSTGRES_USER'],
+                    'password' => $_ENV['POSTGRES_PASSWORD']
                 ]
             ],
         ]

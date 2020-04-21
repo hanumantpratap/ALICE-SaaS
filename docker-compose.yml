@@ -7,6 +7,7 @@ volumes:
 services:
     slim:
         image: php:7-alpine
+        build: .
         working_dir: /var/www
         command: sh -c "php vendor/bin/doctrine orm:schema-tool:update && php -S 0.0.0.0:8080 -t public"
         environment:
@@ -19,20 +20,20 @@ services:
             - visitor-management
         environment:
             - POSTGRES_HOST=localhost
-            - POSTGRES_DB=visitor_management
-            - POSTGRES_USER=user
-            - POSTGRES_PASSWORD=password
-            - POSTGRES_PORT=5432
+            - POSTGRES_DB=navigate_5235
+            - POSTGRES_USER=lauren
+            - POSTGRES_PASSWORD=goFish49!zp9
+            - POSTGRES_PORT=5434
             - ENV=dev
             - LOG_TARGET=/var/www/logs/app.log
     postgres:
         image: postgres:12.1-alpine
         restart: "always"
         ports:
-            - 5432:5432
+            - 5434
         environment:
-            - POSTGRES_USER=user
-            - POSTGRES_PASSWORD=password
+            - POSTGRES_USER=lauren
+            - POSTGRES_PASSWORD=goFish49!zp9
         networks:
             - visitor-management
 networks:

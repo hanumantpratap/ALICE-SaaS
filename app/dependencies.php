@@ -5,15 +5,17 @@ declare(strict_types=1);
 // http://php-di.org/doc/php-definitions.html#autowired-objects
 
 use DI\ContainerBuilder;
+use Psr\Container\ContainerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
+
+use App\Classes\DatabaseConnection;
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
-        LoggerInterface::class => function (ContainerInterface $c) {
+        'Logger' => function (ContainerInterface $c) {
             $settings = $c->get('settings');
 
             $loggerSettings = $settings['logger'];
@@ -27,7 +29,15 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
+        LoggerInterface::class => DI\get('Logger'),
 
+        'CoreDB' => function (ContainerInterface $c, LoggerInterface $logger) {
+            $config = $c->get('settings')['database'];
+            $logger->info('config', $config);
+            $db = new DatabaseConnection(null, $config, $logger);
+            return $db;
+        },
+        DatabaseConnection::class => DI\get('CoreDB'),
         'Foo' => function (ContainerInterface $c) {
             return 'Hello World';
         },

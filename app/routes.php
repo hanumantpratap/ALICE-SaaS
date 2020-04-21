@@ -21,6 +21,10 @@ return function (App $app) {
         return $response;
     });
 
+    $app->get('/php-info', function (Request $request, Response $response) {        
+        return phpinfo();
+    });
+
     //$app->post('/sign-in', SignInAction::class);
     //$app->post('/district-select', DistrictSelectAction::class);
 
