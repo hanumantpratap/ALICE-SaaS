@@ -40,6 +40,11 @@ return function (App $app) {
     });
 
     $app->group('/dev', function (Group $group) {
+        $group->group('/examples', function (Group $group) {
+            $group->get('/database-fetch', \App\Actions\Dev\Examples\DatabaseFetchAction::class);
+            $group->get('/database-fetchall', \App\Actions\Dev\Examples\DatabaseFetchAllAction::class);
+        });
+
         $group->get('/generate-docs', \App\Actions\Dev\GenerateOpenAPIDocs::class);
     });
 };
