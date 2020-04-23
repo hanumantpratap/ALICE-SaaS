@@ -5,35 +5,45 @@ volumes:
         driver: local
 
 services:
-    slim:
-        image: php:7-alpine
+    visitor-management:
         build: .
-        working_dir: /var/www
-        command: sh -c "php vendor/bin/doctrine orm:schema-tool:update && php -S 0.0.0.0:8080 -t public"
         environment:
             docker: "true"
         ports:
             - 8080:8080
         volumes:
-            - .:/var/www
+            - ./app:/var/www/app
+            - ./logs:/var/www/logs
+            - ./public:/var/www/public
+            - ./src:/var/www/src
+            - ./var:/var/www/var
         networks:
             - visitor-management
         environment:
-            - POSTGRES_HOST=localhost
+            - POSTGRES_HOST=postgres-tunnel
             - POSTGRES_DB=navigate_5235
             - POSTGRES_USER=lauren
             - POSTGRES_PASSWORD=goFish49!zp9
             - POSTGRES_PORT=5434
             - ENV=dev
             - LOG_TARGET=/var/www/logs/app.log
+        depends_on:
+            - postgres
+
     postgres:
-        image: postgres:12.1-alpine
-        restart: "always"
+        image: alpine:latest
+        command:
+            - sh
+            - -c
+            - |
+                apk add putty
+                apk add openssh-client
+                puttygen /root/.ssh/key.ppk -O private-openssh -o /root/.ssh/id_rsa
+                while true; do ssh -4 -oStrictHostKeyChecking=no -nNT -L *:5432:test-innovations-v01.cm2dbdfl2yo8.us-east-2.rds.amazonaws.com:5432 ubuntu@18.224.51.91 -i /root/.ssh/id_rsa; done
         ports:
-            - 5434
-        environment:
-            - POSTGRES_USER=lauren
-            - POSTGRES_PASSWORD=goFish49!zp9
+            - 5432:5432
+        volumes:
+            - C:\Users\ScottCollier\.ssh\laureninnovations-us-east-2-test.ppk:/root/.ssh/key.ppk:ro
         networks:
             - visitor-management
 networks:
