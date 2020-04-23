@@ -1,9 +1,7 @@
 version: "3.7"
-
 volumes:
     logs:
         driver: local
-
 services:
     visitor-management:
         build: .
@@ -20,16 +18,17 @@ services:
         networks:
             - visitor-management
         environment:
-            - POSTGRES_HOST=postgres-tunnel
-            - POSTGRES_DB=navigate_5235
+            - POSTGRES_HOST=postgres
+            - POSTGRES_DB=navigate
             - POSTGRES_USER=lauren
             - POSTGRES_PASSWORD=goFish49!zp9
-            - POSTGRES_PORT=5434
+            - POSTGRES_PORT=5432
             - ENV=dev
             - LOG_TARGET=/var/www/logs/app.log
-        depends_on:
+            - REDIS_HOST=localhost
+            - REDIS_PORT=5530
+    depends_on:
             - postgres
-
     postgres:
         image: alpine:latest
         command:
@@ -43,7 +42,7 @@ services:
         ports:
             - 5432:5432
         volumes:
-            - C:\Users\ScottCollier\.ssh\laureninnovations-us-east-2-test.ppk:/root/.ssh/key.ppk:ro
+            - C:\AWS\Auth\laureninnovations-us-east-2-test.ppk:/root/.ssh/key.ppk:ro
         networks:
             - visitor-management
 networks:

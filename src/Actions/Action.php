@@ -9,6 +9,10 @@ use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
+/**
+ * @OA\Info(title="Visitor Management API", version="0.1")
+ */
+
 abstract class Action
 {
     /**

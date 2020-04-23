@@ -1,5 +1,7 @@
 <?php
 namespace App\Classes;
+use PDO;
+use PDOException;
 
 class DatabaseConnection {
     private $host;
@@ -12,7 +14,7 @@ class DatabaseConnection {
 
     function __construct($secureId = null, $config, $logger) {
         $this->host = $config['host'];
-        $this->dbName = ($secureId != null ? $config['database'] . '_' . $secureId : $config['database']);
+        $this->dbName = ($secureId != null ? $config['dbname'] . '_' . $secureId : $config['dbname']);
         $this->user = $config['user'];
         $this->password = $config['password'];
         $this->port = $config['port'];
@@ -21,9 +23,10 @@ class DatabaseConnection {
         $logger->info('constr:' . $conStr);
 
         try {
-            $this->pdo = new \PDO($conStr);
-            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        } catch (\PDOException $e) {
+            $this->pdo = new PDO($conStr);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
             throw $e;
         }
     }
@@ -33,9 +36,9 @@ class DatabaseConnection {
         try {
             if (!$args)
             {
-                return $this->query($sql);
+                return $this->pdo->query($sql);
             }
-            $stmt = $this->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
             $stmt->execute($args);
             return $stmt;
         }
