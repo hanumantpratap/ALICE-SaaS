@@ -1,4 +1,4 @@
-name: Pull Request CI
+name: CI
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 env:
   DOCKER_REGISTRY: 837238518041.dkr.ecr.us-east-2.amazonaws.com/vms/
   DOCKER_IMAGE: visitor-management-service
-  DOCKER_IMAGE_TAG: latest
+  DOCKER_IMAGE_TAG: ${{ github.sha }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
   KUBE_NAMESPACE: visitor-management
   HELM_RELEASE: visitor-management-service
@@ -19,10 +19,23 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
       - id: configure-pipeline
         name: Build configuration
         run: |
-          echo ::set-env name=KUBECONFIG::$(echo $KUBE_CONFIG_DATA | base64 --decode)
+          echo "$KUBE_CONFIG_DATA" | base64 --decode > ${GITHUB_WORKSPACE}/kubeconfig
+          echo ::set-env name=KUBECONFIG::${GITHUB_WORKSPACE}/kubeconfig
           echo ::set-env name=DOCKER_IMAGE_URL::${DOCKER_REGISTRY}${DOCKER_IMAGE}:${DOCKER_IMAGE_TAG}
 
       - id: configure-aws-credentials
@@ -43,10 +56,6 @@ jobs:
           docker build -t ${DOCKER_IMAGE_URL} .
           docker push ${DOCKER_IMAGE_URL}
 
-      - id: eks-create-namespace
-        name: Create the PR namespace
-        run: kubectl create namespace ${KUBE_NAMESPACE}
-
       - id: install-helm
         name: Install Helm
         uses: azure/setup-helm@v1
@@ -55,7 +64,7 @@ jobs:
 
       - id: helm-deploy
         name: Package & Deploy Helm chart
-        run: helm upgrade ${HELM_RELEASE} ./helm --atomic --namespace=${KUBE_NAMESPACE} --set image.tag=${DOCKER_IMAGE_TAG}
+        run: helm upgrade ${HELM_RELEASE} ./helm --install --atomic --namespace=${KUBE_NAMESPACE} --set image.tag=${DOCKER_IMAGE_TAG}
 
       - id: ecr-logout
         name: Log out of ECR

@@ -20,7 +20,8 @@ jobs:
       - id: configure-pipeline
         name: Build configuration
         run: |
-          echo ::set-env name=KUBECONFIG::$(echo $KUBE_CONFIG_DATA | base64 --decode)
+          echo "$KUBE_CONFIG_DATA" | base64 --decode > ${GITHUB_WORKSPACE}/kubeconfig
+          echo ::set-env name=KUBECONFIG::${GITHUB_WORKSPACE}/kubeconfig
 
       - id: configure-aws-credentials
         name: Configure AWS credentials
@@ -37,8 +38,8 @@ jobs:
           version: v3.0.3
 
       - id: helm-deploy
-        name: Package & Deploy Helm chart
-        run: helm delete ${HELM_RELEASE}
+        name: Uninstall Helm chart
+        run: helm uninstall -n ${KUBE_NAMESPACE} ${HELM_RELEASE}
 
       - id: eks-delete-namespace
         name: Delete the PR namespace

@@ -23,7 +23,8 @@ jobs:
       - id: configure-pipeline
         name: Build configuration
         run: |
-          echo ::set-env name=KUBECONFIG::$(echo $KUBE_CONFIG_DATA | base64 --decode)
+          echo "$KUBE_CONFIG_DATA" | base64 --decode > ${GITHUB_WORKSPACE}/kubeconfig
+          echo ::set-env name=KUBECONFIG::${GITHUB_WORKSPACE}/kubeconfig
           echo ::set-env name=DOCKER_IMAGE_URL::${DOCKER_REGISTRY}${DOCKER_IMAGE}:${DOCKER_IMAGE_TAG}
 
       - id: configure-aws-credentials
