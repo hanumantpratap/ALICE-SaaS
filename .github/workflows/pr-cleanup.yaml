@@ -1,0 +1,45 @@
+name: Pull Request CI Cleanup
+
+on:
+  pull_request:
+    branches:
+      - 'develop'
+    types: [ closed ]
+
+env:
+  KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
+  KUBE_NAMESPACE: visitor-management-service-review-${{ github.event.pull_request.number }}
+  HELM_RELEASE: visitor-management-service-review-${{ github.event.pull_request.number }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - id: configure-pipeline
+        name: Build configuration
+        run: |
+          echo ::set-env name=KUBECONFIG::$(echo $KUBE_CONFIG_DATA | base64 --decode)
+
+      - id: configure-aws-credentials
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - id: install-helm
+        name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.0.3
+
+      - id: helm-deploy
+        name: Package & Deploy Helm chart
+        run: helm delete ${HELM_RELEASE}
+
+      - id: eks-delete-namespace
+        name: Delete the PR namespace
+        run: kubectl delete namespace ${KUBE_NAMESPACE}
