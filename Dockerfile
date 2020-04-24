@@ -26,4 +26,4 @@ WORKDIR /var/www
 
 #RUN php /var/www/vendor/bin/doctrine orm:schema-tool:update
 
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public" ]
+CMD ["php", "-S", "0.0.0.0:80", "-t", "public" ]
