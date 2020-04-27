@@ -20,6 +20,17 @@ class DatabaseFetchAction extends Action
         $this->database = $database;
         $this->logger = $logger;
     }
+
+    /**
+     * @OA\Get(
+     *     path="/dev/examples/database-fetch",
+     *     tags={"dev"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="Retrieving a single record from the Database"
+     *     )
+     * )
+     */
        
     protected function action(): Response
     {
