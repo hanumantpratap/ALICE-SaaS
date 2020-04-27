@@ -36,11 +36,18 @@ return function (ContainerBuilder $containerBuilder) {
 
         'CoreDB' => function (ContainerInterface $c, LoggerInterface $logger) {
             $config = $c->get('settings')['database'];
-            $logger->info('config', $config);
-            $db = new DatabaseConnection(null, $config, $logger);
+            $db = new DatabaseConnection($config, $logger);
             return $db;
         },
         DatabaseConnection::class => DI\get('CoreDB'),
+
+        'DistrictDB' => function (ContainerInterface $c, LoggerInterface $logger) {
+            $config = $c->get('settings')['database'];
+            $secureId = $c->get('SecureId');
+            $db = new DistrictDatabaseConnection($secureId, $config, $logger);
+            return $db;
+        },
+        DistrictDatabaseConnection::class => DI\get('CoreDB'),
 
         RedisConnector::class => function (ContainerInterface $c) {
             $config = $c->get('settings')['redis'];
