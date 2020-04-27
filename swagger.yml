@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  title: Visitor Management API
+  version: "1.0"
+paths:
+  /dev/examples/database-fetch:
+    get:
+      tags:
+        - dev
+      operationId: 'App\Actions\Dev\Examples\DatabaseFetchAction::action'
+      responses:
+        '200':
+          description: Retrieving a single record from the Database
+  /dev/examples/database-fetchall:
+    get:
+      tags:
+        - dev
+      operationId: 'App\Actions\Dev\Examples\DatabaseFetchAllAction::action'
+      responses:
+        '200':
+          description: Retrieving a List of Records from the Database
+  /users:
+    get:
+      tags:
+        - users
+      operationId: 'App\Actions\User\ListUsersAction::action'
+      responses:
+        '200':
+          description: List Users
+  '/users/{userId}':
+    get:
+      tags:
+        - users
+      operationId: 'App\Actions\User\ViewUserAction::action'
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: View User
+          content:
+            application/json:
+              example:
+                statusCode: 200
+                data:
+                  id: 1
+                  name: Jessica Smith
+                  email: jsmith@email.com
+  /visits:
+    get:
+      tags:
+        - visits
+      operationId: 'App\Actions\Visit\ListVisitsAction::action'
+      parameters:
+        - name: visitor_name
+          in: query
+          description: Filter by visitor
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: View Visitor
+          content:
+            application/json:
+              example:
+                id: 10
+                visitor_name: Jessica Smith
+    post:
+      tags:
+        - visits
+      operationId: 'App\Actions\Visit\CreateVisitAction::action'
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: Jessica Smith
+      responses:
+        '200':
+          description: Create Visitor
+          content:
+            application/json:
+              example:
+                id: 10
+                name: Jessica Smith
+  '/visits/{visitId}':
+    get:
+      tags:
+        - visits
+      operationId: 'App\Actions\Visit\ViewVisitAction::action'
+      parameters:
+        - name: visitId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: View Visitor
+          content:
+            application/json:
+              example:
+                statusCode: 200
+                data:
+                  id: 1
+                  name: Jessica Smith
+                  email: jsmith@email.com

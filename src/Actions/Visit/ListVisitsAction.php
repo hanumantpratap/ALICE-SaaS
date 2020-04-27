@@ -22,7 +22,27 @@ class ListVisitsAction extends Action
     }
     
     /**
-     * {@inheritdoc}
+     * @OA\Get(
+     *     path="/visits",
+     *     tags={"visits"},
+     *     @OA\Parameter(
+     *         name="visitor_name",
+     *         in="query",
+     *         description="Filter by visitor",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *      @OA\Response(
+     *         response=200,
+     *         description="View Visitor",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             example={"id": 10, "visitor_name": "Jessica Smith"}
+     *         )
+     *     )
+     * )
      */
     protected function action(): Response
     {
