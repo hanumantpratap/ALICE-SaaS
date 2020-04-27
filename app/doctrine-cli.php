@@ -2,14 +2,14 @@
 declare(strict_types=1);
 
 // doctrine-cli.php
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use Slim\Container;
 
 /*
  *  @var Container $container
 */
-$container = include_once __DIR__ . '/bootstrap.php';
+$container = include_once __DIR__ . '/doctrine-bootstrap';
 
-return ConsoleRunner::createHelperSet($container[EntityManager::class]);
+return ConsoleRunner::createHelperSet($container->get('EntityManager'));

@@ -43,6 +43,7 @@ return function (App $app) {
         $group->group('/examples', function (Group $group) {
             $group->get('/database-fetch', \App\Actions\Dev\Examples\DatabaseFetchAction::class);
             $group->get('/database-fetchall', \App\Actions\Dev\Examples\DatabaseFetchAllAction::class);
+            $group->get('/entity-fetchall', \App\Actions\Dev\Examples\EntityFetchAll::class);
         });
 
         $group->get('/generate-docs', \App\Actions\Dev\GenerateOpenAPIDocs::class);
