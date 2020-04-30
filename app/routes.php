@@ -10,6 +10,8 @@ use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
 
+use App\Middleware\AuthMiddleware;
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -25,19 +27,20 @@ return function (App $app) {
         return phpinfo();
     });
 
-    //$app->post('/sign-in', SignInAction::class);
-    //$app->post('/district-select', DistrictSelectAction::class);
+    /* Routes that require signed in user */
+    $app->group('', function (Group $group) {
+        $group->group('/visits', function (Group $group) {
+            $group->get('', ListVisitsAction::class);
+            $group->get('/{id}', ViewVisitAction::class);
+            $group->post('', CreateVisitAction::class);
+        });
 
-    $app->group('/visits', function (Group $group) {
-        $group->get('', ListVisitsAction::class);
-        $group->get('/{id}', ViewVisitAction::class);
-        $group->post('', CreateVisitAction::class);
-    });
+        $group->group('/users', function (Group $group) {
+            $group->get('', ListUsersAction::class);
+            $group->get('/{id}', ViewUserAction::class);
+        });
 
-    $app->group('/users', function (Group $group) {
-        $group->get('', ListUsersAction::class);
-        $group->get('/{id}', ViewUserAction::class);
-    });
+    })->add(AuthMiddleware::class);
 
     $app->group('/dev', function (Group $group) {
         $group->group('/examples', function (Group $group) {
