@@ -7,7 +7,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use App\Actions\Action;
 use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping as ORM;
 
 class EntityFetchAll extends Action
 {
@@ -24,9 +23,7 @@ class EntityFetchAll extends Action
        
     protected function action(): Response
     {
-        //$VisitRepo = $this->entityManager->getRepository('Visits');
-        //$VisitRepo = $this->entityManager->getRepository('Doctrine\\ORM\\Mapping\\Entity\\Visits');
-        $VisitRepo = $this->entityManager->getRepository('App\\Entity\\Visits');
+        $VisitRepo = $this->entityManager->getRepository('App\\Entities\\Visits');
         $visits = $VisitRepo->findAll();
 
         return $this->respondWithData(['visits' => $visits]);

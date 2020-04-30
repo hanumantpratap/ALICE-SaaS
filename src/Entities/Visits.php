@@ -1,18 +1,17 @@
 <?php
-
-
+namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
-
-namespace App\Entity;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Visits
  *
  * @ORM\Table(name="visitor_management.visits", indexes={@ORM\Index(name="IDX_300552BE3147C936", columns={"people_id"}), @ORM\Index(name="IDX_300552BE59BB1592", columns={"reason_id"}), @ORM\Index(name="IDX_300552BE4DFE3A85", columns={"identification_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Entities\Visits")
  */
-class Visits
+
+class Visits extends EntityRepository
 {
     /**
      * @var int
