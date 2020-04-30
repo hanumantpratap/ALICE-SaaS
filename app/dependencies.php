@@ -50,7 +50,7 @@ return function (ContainerBuilder $containerBuilder) {
 
         'DistrictDB' => function (ContainerInterface $c, LoggerInterface $logger) {
             $config = $c->get('settings')['database'];
-            $secureId = $c->get('SecureId');
+            $secureId = $c->get('secureID');
             $db = new DistrictDatabaseConnection($secureId, $config, $logger);
             return $db;
         },
@@ -68,7 +68,9 @@ return function (ContainerBuilder $containerBuilder) {
 
         'EntityManager' => function (ContainerInterface $c): EntityManager {
             $doctrineSettings = $c->get('settings')['doctrine'];
-
+            $secureId = $c->get('secureID');
+            $doctrineSettings['connection']['dbname'] = $doctrineSettings['connection']['dbname'] . '_' . $secureId;
+	    	
             $config = Setup::createAnnotationMetadataConfiguration(
                 $doctrineSettings['metadata_dirs'],
                 $doctrineSettings['dev_mode']
