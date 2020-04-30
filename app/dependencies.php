@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 
 
 use App\Classes\DatabaseConnection;
+use App\Classes\DistrictDatabaseConnection;
 use App\Classes\RedisConnector;
 use App\Classes\TokenProcessor;
 
@@ -35,19 +36,23 @@ return function (ContainerBuilder $containerBuilder) {
         LoggerInterface::class => DI\get('Logger'),
 
         'CoreDB' => function (ContainerInterface $c, LoggerInterface $logger) {
+            $logger->info('create core db');
             $config = $c->get('settings')['database'];
+	    
             $db = new DatabaseConnection($config, $logger);
             return $db;
         },
         DatabaseConnection::class => DI\get('CoreDB'),
 
         'DistrictDB' => function (ContainerInterface $c, LoggerInterface $logger) {
+            $logger->info('create district db');
             $config = $c->get('settings')['database'];
-            $secureId = $c->get('SecureId');
+            $secureId = $c->get('secureID');
+
             $db = new DistrictDatabaseConnection($secureId, $config, $logger);
             return $db;
         },
-        DistrictDatabaseConnection::class => DI\get('CoreDB'),
+        DistrictDatabaseConnection::class => DI\get('DistrictDB'),
 
         RedisConnector::class => function (ContainerInterface $c) {
             $config = $c->get('settings')['redis'];
@@ -55,8 +60,9 @@ return function (ContainerBuilder $containerBuilder) {
             return $redis;
         },
 
-        TokenProcessor::class => function (ContainerInterface $c, RedisConnector $redis) {
-            return new TokenProcessor($redis);
+        TokenProcessor::class => function (ContainerInterface $c) {
+            //return new TokenProcessor($redis);
+            return new TokenProcessor();
         },
 
     ]);

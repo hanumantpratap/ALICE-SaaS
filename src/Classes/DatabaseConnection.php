@@ -4,13 +4,13 @@ use PDO;
 use PDOException;
 
 class DatabaseConnection {
-    private $host;
-    private $dbName;
-    private $user;
-    private $password;
-    private $port;
+    protected $host;
+    protected $dbName;
+    protected $user;
+    protected $password;
+    protected $port;
 
-    private $pdo = null;
+    protected $pdo = null;
 
     function __construct($config, $logger) {
         $this->host = $config['host'];
