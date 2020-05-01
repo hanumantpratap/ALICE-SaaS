@@ -15,6 +15,7 @@ services:
             - ./public:/var/www/public
             - ./src:/var/www/src
             - ./var:/var/www/var
+            - ./templates:/var/www/templates
         networks:
             - visitor-management
         environment:
