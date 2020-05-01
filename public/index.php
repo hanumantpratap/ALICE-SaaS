@@ -49,7 +49,7 @@ $displayErrorDetails = $container->get('settings')['displayErrorDetails'];
 $serverRequestCreator = ServerRequestCreatorFactory::create();
 $request = $serverRequestCreator->createServerRequestFromGlobals();
 
-$logger = $container->get(LoggerInterface::class);
+$logger = $container->get('Logger');
 
 // Create Error Handler
 $responseFactory = $app->getResponseFactory();
