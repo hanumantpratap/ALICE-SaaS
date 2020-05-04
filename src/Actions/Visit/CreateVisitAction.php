@@ -25,7 +25,18 @@ class CreateVisitAction extends Action
  *         description="Create Visitor",
  *         @OA\MediaType(
  *             mediaType="application/json",
- *             example={"id": 10, "name": "Jessica Smith"}
+ *             example={"statusCode": 200, 
+ *                      "data": {
+ *                              "id": 10, 
+ *                              "visitor_id": 12, 
+ *                              "visitor_name": "Jessica Smith", 
+ *                              "date_created": "2020-05-01 11:15:40",
+ *                              "check_in": "2020-05-01 11:15:40",
+ *                              "check_out": "2020-05-01 11:15:40",
+ *                              "user_id": 3,
+ *                              "user_name": "Mike Jones",
+ *                              "notes": "Here are some notes."
+ *                          }}
  *         )
  *     ),
  *     @OA\RequestBody(

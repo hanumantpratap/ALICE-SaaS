@@ -24,11 +24,25 @@ class ListVisitsAction extends Action
     protected function action(): Response
     {
         $visits = array();
-
+        
         $sql = "SELECT
-                    *
+                    Visits.id,
+                    Visits.people_id as visitor_id,
+                    PersonNames.given_name || ' ' || PersonNames.family_name as visitor_name,
+                    Visits.date_created,
+                    Visits.check_in,
+                    Visits.check_out,
+                    Visits.user_id,
+                    UserNames.given_name || ' ' || PersonNames.family_name as user_name,
+                    Visits.notes
                 FROM 
-                    visitor_management.visits";
+                    visitor_management.visits As Visits
+                    LEFT JOIN public.person_names AS PersonNames
+                        ON Visits.people_id = PersonNames.person_id
+                    LEFT JOIN public.person_account AS Users
+                        ON Visits.user_id = Users.pa_id
+                    LEFT JOIN public.person_names AS UserNames
+                        ON Users.person_id = UserNames.person_id";
 
         $query = $this->districtDB->run($sql);
 
