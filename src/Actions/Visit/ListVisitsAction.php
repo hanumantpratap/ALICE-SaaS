@@ -56,10 +56,34 @@ class ListVisitsAction extends Action
      *     ),
      *      @OA\Response(
      *         response=200,
-     *         description="View Visitor",
+     *         description="View Visits",
      *         @OA\MediaType(
      *             mediaType="application/json",
-     *             example={"id": 10, "visitor_name": "Jessica Smith"}
+     *             example={"statusCode": 200,
+     *                      "data": {
+     *                          {
+     *                              "id": 10, 
+    *                               "visitor_id": 12, 
+     *                              "visitor_name": "Jessica Smith", 
+     *                              "date_created": "2020-05-01 11:15:40",
+     *                              "check_in": "2020-05-01 11:15:40",
+     *                              "check_out": "2020-05-01 11:15:40",
+     *                              "user_id": 3,
+     *                              "user_name": "Mike Jones",
+     *                              "notes": "Here are some notes."
+     *                          },
+     *                          {
+     *                              "id": 11, 
+    *                               "visitor_id": 13, 
+     *                              "visitor_name": "Dan Brown", 
+     *                              "date_created": "2020-05-01 11:15:40",
+     *                              "check_in": "2020-05-01 11:15:40",
+     *                              "check_out": "2020-05-01 11:15:40",
+     *                              "user_id": 4,
+     *                              "user_name": "Amy Davis",
+     *                              "notes": "Here are some notes."
+     *                          }
+     *                      }}
      *         )
      *     )
      * )
