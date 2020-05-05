@@ -9,6 +9,7 @@ use App\Actions\User\ViewUserAction;
 use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
+use App\Actions\ID\IDScanAction;
 
 use App\Middleware\AuthMiddleware;
 
@@ -41,6 +42,8 @@ return function (App $app) {
         });
 
     })->add(AuthMiddleware::class);
+
+    $app->post('/id-scan', IDScanAction::class);
 
     $app->group('/dev', function (Group $group) {
         $group->group('/examples', function (Group $group) {

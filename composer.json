@@ -26,6 +26,7 @@
         "ext-json": "*",
         "doctrine/orm": "^2.7",
         "firebase/php-jwt": "^5.2",
+        "guzzlehttp/guzzle": "~6.0",
         "monolog/monolog": "^1.24",
         "php-di/php-di": "^6.0",
         "predis/predis": "^1.1",
