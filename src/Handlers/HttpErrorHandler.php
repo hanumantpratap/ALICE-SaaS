@@ -24,12 +24,6 @@ use Throwable;
 
 class HttpErrorHandler extends SlimErrorHandler
 {
-    public function __construct(CallableResolverInterface $callableResolver, ResponseFactoryInterface $responseFactory, LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-        parent::__construct($callableResolver, $responseFactory);
-    }
-
     /**
      * @inheritdoc
      */
