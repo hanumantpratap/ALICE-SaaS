@@ -17,4 +17,6 @@ $dependencies($containerBuilder);
 // Build PHP-DI Container instance
 $container = $containerBuilder->build();
 
+$container->set('secureID', '5235');
+
 return $container;

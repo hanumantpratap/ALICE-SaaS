@@ -14,7 +14,7 @@ $classLoader->register();
 
 echo "get container";
 
-$container = include_once __DIR__ . '/doctrine-bootstrap';
+$container = include_once __DIR__ . '/doctrine-bootstrap.php';
 $em = $container->get('EntityManager');
 
 echo "\nregisterDoctrineTypeMapping";
@@ -45,8 +45,7 @@ echo "\n";
 
 $specificTables = [
     $em->getConnection()->getSchemaManager()->listTableDetails('visitor_management.visits'),
-    $em->getConnection()->getSchemaManager()->listTableDetails('visitor_management.visits_has_people'),
-    $em->getConnection()->getSchemaManager()->listTableDetails('visitor_management.visits_has_students'),
+    $em->getConnection()->getSchemaManager()->listTableDetails('public.people'),
     $em->getConnection()->getSchemaManager()->listTableDetails('prepared.teams')
 ];
 

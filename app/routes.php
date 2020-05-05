@@ -51,5 +51,5 @@ return function (App $app) {
 
         $group->get('/generate-docs', \App\Actions\Dev\GenerateOpenAPIDocs::class);
         $group->get('/docs', \App\Actions\Dev\ViewSwaggerAction::class);
-    });
+    })->add(AuthMiddleware::class);
 };
