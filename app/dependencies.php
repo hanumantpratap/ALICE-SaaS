@@ -33,9 +33,14 @@ use App\Classes\DatabaseConnection;
 use App\Classes\DistrictDatabaseConnection;
 use App\Classes\RedisConnector;
 use App\Classes\TokenProcessor;
+use App\Domain\Person\PersonRepository;
+use App\Infrastructure\Persistence\Person\SqlPersonRepository;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
+        PersonRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
+            return new SqlPersonRepository($logger, $em);
+        },
         'Logger' => function (ContainerInterface $c) {
             $settings = $c->get('settings');
 

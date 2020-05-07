@@ -35,5 +35,3 @@ class AuthMiddleware implements MiddlewareInterface
         return $handler->handle($request);
     }
 }
-
-?>

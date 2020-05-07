@@ -4,6 +4,8 @@ declare(strict_types=1);
 // if we need to scale:
 //use some\namespace\{ClassA, ClassB, ClassC as C};
 
+use App\Actions\Person\ListPersonsAction;
+use App\Actions\Person\ViewPersonAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\ViewUserAction;
 use App\Actions\Visit\ListVisitsAction;
@@ -40,6 +42,10 @@ return function (App $app) {
             $group->get('/{id}', ViewUserAction::class);
         });
 
+        $group->group('/persons', function (Group $group) {
+            $group->get('', ListPersonsAction::class);
+            $group->get('/{id}', ViewPersonAction::class);
+        });
     })->add(AuthMiddleware::class);
 
     $app->group('/dev', function (Group $group) {

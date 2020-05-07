@@ -4,3 +4,5 @@
 /logs/*
 !/logs/README.md
 /tmp
+.vscode/
+/var/doctrine
