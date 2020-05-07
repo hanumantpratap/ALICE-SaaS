@@ -12,7 +12,7 @@ RUN set -xe \
 
 COPY . /app/
 
-RUN composer dump-autoload --no-dev --optimize --classmap-authoritative
+RUN composer dump-autoload --no-dev --optimize
 
 FROM php:7-alpine
 

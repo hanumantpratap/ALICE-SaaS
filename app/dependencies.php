@@ -69,7 +69,6 @@ return function (ContainerBuilder $containerBuilder) {
         'DistrictDB' => function (ContainerInterface $c, LoggerInterface $logger) {
             $logger->info('create district db');
             $config = $c->get('settings')['database'];
-            //$secureId = '5135';
             $secureId = $c->get('secureID');
 
             $db = new DistrictDatabaseConnection($secureId, $config, $logger);

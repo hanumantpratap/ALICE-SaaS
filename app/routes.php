@@ -46,7 +46,6 @@ return function (App $app) {
             $group->get('', ListPersonsAction::class);
             $group->get('/{id}', ViewPersonAction::class);
         });
-
     })->add(AuthMiddleware::class);
 
     $app->group('/dev', function (Group $group) {
