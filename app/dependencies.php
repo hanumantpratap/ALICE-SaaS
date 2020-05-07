@@ -33,6 +33,7 @@ use App\Classes\DatabaseConnection;
 use App\Classes\DistrictDatabaseConnection;
 use App\Classes\RedisConnector;
 use App\Classes\TokenProcessor;
+use App\Classes\VisitsService;
 use App\Domain\Person\PersonRepository;
 use App\Infrastructure\Persistence\Person\SqlPersonRepository;
 
@@ -69,8 +70,13 @@ return function (ContainerBuilder $containerBuilder) {
         'DistrictDB' => function (ContainerInterface $c, LoggerInterface $logger) {
             $logger->info('create district db');
             $config = $c->get('settings')['database'];
+            
+            if (!$c->has('secureID')) {
+                throw new \App\Exceptions\InternalServerErrorException('No Secure ID set');
+            }
+            
             $secureId = $c->get('secureID');
-
+            
             $db = new DistrictDatabaseConnection($secureId, $config, $logger);
             return $db;
         },
@@ -111,6 +117,8 @@ return function (ContainerBuilder $containerBuilder) {
 
             return EntityManager::create($doctrineSettings['connection'], $config);
         },
-        EntityManagerInterface::class => DI\get('EntityManager')
+        EntityManagerInterface::class => DI\get('EntityManager'),
+
+        VisitsService::class => DI\create()->constructor(DI\get(DistrictDatabaseConnection::class), DI\get(LoggerInterface::class)),
     ]);
 };

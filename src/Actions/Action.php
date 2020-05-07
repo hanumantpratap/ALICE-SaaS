@@ -56,6 +56,7 @@ abstract class Action
         $this->request = $request;
         $this->response = $response;
         $this->args = $args;
+        $this->token = $request->getAttribute('token');
 
         return $this->action();
     }
