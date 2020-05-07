@@ -6,7 +6,9 @@ WORKDIR /app
 
 RUN set -xe \
     && composer global require hirak/prestissimo \
-    && composer install --no-dev --no-scripts --no-suggest --no-interaction --prefer-dist --optimize-autoloader
+    && composer install --no-dev --no-scripts --no-suggest --no-interaction --prefer-dist
+    
+    #--optimize-autoloader
 
 COPY . /app/
 
