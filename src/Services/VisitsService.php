@@ -1,7 +1,7 @@
 <?php
-namespace App\Classes;
+namespace App\Services;
 
-use App\Classes\DatabaseConnection;
+use App\Classes\DistrictDatabaseConnection;
 use Psr\Log\LoggerInterface;
 use App\Exceptions;
 
@@ -44,7 +44,6 @@ class VisitsService
 
         if ($query->rowCount() > 0) {
             $visits = $query->fetchAll();
-            testLog('visits', $visits);
         }
 
         return $visits;
