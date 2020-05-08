@@ -31,6 +31,7 @@ class DatabaseConnection {
             $this->pdo = new PDO($conStr);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            $this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
         } catch (PDOException $e) {
             throw $e;
         }

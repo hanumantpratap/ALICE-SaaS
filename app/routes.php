@@ -42,22 +42,22 @@ return function (App $app) {
             $group->get('', ListUsersAction::class);
             $group->get('/{id}', ViewUserAction::class);
         });
-
-        $group->group('/persons', function (Group $group) {
+	
+	 $group->group('/persons', function (Group $group) {
             $group->get('', ListPersonsAction::class);
             $group->get('/{id}', ViewPersonAction::class);
             $group->get('/search/query', SearchPersonsAction::class);
         });
-    })->add(AuthMiddleware::class);
+		      
+        $group->group('/dev', function (Group $group) {
+            $group->group('/examples', function (Group $group) {
+                $group->get('/database-fetch', \App\Actions\Dev\Examples\DatabaseFetchAction::class);
+                $group->get('/database-fetchall', \App\Actions\Dev\Examples\DatabaseFetchAllAction::class);
+                $group->get('/entity-fetchall', \App\Actions\Dev\Examples\EntityFetchAll::class);
+            });
 
-    $app->group('/dev', function (Group $group) {
-        $group->group('/examples', function (Group $group) {
-            $group->get('/database-fetch', \App\Actions\Dev\Examples\DatabaseFetchAction::class);
-            $group->get('/database-fetchall', \App\Actions\Dev\Examples\DatabaseFetchAllAction::class);
-            $group->get('/entity-fetchall', \App\Actions\Dev\Examples\EntityFetchAll::class);
+            $group->get('/generate-docs', \App\Actions\Dev\GenerateOpenAPIDocs::class);
+            $group->get('/docs', \App\Actions\Dev\ViewSwaggerAction::class);
         });
-
-        $group->get('/generate-docs', \App\Actions\Dev\GenerateOpenAPIDocs::class);
-        $group->get('/docs', \App\Actions\Dev\ViewSwaggerAction::class);
     })->add(AuthMiddleware::class);
 };

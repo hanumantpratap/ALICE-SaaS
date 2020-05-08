@@ -4,10 +4,19 @@ declare(strict_types=1);
 namespace App\Actions\Visit;
 
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Actions\Action;
 
-class ViewVisitAction extends Action
+class ViewVisitAction extends VisitAction
 {
+    protected function action(): Response
+    {
+        $visitId = (int) $this->resolveArg('id');
+        $visit = $this->visitsService->fetch($visitId);
+
+        $this->logger->info("Visit of id `${visitId}` was viewed.");
+
+        return $this->respondWithData($visit);
+    }
+
     /**
      * @OA\Get(
      *     path="/visits/{visitId}",
@@ -26,26 +35,18 @@ class ViewVisitAction extends Action
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             example={"statusCode": 200, "data": {
-     *                              "id": 10, 
-    *                               "visitor_id": 12, 
-     *                              "visitor_name": "Jessica Smith", 
-     *                              "date_created": "2020-05-01 11:15:40",
-     *                              "check_in": "2020-05-01 11:15:40",
-     *                              "check_out": "2020-05-01 11:15:40",
-     *                              "user_id": 3,
-     *                              "user_name": "Mike Jones",
-     *                              "notes": "Here are some notes."
-     *                          }}
+     *                            "id": 2,
+     *                            "personId": 1,
+     *                            "personName": "Lauren Admin",
+     *                            "dateCreated": "2020-05-01 15:15:40.638842+00",
+     *                            "checkIn": null,
+     *                            "checkOut": null,
+     *                            "userId": 200000037,
+     *                            "userName": "Mae Admin",
+     *                            "notes": "test"
+     *                       }}
      *         )
      *     )
      * )
      */
-    protected function action(): Response
-    {
-        $visitId = (int) $this->resolveArg('id');
-
-        $this->logger->info("Visit of id `${visitId}` was viewed.");
-
-        return $this->respondWithData([]);
-    }
 }

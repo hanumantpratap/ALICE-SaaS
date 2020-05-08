@@ -11,16 +11,14 @@ use Psr\Container\ContainerInterface;
 class AuthMiddleware implements MiddlewareInterface
 {
     public function __construct(ContainerInterface $container, LoggerInterface $logger)
-    {   
+    {
         $this->container = $container;
         $this->logger = $logger;
     }
 
     public function process(Request $request, RequestHandler $handler): Response
     {
-        $this->logger->info('user auth');
-
-        /* $token =  $request->getAttribute('token');
+        $token =  $request->getAttribute('token');
 
         // Validate Auth Token
         if (!$token || $token->type != 'auth') {
@@ -28,9 +26,7 @@ class AuthMiddleware implements MiddlewareInterface
         }
         
         $this->container->set('secureID', $token->dist);
-        $request = $request->withAttribute('secureID', $token->dist); */
-
-        $this->container->set('secureID', '5235');
+        $request = $request->withAttribute('secureID', $token->dist);
 
         return $handler->handle($request);
     }

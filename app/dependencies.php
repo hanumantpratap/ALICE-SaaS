@@ -33,6 +33,7 @@ use App\Classes\DatabaseConnection;
 use App\Classes\DistrictDatabaseConnection;
 use App\Classes\RedisConnector;
 use App\Classes\TokenProcessor;
+use App\Services\VisitsService;
 use App\Domain\Person\PersonRepository;
 use App\Infrastructure\Persistence\Person\SqlPersonRepository;
 
@@ -41,6 +42,7 @@ return function (ContainerBuilder $containerBuilder) {
         PersonRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
             return new SqlPersonRepository($logger, $em);
         },
+        
         'Logger' => function (ContainerInterface $c) {
             $settings = $c->get('settings');
 
@@ -57,24 +59,27 @@ return function (ContainerBuilder $containerBuilder) {
         },
         LoggerInterface::class => DI\get('Logger'),
 
-        'CoreDB' => function (ContainerInterface $c, LoggerInterface $logger) {
+        DatabaseConnection::class => function (ContainerInterface $c, LoggerInterface $logger) {
             $logger->info('create core db');
             $config = $c->get('settings')['database'];
 	    
             $db = new DatabaseConnection($config, $logger);
             return $db;
         },
-        DatabaseConnection::class => DI\get('CoreDB'),
 
-        'DistrictDB' => function (ContainerInterface $c, LoggerInterface $logger) {
+        DistrictDatabaseConnection::class => function (ContainerInterface $c, LoggerInterface $logger) {
             $logger->info('create district db');
             $config = $c->get('settings')['database'];
+            
+            if (!$c->has('secureID')) {
+                throw new \App\Exceptions\InternalServerErrorException('No Secure ID set');
+            }
+            
             $secureId = $c->get('secureID');
-
+            
             $db = new DistrictDatabaseConnection($secureId, $config, $logger);
             return $db;
         },
-        DistrictDatabaseConnection::class => DI\get('DistrictDB'),
 
         RedisConnector::class => function (ContainerInterface $c) {
             $config = $c->get('settings')['redis'];
@@ -87,7 +92,7 @@ return function (ContainerBuilder $containerBuilder) {
             return new TokenProcessor();
         },
 
-        'EntityManager' => function (ContainerInterface $c, LoggerInterface $logger): EntityManager {
+        EntityManagerInterface::class => function (ContainerInterface $c, LoggerInterface $logger): EntityManager {
             $doctrineSettings = $c->get('settings')['doctrine'];
             $logger->info('entity manager');
             $secureId = $c->get('secureID');
@@ -110,7 +115,6 @@ return function (ContainerBuilder $containerBuilder) {
             );
 
             return EntityManager::create($doctrineSettings['connection'], $config);
-        },
-        EntityManagerInterface::class => DI\get('EntityManager')
+        }
     ]);
 };
