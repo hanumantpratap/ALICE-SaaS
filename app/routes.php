@@ -5,6 +5,7 @@ declare(strict_types=1);
 //use some\namespace\{ClassA, ClassB, ClassC as C};
 
 use App\Actions\Person\ListPersonsAction;
+use App\Actions\Person\SearchPersonsAction;
 use App\Actions\Person\ViewPersonAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\ViewUserAction;
@@ -45,6 +46,7 @@ return function (App $app) {
         $group->group('/persons', function (Group $group) {
             $group->get('', ListPersonsAction::class);
             $group->get('/{id}', ViewPersonAction::class);
+            $group->get('/search/query', SearchPersonsAction::class);
         });
     })->add(AuthMiddleware::class);
 

@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace App\Actions\Person;
 
 use Psr\Http\Message\ResponseInterface as Response;
+use OpenApi\Annotations as OA;
 
 class ViewPersonAction extends PersonAction
 {
     /**
      * {@inheritdoc}
+     * OA\Get
      */
     protected function action(): Response
     {
