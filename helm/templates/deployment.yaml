@@ -33,7 +33,7 @@ spec:
             - name: POSTGRES_HOST
               value: "test-innovations-v01.cm2dbdfl2yo8.us-east-2.rds.amazonaws.com"
             - name: POSTGRES_DB
-              value: "5235"
+              value: "navigate"
             - name: POSTGRES_USER
               value: "lauren"
             - name: POSTGRES_PASSWORD
