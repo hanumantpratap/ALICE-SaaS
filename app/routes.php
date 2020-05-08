@@ -12,6 +12,7 @@ use App\Actions\User\ViewUserAction;
 use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
+use App\Actions\User\SignInAction;
 
 use App\Middleware\AuthMiddleware;
 
@@ -60,4 +61,7 @@ return function (App $app) {
             $group->get('/docs', \App\Actions\Dev\ViewSwaggerAction::class);
         });
     })->add(AuthMiddleware::class);
+
+    
+    $app->post('/sign-in', SignInAction::class);
 };
