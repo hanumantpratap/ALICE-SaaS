@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\Person;
 use App\Domain\Person\Person;
 use App\Domain\Person\PersonNotFoundException;
 use App\Domain\Person\PersonRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -51,7 +52,18 @@ final class SqlPersonRepository implements PersonRepository
      * @inheritdoc
      */
     public function findPersonsOfName(string $name): array {
-        $persons = $this->repository->findBy(['name' => $name]);
+
+        /** @var Criteria */
+        $criteria = Criteria::create()
+                    ->where(Criteria::expr()->contains("displayName", $name));
+
+        $persons = $this->entityManager->createQueryBuilder("p")
+                    ->from(Person::class, "p")
+                    ->select("p")
+                    ->addCriteria($criteria)
+                    ->getQuery()
+                    ->getResult();
+
         if (!is_null($persons) && !empty($persons)) {
             return $persons;
         }
