@@ -18,7 +18,7 @@ return function (ContainerBuilder $containerBuilder) {
                 'doctrine' => [
                     'dev_mode' => $_ENV['ENV'] == 'dev',
                     'cache_dir' => APP_ROOT . '/var/doctrine',
-                    'metadata_dirs' => [APP_ROOT . '/src/Domain'],
+                    'metadata_dirs' => [APP_ROOT . '/src/Entities'],
                     'connection' => [
                         'driver' => 'pdo_pgsql',
                         'charset' => 'utf-8',
@@ -35,6 +35,10 @@ return function (ContainerBuilder $containerBuilder) {
                     'dbname' => $_ENV['POSTGRES_DB'],
                     'user' => $_ENV['POSTGRES_USER'],
                     'password' => $_ENV['POSTGRES_PASSWORD']
+                ],
+                'redis' => [
+                    'host' => $_ENV['REDIS_HOST'],
+                    'port' => $_ENV['REDIS_PORT']
                 ]
             ],
         ]

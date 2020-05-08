@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - 'develop'
+
+env:
+  DOCKER_REGISTRY: 837238518041.dkr.ecr.us-east-2.amazonaws.com/vms/
+  DOCKER_IMAGE: visitor-management-service
+  DOCKER_IMAGE_TAG: ${{ github.sha }}
+  KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
+  KUBE_NAMESPACE: visitor-management
+  HELM_RELEASE: visitor-management-service
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - id: configure-pipeline
+        name: Build configuration
+        run: |
+          echo "$KUBE_CONFIG_DATA" | base64 --decode > ${GITHUB_WORKSPACE}/kubeconfig
+          echo ::set-env name=KUBECONFIG::${GITHUB_WORKSPACE}/kubeconfig
+          echo ::set-env name=DOCKER_IMAGE_URL::${DOCKER_REGISTRY}${DOCKER_IMAGE}:${DOCKER_IMAGE_TAG}
+
+      - id: configure-aws-credentials
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - id: ecr-login
+        name: Log in to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - id: build-push
+        name: Build and push image to ECR
+        run: |
+          docker build -t ${DOCKER_IMAGE_URL} .
+          docker push ${DOCKER_IMAGE_URL}
+
+      - id: install-helm
+        name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.0.3
+
+      - id: helm-deploy
+        name: Package & Deploy Helm chart
+        run: helm upgrade ${HELM_RELEASE} ./helm --install --atomic --namespace=${KUBE_NAMESPACE} --set image.tag=${DOCKER_IMAGE_TAG}
+
+      - id: ecr-logout
+        name: Log out of ECR
+        if: always()
+        run: docker logout ${{ steps.ecr-login.outputs.registry }}

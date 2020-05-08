@@ -9,7 +9,14 @@ use App\Actions\Action;
 class ListUsersAction extends Action
 {
     /**
-     * {@inheritdoc}
+     * @OA\Get(
+     *     path="/users",
+     *     tags={"users"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="List Users"
+     *     )
+     * )
      */
     protected function action(): Response
     {

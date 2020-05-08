@@ -4,23 +4,28 @@ use PDO;
 use PDOException;
 
 class DatabaseConnection {
-    private $host;
-    private $dbName;
-    private $user;
-    private $password;
-    private $port;
+    protected $host;
+    protected $dbName;
+    protected $user;
+    protected $password;
+    protected $port;
 
-    private $pdo = null;
+    protected $pdo = null;
 
-    function __construct($secureId = null, $config, $logger) {
+    function __construct($config, $logger) {
         $this->host = $config['host'];
-        $this->dbName = ($secureId != null ? $config['dbname'] . '_' . $secureId : $config['dbname']);
+        $this->dbName = $config['dbname'];
         $this->user = $config['user'];
         $this->password = $config['password'];
         $this->port = $config['port'];
+        $this->logger = $logger;
 
+        $this->create();
+    }
+
+    public function create() {
         $conStr = 'pgsql:host='.$this->host.';port='.$this->port.';dbname='.$this->dbName.';user='.$this->user.';password='.$this->password;
-        $logger->info('constr:' . $conStr);
+        $this->logger->info('constr:' . $conStr);
 
         try {
             $this->pdo = new PDO($conStr);

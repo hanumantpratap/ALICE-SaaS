@@ -8,26 +8,6 @@ use App\Actions\Action;
 
 class CreateVisitAction extends Action
 {
-    /**
-     * @OA\Post(
-     *     path="/visits",
-     *     tags={"visits"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Create Visitor",
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             example={"id": 10, "name": "Jessica Smith"}
-     *         )
-     *     ),
-     *     @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             example={"name": "Jessica Smith"}
-     *         )
-     *     )
-     * )
-     */
     protected function action(): Response
     {
         $formData = $this->getFormData();
@@ -35,3 +15,35 @@ class CreateVisitAction extends Action
         return $this->respondWithData($formData);
     }
 }
+
+/**
+ * @OA\Post(
+ *     path="/visits",
+ *     tags={"visits"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Create Visitor",
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             example={"statusCode": 200, 
+ *                      "data": {
+ *                              "id": 10, 
+ *                              "visitor_id": 12, 
+ *                              "visitor_name": "Jessica Smith", 
+ *                              "date_created": "2020-05-01 11:15:40",
+ *                              "check_in": "2020-05-01 11:15:40",
+ *                              "check_out": "2020-05-01 11:15:40",
+ *                              "user_id": 3,
+ *                              "user_name": "Mike Jones",
+ *                              "notes": "Here are some notes."
+ *                          }}
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             example={"name": "Jessica Smith"}
+ *         )
+ *     )
+ * )
+ */

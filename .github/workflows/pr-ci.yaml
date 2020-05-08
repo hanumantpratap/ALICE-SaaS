@@ -1,0 +1,76 @@
+name: Pull Request CI
+
+on:
+  pull_request:
+    branches:
+      - 'develop'
+    types: [ opened, edited, reopened ]
+
+env:
+  DOCKER_REGISTRY: 837238518041.dkr.ecr.us-east-2.amazonaws.com/vms/
+  DOCKER_IMAGE: visitor-management-service
+  DOCKER_IMAGE_TAG: review-${{ github.event.pull_request.number }}
+  KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
+  KUBE_NAMESPACE: visitor-management-service-review-${{ github.event.pull_request.number }}
+  HELM_RELEASE: visitor-management-service-review-${{ github.event.pull_request.number }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - id: configure-pipeline
+        name: Build configuration
+        run: |
+          echo "$KUBE_CONFIG_DATA" | base64 --decode > ${GITHUB_WORKSPACE}/kubeconfig
+          echo ::set-env name=KUBECONFIG::${GITHUB_WORKSPACE}/kubeconfig
+          echo ::set-env name=DOCKER_IMAGE_URL::${DOCKER_REGISTRY}${DOCKER_IMAGE}:${DOCKER_IMAGE_TAG}
+
+      - id: configure-aws-credentials
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - id: ecr-login
+        name: Log in to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - id: build-push
+        name: Build and push image to ECR
+        run: |
+          docker build -t ${DOCKER_IMAGE_URL} .
+          docker push ${DOCKER_IMAGE_URL}
+
+      - id: eks-create-namespace
+        name: Create the PR namespace
+        run: kubectl create namespace ${KUBE_NAMESPACE}
+
+      - id: install-helm
+        name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.0.3
+
+      - id: helm-deploy
+        name: Package & Deploy Helm chart
+        run: helm install ${HELM_RELEASE} ./helm --atomic --namespace=${KUBE_NAMESPACE} --set image.tag=${DOCKER_IMAGE_TAG}
+
+      - id: ecr-logout
+        name: Log out of ECR
+        if: always()
+        run: docker logout ${{ steps.ecr-login.outputs.registry }}
+
+      - id: print-elb-url
+        name: Print the ELB URL of the app
+        run: |
+          export SERVICE_IP=$(kubectl get svc --namespace ${KUBE_NAMESPACE} ${HELM_RELEASE} --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")
+          echo http://$SERVICE_IP:80
+
+      - id: cleanup
+        name: Clean up k8s namespace
+        if: failure()
+        run: kubectl delete namespace ${KUBE_NAMESPACE}

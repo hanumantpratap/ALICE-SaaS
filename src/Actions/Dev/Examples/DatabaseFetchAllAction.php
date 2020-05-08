@@ -20,7 +20,18 @@ class DatabaseFetchAllAction extends Action
         $this->database = $database;
         $this->logger = $logger;
     }
-       
+    
+    /**
+     * @OA\Get(
+     *     path="/dev/examples/database-fetchall",
+     *     tags={"dev"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="Retrieving a List of Records from the Database"
+     *     )
+     * )
+     */
+
     protected function action(): Response
     {
         $sql = "SELECT

@@ -8,13 +8,15 @@ services:
         environment:
             docker: "true"
         ports:
-            - 8080:8080
+            - 8080:80
         volumes:
             - ./app:/var/www/app
+            - ./config:/var/www/config
             - ./logs:/var/www/logs
             - ./public:/var/www/public
             - ./src:/var/www/src
             - ./var:/var/www/var
+            - ./templates:/var/www/templates
         networks:
             - visitor-management
         environment:
@@ -27,7 +29,8 @@ services:
             - LOG_TARGET=/var/www/logs/app.log
             - REDIS_HOST=localhost
             - REDIS_PORT=5530
-    depends_on:
+            - VIRTUAL_HOST=api.navigate360.com
+        depends_on:
             - postgres
     postgres:
         image: alpine:latest
@@ -42,7 +45,15 @@ services:
         ports:
             - 5432:5432
         volumes:
-            - C:\AWS\Auth\laureninnovations-us-east-2-test.ppk:/root/.ssh/key.ppk:ro
+            - ${PPK_FILE}:/root/.ssh/key.ppk:ro
+        networks:
+            - visitor-management
+    ingress:
+        image: jwilder/nginx-proxy
+        ports:
+            - "80:80"
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
         networks:
             - visitor-management
 networks:

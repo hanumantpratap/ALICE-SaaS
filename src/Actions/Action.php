@@ -10,7 +10,7 @@ use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
 /**
- * @OA\Info(title="Visitor Management API", version="0.1")
+ * @OA\Info(title="Visitor Management API", version="1.0")
  */
 
 abstract class Action
