@@ -4,6 +4,9 @@ declare(strict_types=1);
 // if we need to scale:
 //use some\namespace\{ClassA, ClassB, ClassC as C};
 
+use App\Actions\Person\ListPersonsAction;
+use App\Actions\Person\SearchPersonsAction;
+use App\Actions\Person\ViewPersonAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\ViewUserAction;
 use App\Actions\Visit\ListVisitsAction;
@@ -40,18 +43,24 @@ return function (App $app) {
             $group->get('', ListUsersAction::class);
             $group->get('/{id}', ViewUserAction::class);
         });
-
-    })->add(AuthMiddleware::class);
-
-    $app->post('/id-scan', IDScanAction::class);
-
-    $app->group('/dev', function (Group $group) {
-        $group->group('/examples', function (Group $group) {
-            $group->get('/database-fetch', \App\Actions\Dev\Examples\DatabaseFetchAction::class);
-            $group->get('/database-fetchall', \App\Actions\Dev\Examples\DatabaseFetchAllAction::class);
+	
+	 $group->group('/persons', function (Group $group) {
+            $group->get('', ListPersonsAction::class);
+            $group->get('/{id}', ViewPersonAction::class);
+            $group->get('/search/query', SearchPersonsAction::class);
         });
+	
+	$app->post('/id-scan', IDScanAction::class);
+		      
+        $group->group('/dev', function (Group $group) {
+            $group->group('/examples', function (Group $group) {
+                $group->get('/database-fetch', \App\Actions\Dev\Examples\DatabaseFetchAction::class);
+                $group->get('/database-fetchall', \App\Actions\Dev\Examples\DatabaseFetchAllAction::class);
+                $group->get('/entity-fetchall', \App\Actions\Dev\Examples\EntityFetchAll::class);
+            });
 
-        $group->get('/generate-docs', \App\Actions\Dev\GenerateOpenAPIDocs::class);
-        $group->get('/docs', \App\Actions\Dev\ViewSwaggerAction::class);
-    });
+            $group->get('/generate-docs', \App\Actions\Dev\GenerateOpenAPIDocs::class);
+            $group->get('/docs', \App\Actions\Dev\ViewSwaggerAction::class);
+        });
+    })->add(AuthMiddleware::class);
 };
