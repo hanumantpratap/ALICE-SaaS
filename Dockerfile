@@ -7,7 +7,6 @@ WORKDIR /app
 RUN set -xe \
     && composer global require hirak/prestissimo \
     && composer install --no-dev --no-scripts --no-suggest --no-interaction --prefer-dist
-    
     #--optimize-autoloader
 
 COPY . /app/
@@ -25,7 +24,5 @@ COPY --from=builder /app/vendor /var/www/vendor
 COPY . /var/www
 
 WORKDIR /var/www
-
-#RUN php /var/www/vendor/bin/doctrine orm:schema-tool:update
 
 CMD ["php", "-S", "0.0.0.0:80", "-t", "public" ]

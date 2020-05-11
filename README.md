@@ -13,6 +13,25 @@ PPK_FILE=C:\Users\ScottCollier\.ssh\laureninnovations-us-east-2-test.ppk
 
 ```
 
+## Running Tests
+The easiest way to run the unit test suite is via the `Makefile`:
+
+```bash
+
+make test
+
+```
+
+Under the hood, the `Makefile` just runs the following (which you can also run from the command line):
+
+```bash
+
+docker-compose run --rm visitor-management sh -c ./vendor/bin/phpunit
+
+```
+
+Of course if you have PHP/Composer installed on your local system, you can just run the tests locally via your normal PHP/Composer/IDE workflow.
+
 ## Local DNS
 If you would like to access the services locally via a friendly name, e.g., `api.navigate360.com`, just add an entry as follows to your OS's `hosts` file:
 
