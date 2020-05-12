@@ -18,6 +18,7 @@ services:
             - ./var:/var/www/var
             - ./templates:/var/www/templates
             - ./tests:/var/www/tests
+            - ./tmp/reports:/var/www/tmp/reports
         networks:
             - visitor-management
         environment:

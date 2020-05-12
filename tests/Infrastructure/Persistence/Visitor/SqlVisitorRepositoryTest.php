@@ -19,7 +19,7 @@ class SqlVisitorRepositoryTest extends TestCase
     protected ObjectProphecy $entityManager;
     protected LoggerInterface $logger;
 
-    protected function setUp() {
+    protected function setUp(): void {
       $this->objectRepository = $this->prophesize(ObjectRepository::class);
       $this->entityManager = $this->prophesize(EntityManagerInterface::class);
       $this->entityManager->getRepository(Argument::any())->willReturn($this->objectRepository);

@@ -50,3 +50,31 @@ Since the Visitor Management service runs on port 8080, you can then send a requ
 curl -X GET api.navigate360.com:8080/persons/1
 
 ```
+
+## Configuring the Debugger with Docker
+The XDebug configuration is automatically created in the container.  From there, you simply need to configure your editor/IDE.
+
+Here's an example launch configuration for VSCode:
+
+```json
+
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Docker XDebug",
+      "type": "php",
+      "request": "launch",
+      "pathMappings": {
+          "/var/www": "${workspaceRoot}"
+      },
+      "port": 9000,
+      "log": true
+    }
+  ]
+}
+
+```

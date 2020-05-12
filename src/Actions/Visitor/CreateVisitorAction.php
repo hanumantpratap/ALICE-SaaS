@@ -17,7 +17,7 @@ class CreateVisitorAction extends VisitorAction
         $visitor = $this->getFormData();
         $visitor = $this->visitorRepository->save($visitor);
 
-        $this->logger->info("Visitor of name `${visitor->name}` was viewed.");
+        #$this->logger->info("Visitor of name `${visitor->name}` was viewed.");
 
         $payload = new ActionPayload(201);
 
