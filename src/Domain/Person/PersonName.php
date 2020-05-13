@@ -6,7 +6,7 @@ namespace App\Domain\Person;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -30,26 +30,26 @@ class PersonName {
   public int $nameType;
 
   /** @Column(name="given_name") */
-  public string $givenName;
+  public ?string $givenName;
 
   /** @Column(name="middle_name") */
-  public string $middleName;
+  public ?string $middleName;
 
   /** @Column(name="family_name") */
-  public string $familyName;
+  public ?string $familyName;
 
   /** @Column(name="nick_name") */
-  public string $nickName;
+  public ?string $nickName;
 
   /** @Column */
-  public string $suffix;
+  public ?string $suffix;
 
   /** @Column */
-  public string $title;
+  public ?string $title;
 
   /**
-   * @ManyToOne(targetEntity="Person", inversedBy="names")
-   * @JoinColumn(name="person_id", referencedColumnName="person_id")
+   * @OneToOne(targetEntity="Person", inversedBy="name")
+   * @JoinColumn(name="pname_id", referencedColumnName="person_id")
    */
-  public Person $person;
+  protected Person $person;
 }
