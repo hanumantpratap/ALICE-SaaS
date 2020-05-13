@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
 
@@ -36,27 +37,14 @@ class Person {
   /** @Column(name="type") */
   public ?string $type;
 
-  /** @OneToMany(targetEntity="PersonName", mappedBy="person") */
-  protected Collection $names;
-
-  public function getNames(): ?Collection {
-    return $this->names;
-  }
-
-  public function addName(PersonName $name): void {
-    $this->names->add($name);
-  }
-
-  public function setNames(?Collection $names): self {
-    $this->names = $names;
-    return $this;
-  }
+  /** @OneToOne(targetEntity="PersonName", mappedBy="person") */
+  public ?PersonName $name;
 
   /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
   protected Collection $phones;
 
   public function __construct() {
-    $this->names = new ArrayCollection();
+    $this->name = new PersonName();
     $this->phones = new ArrayCollection();
   }
 }

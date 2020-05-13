@@ -38,8 +38,9 @@
         "zircote/swagger-php": "^3.0"
     },
     "require-dev": {
+        "phpspec/prophecy": "~1.0",
         "phpunit/phpunit": "^9.1",
-        "phpspec/prophecy": "~1.0"
+        "vimeo/psalm": "^3.11"
     },
     "config": {
         "process-timeout": 0,
