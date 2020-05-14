@@ -9,7 +9,7 @@ class ListVisitsAction extends VisitAction
 {
     protected function action(): Response
     {
-        visits = $this->repository->findAll();
+        $visits = $this->repository->findAll();
 
         //$visits = $this->visitsService->fetchAll();
 
