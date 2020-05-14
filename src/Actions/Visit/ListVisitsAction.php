@@ -9,9 +9,9 @@ class ListVisitsAction extends VisitAction
 {
     protected function action(): Response
     {
-        $visits = array();
+        visits = $this->repository->findAll();
 
-        $visits = $this->visitsService->fetchAll();
+        //$visits = $this->visitsService->fetchAll();
 
         $this->logger->info("Visits list was viewed.");
         

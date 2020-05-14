@@ -10,11 +10,13 @@ class ViewVisitAction extends VisitAction
     protected function action(): Response
     {
         $visitId = (int) $this->resolveArg('id');
-        $visit = $this->visitsService->fetch($visitId);
+        $visit = $this->repository->findOneBy(['id' => $visitId]);
+        $person = $visit->getPerson();
+        //$visit = $this->visitsService->fetch($visitId);
 
         $this->logger->info("Visit of id `${visitId}` was viewed.");
 
-        return $this->respondWithData($visit);
+        return $this->respondWithData(['visit' => $visit, 'person' => $person]);
     }
 
     /**
