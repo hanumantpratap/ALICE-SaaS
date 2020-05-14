@@ -5,7 +5,7 @@ namespace App\Actions\Visitor;
 
 use Psr\Http\Message\ResponseInterface as Response;
 
-class ViewVisitorAction extends VisitorAction
+class ListVisitorsAction extends VisitorAction
 {
     /**
      * {@inheritdoc}

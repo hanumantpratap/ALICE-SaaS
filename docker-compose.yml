@@ -11,12 +11,13 @@ services:
             - 8080:80
         volumes:
             - ./app:/var/www/app
-            - ./config:/var/www/config
             - ./logs:/var/www/logs
             - ./public:/var/www/public
             - ./src:/var/www/src
             - ./var:/var/www/var
             - ./templates:/var/www/templates
+            - ./tests:/var/www/tests
+            - ./tmp/reports:/var/www/tmp/reports
         networks:
             - visitor-management
         environment:
