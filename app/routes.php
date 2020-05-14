@@ -50,9 +50,9 @@ return function (App $app) {
             $group->get('/{id}', ViewPersonAction::class);
             $group->get('/search/query', SearchPersonsAction::class);
         });
-	
-	$app->post('/id-scan', IDScanAction::class);
-		      
+    
+        $group->post('/id-scan', IDScanAction::class);
+              
         $group->group('/dev', function (Group $group) {
             $group->group('/examples', function (Group $group) {
                 $group->get('/database-fetch', \App\Actions\Dev\Examples\DatabaseFetchAction::class);
