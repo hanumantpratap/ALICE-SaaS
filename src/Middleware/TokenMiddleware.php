@@ -31,6 +31,7 @@ class TokenMiddleware implements MiddlewareInterface
             $token->gid = '65';
             $token->dist = '5235';
             $token->admin = 'f';
+            $token->building = '5240';
         }
 
         $request = $request->withAttribute('token', $token);
