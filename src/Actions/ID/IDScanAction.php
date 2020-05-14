@@ -24,11 +24,23 @@ class IDScanAction extends Action
             $formData = $this->getFormData();
 
             if (isset($formData->imageBase64)) {
-                $imageBase64 = ($formData->imageBase64);
+                $this->logger->info('get base64');
+
+                $imageBase64 = $formData->imageBase64;
+
+                /* 
+                    Recongnizer Types:
+                        FRONT: BLINK_ID
+                        BACK: USDL
+                        PHOTO: FACE
+                */
 
                 $data = [
-                    'recognizerType' => 'MRTD',
-                    'imageBase64' => $imageBase64
+                    'recognizerType' => 'BLINK_ID',
+                    'imageBase64' => $imageBase64,
+                    'exportImages' => false,
+                    'exportFullDocumentImage' => false,
+                    "exportFaceImage" => false
                 ];
             }
             else {
@@ -62,11 +74,15 @@ class IDScanAction extends Action
             ]);
 
             $payload = json_decode($response->getBody()->getContents());
+
+            if (!isset($payload->data->result)) {
+                throw new Exceptions\BadRequestException('Could not process the ID card.');
+            }
+
             return $this->respondWithData($payload->data->result);
         }
         catch(ClientException $e) {
             $response = json_decode($e->getResponse()->getBody()->getContents());
-
             throw new Exceptions\BadRequestException($response->summary);
         }
         catch(ServerException $e) {
