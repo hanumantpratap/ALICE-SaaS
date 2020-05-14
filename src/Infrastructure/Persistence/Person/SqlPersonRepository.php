@@ -40,6 +40,7 @@ final class SqlPersonRepository implements PersonRepository
     public function findPersonOfId(int $id): Person {
       /** @var Person $person */
       $person = $this->repository->findOneBy(['personId' => $id]);
+      $person->blacklistArray = $person->getBlacklist()->toArray();
 
       if (!is_null($person)) {
           return $person;

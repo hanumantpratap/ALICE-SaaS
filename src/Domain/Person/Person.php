@@ -12,15 +12,12 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
-use JsonSerializable;
-use ReflectionObject;
-use ReflectionProperty;
 
 /**
  * @Entity
  * @Table(name="people", schema="public")
  */
-class Person implements JsonSerializable {
+class Person {
   /**
    * @Id
    * @GeneratedValue
@@ -52,6 +49,8 @@ class Person implements JsonSerializable {
   /** @OneToMany(targetEntity="BlacklistItem", mappedBy="person") */
   protected Collection $blacklist;
 
+  public array $blacklistArray;
+
   public function getBlacklist(): Collection {
     return $this->blacklist;
   }
@@ -77,14 +76,5 @@ class Person implements JsonSerializable {
     $this->phones = new ArrayCollection();
     $this->flags = new ArrayCollection();
     $this->blacklist = new ArrayCollection();
-  }
-
-  public function jsonSerialize() {
-    return [
-      "personId" => $this->personId,
-      "firstName" => $this->name->givenName,
-      "lastName" => $this->name->familyName,
-      "blacklist" => $this->blacklist->toArray()
-    ];
   }
 }
