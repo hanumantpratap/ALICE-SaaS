@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Visit;
 
+use App\Exceptions;
 use App\Domain\Visit\Visit;
 use App\Domain\Visit\VisitRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -51,7 +52,7 @@ final class SqlVisitRepository implements VisitRepository
           return $visit;
       }
 
-      throw new Exceptions\NotFoundException('The User you requested does not exist.');
+      throw new Exceptions\NotFoundException('The Visit you requested does not exist.');
     }
 
     /**
