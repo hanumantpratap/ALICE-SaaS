@@ -26,6 +26,10 @@ $settings($containerBuilder);
 $dependencies = require __DIR__ . '/../app/dependencies.php';
 $dependencies($containerBuilder);
 
+// Set up repositories
+$repositories = require __DIR__ . '/../app/repositories.php';
+$repositories($containerBuilder);
+
 // Set up services
 $services = require __DIR__ . '/../app/services.php';
 $services($containerBuilder);
