@@ -33,30 +33,23 @@ class TokenProcessor {
     }
 
     public function create($params, $expire = null, $refresh = false) {
-        if (!is_array($params)) {
-            $params = [];
-        }
-
-        $default_params = [
-            'iat' => time()        
-        ];
+        $iat = time();
+        $params->iat = $iat;
 
         if ($expire && is_numeric($expire)) {
             if ($refresh) {
-                $default_params['redexp'] = $expire;
+                $params->redexp = $expire;
             }
             else {
-                $default_params['exp'] = $default_params['iat'] + $expire; //expiration is issued at time plus expire time in seconds
+                $params->exp = $iat + $expire; //expiration is issued at time plus expire time in seconds
             }
         }
 
-        $payload = array_merge($params, $default_params);
-
-        $token = JWT::encode($payload, $this->secret);
+        $token = JWT::encode($params, $this->secret);
 
         // if token needs to refresh, use redis to manage expiration
-        if (isset($default_params['redexp'])) {
-            $this->redis->set($token, 1, $default_params['redexp']);
+        if (isset($params->redexp)) {
+            $this->redis->set($token, 1, $params->redexp);
         }
 
         return $token;

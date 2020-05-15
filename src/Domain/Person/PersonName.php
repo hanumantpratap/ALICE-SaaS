@@ -49,7 +49,7 @@ class PersonName {
 
   /**
    * @OneToOne(targetEntity="Person", inversedBy="name")
-   * @JoinColumn(name="pname_id", referencedColumnName="person_id")
+   * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
   protected Person $person;
 }

@@ -43,8 +43,38 @@ class Person {
   /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
   protected Collection $phones;
 
+  /** @OneToMany(targetEntity="Flag", mappedBy="person") */
+  protected Collection $flags;
+
+  /** @OneToMany(targetEntity="BlacklistItem", mappedBy="person") */
+  protected Collection $blacklist;
+
+  public array $blacklistArray;
+
+  public function getBlacklist(): Collection {
+    return $this->blacklist;
+  }
+
+  protected function setBlacklist(Collection $blacklist): void {
+    $this->blacklist = $blacklist;
+  }
+
+  public function addBlacklistItem(BlacklistItem $item): void {
+    $this->blacklist->add($item);
+  }
+
+  public function removeBlacklistItem(BlacklistItem $item): void {
+    $this->blacklist->removeElement($item);
+  }
+
+  public function isOnBuildingBlacklist(int $buildingId): bool {
+    return $this->blacklist->exists(fn($key, $value) => $value->buildingId == $buildingId);
+  }
+
   public function __construct() {
     $this->name = new PersonName();
     $this->phones = new ArrayCollection();
+    $this->flags = new ArrayCollection();
+    $this->blacklist = new ArrayCollection();
   }
 }
