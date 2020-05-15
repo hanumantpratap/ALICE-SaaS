@@ -36,12 +36,14 @@ class IDScanAction extends Action
                 */
 
                 $data = [
-                    'recognizerType' => 'BLINK_ID',
-                    'imageBase64' => $imageBase64,
-                    'exportImages' => false,
-                    'exportFullDocumentImage' => false,
-                    "exportFaceImage" => false
+                    'imageBase64' => $formData->imageBase64,
+                    'recognizerType' => $formData->recognizerType ?? 'BLINK_ID',
+                    'exportImages' => $formData->exportImages ?? false,
+                    'exportFullDocumentImage' => $formData->exportFullDocumentImage ?? false,
+                    'exportFaceImage' => $formData->exportFaceImage ?? false,
                 ];
+
+                $this->logger->info('data', $data);
             }
             else {
                 throw new BadRequestException('Please provide imageBase64 in request.');
@@ -76,7 +78,7 @@ class IDScanAction extends Action
             $payload = json_decode($response->getBody()->getContents());
 
             if (!isset($payload->data->result)) {
-                throw new Exceptions\BadRequestException('Could not process the ID card.');
+                throw new Exceptions\BadRequestException('Could not process ID.');
             }
 
             return $this->respondWithData($payload->data->result);
