@@ -6,22 +6,18 @@ namespace App\Actions\Visit;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Actions\Action;
 use Psr\Log\LoggerInterface;
-use App\Services\VisitsService;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Domain\Visit\Visit;
+use App\Domain\Visit\VisitRepository;
 
 abstract class VisitAction extends Action
 {
     /**
      * @param LoggerInterface $logger
-     * @param VisitsService $visitsService
-     * @param EntityManagerInterface $entityManager
+     * @param VisitRepository $visitRepository
      */
 
-    public function __construct(LoggerInterface $logger, VisitsService $visitsService, EntityManagerInterface $entityManager)
+    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository)
     {
-        $this->visitsService = $visitsService;
-        $this->repository = $entityManager->getRepository(Visit::class);
+        $this->visitRepository = $visitRepository;
         parent::__construct($logger);
     }
 }

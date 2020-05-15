@@ -59,9 +59,41 @@ class Visit {
    * @ManyToOne(targetEntity="\App\Domain\Person\Person")
    * @JoinColumn(name="people_id", referencedColumnName="person_id")
    */
-  public \App\Domain\Person\Person $person;
+  protected ?Person $person;
+
+  public object $visitor;
+
+  public function getId() {
+    return $this->id;
+  }
 
   public function getPerson() {
     return $this->person;
+  }
+
+  public function setPerson(Person $person) {
+    $this->person = $person;
+  }
+
+  public function setUserId(int $userId) {
+    $this->userId = $userId;
+  }
+
+  public function setNotes(string $notes) {
+    $this->notes = $notes;
+  }
+
+  public function getVisitor() {
+    $person = $this->getPerson();
+
+    $visitor = new \stdClass();
+    $visitor->personId = $person->personId;
+    
+    $visitor->firstName = $person->getName()->givenName;
+    $visitor->lastName = $person->getName()->familyName;
+    $visitor->emailAddress = $person->getEmail()->emailAddress;
+
+    return $visitor;
+
   }
 }

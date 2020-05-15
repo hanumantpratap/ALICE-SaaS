@@ -43,8 +43,23 @@ class Person {
   /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
   protected Collection $phones;
 
+  /** @OneToOne(targetEntity="PersonEmail", mappedBy="person") */
+  public ?PersonEmail $email;
+
   public function __construct() {
     $this->name = new PersonName();
     $this->phones = new ArrayCollection();
+  }
+
+  public function getDisplayName() {
+    return $this->displayName;
+  }
+
+  public function getName() {
+    return $this->name;
+  }
+
+  public function getEmail() {
+    return $this->email;
   }
 }

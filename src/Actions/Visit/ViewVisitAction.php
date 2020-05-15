@@ -10,13 +10,11 @@ class ViewVisitAction extends VisitAction
     protected function action(): Response
     {
         $visitId = (int) $this->resolveArg('id');
-        $visit = $this->repository->findOneBy(['id' => $visitId]);
-        $person = $visit->getPerson();
-        //$visit = $this->visitsService->fetch($visitId);
+        $visit = $this->visitRepository->findVisitOfId($visitId);
 
         $this->logger->info("Visit of id `${visitId}` was viewed.");
 
-        return $this->respondWithData(['visit' => $visit, 'person' => $person]);
+        return $this->respondWithData($visit);
     }
 
     /**
@@ -36,17 +34,28 @@ class ViewVisitAction extends VisitAction
      *         description="View Visitor",
      *         @OA\MediaType(
      *             mediaType="application/json",
-     *             example={"statusCode": 200, "data": {
-     *                            "id": 2,
-     *                            "personId": 1,
-     *                            "personName": "Lauren Admin",
-     *                            "dateCreated": "2020-05-01 15:15:40.638842+00",
-     *                            "checkIn": null,
-     *                            "checkOut": null,
-     *                            "userId": 200000037,
-     *                            "userName": "Mae Admin",
-     *                            "notes": "test"
-     *                       }}
+     *             example={
+     *                 "statusCode": 200, 
+     *                 "data": {
+     *                      "id": 10,
+     *                      "personId": 3185,
+     *                      "dateCreated": "2020-05-07 22:25:47.262826+00",
+     *                      "reasonId": null,
+     *                      "checkIn": null,
+     *                      "checkOut": null,
+     *                      "userId": 200000127,
+     *                      "identificationId": null,
+     *                      "notes": "hello",
+     *                      "estimatedCheckIn": null,
+     *                      "estimatedCheckOut": null,
+     *                      "visitor": {
+     *                          "personId": 3185,
+     *                          "firstName": "Rosalinda",
+     *                          "lastName": "Walt",
+     *                          "emailAddress": "Rosalinda.Walt@laureninnovations.com"
+     *                      }
+     *                  }
+     *              }
      *         )
      *     )
      * )

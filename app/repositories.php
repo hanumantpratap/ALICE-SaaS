@@ -17,6 +17,8 @@ use App\Domain\Person\PersonRepository;
 use App\Infrastructure\Persistence\Person\SqlPersonRepository;
 use App\Domain\User\UserRepository;
 use App\Infrastructure\Persistence\User\SqlUserRepository;
+use App\Domain\Visit\VisitRepository;
+use App\Infrastructure\Persistence\Visit\SqlVisitRepository;
 use DI\ContainerBuilder;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -26,6 +28,9 @@ return function (ContainerBuilder $containerBuilder) {
         },
         UserRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
             return new SqlUserRepository($logger, $em);
+        },
+        VisitRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
+            return new SqlVisitRepository($logger, $em);
         },
     ]);
 };
