@@ -18,6 +18,7 @@ services:
             - ./templates:/var/www/templates
             - ./tests:/var/www/tests
             - ./tmp/reports:/var/www/tmp/reports
+            - ./phpunit.xml:/var/www/phpunit.xml
         networks:
             - visitor-management
         environment:

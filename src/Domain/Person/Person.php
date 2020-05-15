@@ -68,7 +68,7 @@ class Person {
   }
 
   public function isOnBuildingBlacklist(int $buildingId): bool {
-    return $this->blacklist->exists(fn($item) => $item->buildingId == $buildingId);
+    return $this->blacklist->exists(fn($key, $value) => $value->buildingId == $buildingId);
   }
 
   public function __construct() {
