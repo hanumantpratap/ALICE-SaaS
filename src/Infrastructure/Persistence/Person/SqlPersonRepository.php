@@ -38,11 +38,14 @@ final class SqlPersonRepository implements PersonRepository
      * @inheritdoc
      */
     public function findPersonOfId(int $id): Person {
-      /** @var Person $person */
       $person = $this->repository->findOneBy(['personId' => $id]);
 
       if (!is_null($person)) {
-          return $person;
+        // For a single record, attach the Blacklist to the public array
+        // This allows it to be easily serialized and prevents too many queries
+        // on listing calls.
+        $person->blacklistArray = $person->getBlacklist()->toArray();
+        return $person;
       }
 
       throw new PersonNotFoundException();

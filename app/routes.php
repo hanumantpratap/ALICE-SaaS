@@ -13,6 +13,7 @@ use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
 use App\Actions\User\SignInAction;
+use App\Actions\ID\IDScanAction;
 
 use App\Middleware\AuthMiddleware;
 
@@ -49,7 +50,9 @@ return function (App $app) {
             $group->get('/{id}', ViewPersonAction::class);
             $group->get('/search/query', SearchPersonsAction::class);
         });
-		      
+    
+        $group->post('/id-scan', IDScanAction::class);
+              
         $group->group('/dev', function (Group $group) {
             $group->group('/examples', function (Group $group) {
                 $group->get('/database-fetch', \App\Actions\Dev\Examples\DatabaseFetchAction::class);
