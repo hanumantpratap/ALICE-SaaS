@@ -46,7 +46,7 @@ class Person {
   /** @OneToMany(targetEntity="Flag", mappedBy="person") */
   protected Collection $flags;
 
-  /** @OneToMany(targetEntity="BlacklistItem", mappedBy="person") */
+  /** @OneToMany(targetEntity="BlacklistItem", mappedBy="person", cascade={"persist", "remove"}) */
   protected Collection $blacklist;
 
   public array $blacklistArray;

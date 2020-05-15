@@ -40,7 +40,7 @@ class BlacklistItem {
   public int $userId;
 
   /** @Column(name="date_created", nullable=true, type="datetime") */
-  public DateTime $createdAt;
+  public ?DateTime $createdAt;
 
   /** @Column(name="date_updated", nullable=true, type="datetime") */
   public ?DateTime $updatedAt;
@@ -50,4 +50,13 @@ class BlacklistItem {
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
   protected Person $person;
+
+  public function setPerson(Person $person): void {
+    $this->person = $person;
+  }
+
+  public function __construct() {
+    $this->createdAt = new DateTime();
+    $this->updatedAt = new DateTime();
+  }
 }
