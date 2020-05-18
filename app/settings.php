@@ -18,7 +18,7 @@ return function (ContainerBuilder $containerBuilder) {
                 'doctrine' => [
                     'dev_mode' => $_ENV['ENV'] == 'dev',
                     'cache_dir' => APP_ROOT . '/var/doctrine',
-                    'metadata_dirs' => [APP_ROOT . '/src/Entities'],
+                    'metadata_dirs' => [APP_ROOT . '/src/Domain'],
                     'connection' => [
                         'driver' => 'pdo_pgsql',
                         'charset' => 'utf-8',
