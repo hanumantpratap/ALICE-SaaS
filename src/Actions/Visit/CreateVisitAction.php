@@ -8,6 +8,8 @@ use App\Actions\Action;
 use Psr\Log\LoggerInterface;
 use App\Domain\Visit\Visit;
 use App\Domain\Visit\VisitRepository;
+use App\Domain\Person\Person;
+use App\Domain\Person\PersonName;
 use App\Domain\Person\PersonRepository;
 use App\Exceptions;
 
@@ -28,18 +30,27 @@ class CreateVisitAction extends Action
     protected function action(): Response
     {
         $formData = $this->getFormData();
-        $bad_fields = array();
 
-        if (!isset($formData->personId)) {
-            array_push($bad_fields, ['field' => 'personId', 'message' => 'You must provide a personId.']);
+        if (!isset($formData->personId) && (!isset($formData->firstName) || !isset($formData->lastName) )) {
+            throw new Exceptions\BadRequestException('Please provide a person ID or information for creating a new visitor.');
         }
 
-        if (count($bad_fields) > 0) {
-            throw new Exceptions\BadRequestException(null, $bad_fields);
+        if (isset($formData->personId)) {
+            $person = $this->personRepository->findPersonOfId((int) $formData->personId);
         }
+        else {
+            $name = new PersonName();
+            $name->setGivenName($formData->firstName);
+            $name->setFamilyName($formData->lastName);
+            
+            $person = new Person();
+            $person->setName($name);
+            $person->setStatus(1);
+            
+            $name->setPerson($person);
 
-        $personId = (int) $formData->personId;
-        $person = $this->personRepository->findPersonOfId($personId);
+            $this->personRepository->save($person);
+        }
 
         $visit = new Visit();
         $visit->setPerson($person);
