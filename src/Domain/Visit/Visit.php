@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Visit;
 
+use DateTime;
 use App\Domain\Person\Person;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
@@ -28,17 +29,17 @@ class Visit {
   /** @Column(name="people_id") */
   public int $personId;
 
-  /** @Column(name="date_created") */
-  public ?string $dateCreated;
+  /** @Column(name="date_created", nullable=true, type="datetime") */
+  public ?DateTime $dateCreated;
 
   /** @Column(name="reason_id") */
   public ?int $reasonId;
 
-  /** @Column(name="check_in") */
-  public ?string $checkIn;
+  /** @Column(name="check_in", nullable=true, type="datetime") */
+  public ?DateTime $checkIn;
 
-  /** @Column(name="check_out") */
-  public ?string $checkOut;
+  /** @Column(name="check_out", nullable=true, type="datetime") */
+  public ?DateTime $checkOut;
 
   /** @Column(name="user_id") */
   public ?int $userId;
@@ -49,11 +50,11 @@ class Visit {
   /** @Column */
   public ?string $notes;
 
-  /** @Column(name="estimated_check_in") */
-  public ?string $estimatedCheckIn;
+  /** @Column(name="estimated_check_in", nullable=true, type="datetime") */
+  public ?DateTime $estimatedCheckIn;
 
-  /** @Column(name="estimated_check_out") */
-  public ?string $estimatedCheckOut;
+  /** @Column(name="estimated_check_out", nullable=true, type="datetime") */
+  public ?DateTime $estimatedCheckOut;
 
   /**
    * @ManyToOne(targetEntity="\App\Domain\Person\Person")
@@ -94,6 +95,13 @@ class Visit {
     $visitor->emailAddress = $person->getEmail()->emailAddress;
 
     return $visitor;
+  }
 
+  public function __construct() {
+    $this->dateCreated = new DateTime();
+    $this->checkIn = null;
+    $this->checkOut = null;
+    $this->estimatedCheckIn = null;
+    $this->estimatedCheckOut = null;
   }
 }
