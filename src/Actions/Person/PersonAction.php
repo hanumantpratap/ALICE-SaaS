@@ -9,15 +9,8 @@ use Psr\Log\LoggerInterface;
 
 abstract class PersonAction extends Action
 {
-    /**
-     * @var PersonRepository
-     */
-    protected $personRepository;
+    protected PersonRepository $personRepository;
 
-    /**
-     * @param LoggerInterface $logger
-     * @param PersonRepository  $personRepository
-     */
     public function __construct(LoggerInterface $logger, PersonRepository $personRepository)
     {
         parent::__construct($logger);
