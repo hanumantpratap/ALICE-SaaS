@@ -6,18 +6,18 @@ namespace App\Actions\Visit;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Actions\Action;
 use Psr\Log\LoggerInterface;
-use App\Services\VisitsService;
+use App\Domain\Visit\VisitRepository;
 
 abstract class VisitAction extends Action
 {
     /**
      * @param LoggerInterface $logger
-     * @param VisitsService $visitsService
+     * @param VisitRepository $visitRepository
      */
 
-    public function __construct(LoggerInterface $logger, VisitsService $visitsService)
+    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository)
     {
-        $this->logger = $logger;
-        $this->visitsService = $visitsService;
+        $this->visitRepository = $visitRepository;
+        parent::__construct($logger);
     }
 }

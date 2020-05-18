@@ -43,6 +43,9 @@ class Person {
   /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
   protected Collection $phones;
 
+  /** @OneToOne(targetEntity="PersonEmail", mappedBy="person") */
+  public ?PersonEmail $email;
+  
   /** @OneToMany(targetEntity="Flag", mappedBy="person") */
   protected Collection $flags;
 
@@ -50,7 +53,19 @@ class Person {
   protected Collection $blacklist;
 
   public array $blacklistArray;
+  
+  public function getDisplayName() {
+    return $this->displayName;
+  }
 
+  public function getName() {
+    return $this->name;
+  }
+  
+  public function getEmail() {
+    return $this->email;
+  }
+  
   public function getBlacklist(): Collection {
     return $this->blacklist;
   }
