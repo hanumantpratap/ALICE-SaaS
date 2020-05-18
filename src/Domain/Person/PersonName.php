@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\SequenceGenerator;
 
 /**
  * @Entity
@@ -20,6 +21,7 @@ class PersonName {
    * @Id
    * @GeneratedValue
    * @Column(name="pname_id")
+   * @SequenceGenerator(sequenceName="pname_id_seq")
    */
   public ?int $id;
 
@@ -27,7 +29,7 @@ class PersonName {
   public int $personId;
 
   /** @Column(name="name_type") */
-  public int $nameType;
+  public int $nameType = 2;
 
   /** @Column(name="given_name") */
   public ?string $givenName;
@@ -52,4 +54,32 @@ class PersonName {
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
   protected Person $person;
+
+  public function getGivenName() {
+    return $this->givenName;
+  }
+
+  public function setGivenName(string $givenName) {
+    $this->givenName = $givenName;
+  }
+
+  public function getMiddleName() {
+    return $this->middleName;
+  }
+
+  public function setMiddleName(string $middleName) {
+    $this->middleName = $middleName;
+  }
+
+  public function getFamilyName() {
+    return $this->familyName;
+  }
+
+  public function setFamilyName(string $familyName) {
+    $this->familyName = $familyName;
+  }
+
+  public function setPerson(Person $person) {
+    $this->person = $person;
+  }
 }
