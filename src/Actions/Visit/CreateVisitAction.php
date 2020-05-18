@@ -10,6 +10,7 @@ use App\Domain\Visit\Visit;
 use App\Domain\Visit\VisitRepository;
 use App\Domain\Person\Person;
 use App\Domain\Person\PersonName;
+use App\Domain\Person\PersonEmail;
 use App\Domain\Person\PersonRepository;
 use App\Exceptions;
 
@@ -39,17 +40,29 @@ class CreateVisitAction extends Action
             $person = $this->personRepository->findPersonOfId((int) $formData->personId);
         }
         else {
+            $person = new Person();
+            $person->setStatus(1);
+
             $name = new PersonName();
             $name->setGivenName($formData->firstName);
             $name->setFamilyName($formData->lastName);
-            
-            $person = new Person();
-            $person->setName($name);
-            $person->setStatus(1);
-            
             $name->setPerson($person);
+            $person->setName($name);
 
             $this->personRepository->save($person);
+            
+            // The reason this has to be done as a separate save call is because 
+            // the person ID needs to be set to the email's source column.
+            // I don't yet know what the point of the column is.
+            if (isset($formData->email)) {
+                $email = new PersonEmail();
+                $email->setEmailAddress($formData->email);
+                $email->setPerson($person);
+                $email->setSource($person->getPersonId());
+                $person->setEmail($email);
+
+                $this->personRepository->save($person);
+            }
         }
 
         $visit = new Visit();

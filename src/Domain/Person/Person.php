@@ -45,7 +45,7 @@ class Person {
   /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
   protected Collection $phones;
 
-  /** @OneToOne(targetEntity="PersonEmail", mappedBy="person") */
+  /** @OneToOne(targetEntity="PersonEmail", mappedBy="person", cascade={"persist", "remove"}) */
   public ?PersonEmail $email = null;
   
   /** @OneToMany(targetEntity="Flag", mappedBy="person") */
@@ -56,6 +56,10 @@ class Person {
 
   public array $blacklistArray;
   
+  public function getPersonId() {
+    return $this->personId;
+  }
+
   public function getStatus() {
     return $this->status;
   }
@@ -79,6 +83,10 @@ class Person {
   
   public function getEmail() {
     return $this->email;
+  }
+
+  public function setEmail(PersonEmail $email) {
+    $this->email = $email;
   }
   
   public function getBlacklist(): Collection {
