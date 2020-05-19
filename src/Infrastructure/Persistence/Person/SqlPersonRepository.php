@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Persistence\Person;
 
 use App\Domain\Person\Person;
+use App\Domain\Person\PersonDemographics;
 use App\Domain\Person\PersonNotFoundException;
 use App\Domain\Person\PersonRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -12,6 +13,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Doctrine\Persistence\ObjectRepository;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
 final class SqlPersonRepository implements PersonRepository
@@ -71,8 +73,55 @@ final class SqlPersonRepository implements PersonRepository
             return $persons;
         }
 
-        throw new PersonNotFoundException();
+        return [];
+        //throw new PersonNotFoundException();
     }
+
+
+
+    // find persons based on field searches in the people and person_demographics table.
+    // All search criteria in array, $params, will be concatenated by ANDs.
+    public function findPersonsByParams(array $params): array {
+        
+        // declare the QueryBuilder
+        $qb = $this->entityManager->createQueryBuilder("p")
+            ->from(Person::class, "p")
+            ->select("p")->LeftJoin( 'p.personDemographics', 'pd');
+
+        // iterate through query params, and build the query
+        foreach( $params as $key => $value ) {
+            switch( $key ) {
+                // a partial string match in a Person field
+                case "displayName": case "externalId": case "type":
+                    $criteria = Criteria::create()->where(Criteria::expr()->contains( $key, $value ));
+                    $qb->addCriteria( $criteria );
+                    break;
+                 // an exact value in a Person field
+                 case "status":
+                    $criteria = Criteria::create()->where(Criteria::expr()->eq( $key, $value ));
+                    $qb->addCriteria( $criteria );                  
+                    break;
+                // a partial string match in a PersonDemographics field
+                case "marks":
+                    $criteria = Criteria::create()->where(Criteria::expr()->contains( 'pd.'.$key, $value ));
+                    $qb->addCriteria( $criteria );
+                    break;
+                // an exact value in a PersonDemographics field
+                case "birthDate": case "gender": case "ethnicity": case "bloodType": case "maritalStatus":
+                case "eyeColor": case "hairColor": case "height": case "weight":
+                    $criteria = Criteria::create()->where(Criteria::expr()->eq( 'pd.'.$key, $value ));
+                    $qb->addCriteria( $criteria );                  
+                    break;
+                default:
+                    throw new InvalidArgumentException( 'Query parameter, '.$key.', is not recognized.');
+            }
+        }
+
+        // return the array of persons, or an empty array if no matches found
+        return $qb->getQuery()->getResult() ?? [];
+    }
+
+
 
     /**
      * @inheritdoc
