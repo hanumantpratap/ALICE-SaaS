@@ -93,6 +93,8 @@ return function (ContainerBuilder $containerBuilder) {
                 )
             );
 
+            $config->setAutoGenerateProxyClasses(true);
+
             $config->setMetadataCacheImpl(
                 new FilesystemCache($doctrineSettings['cache_dir'])
             );
