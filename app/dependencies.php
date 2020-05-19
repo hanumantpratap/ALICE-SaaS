@@ -23,6 +23,7 @@ use App\Classes\DatabaseConnection;
 use App\Classes\DistrictDatabaseConnection;
 use App\Classes\RedisConnector;
 use App\Classes\TokenProcessor;
+use App\Classes\SqlLogger;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -76,7 +77,8 @@ return function (ContainerBuilder $containerBuilder) {
         },
 
         EntityManagerInterface::class => function (ContainerInterface $c, LoggerInterface $logger): EntityManager {
-            $doctrineSettings = $c->get('settings')['doctrine'];
+            $settings = $c->get('settings');
+            $doctrineSettings = $settings['doctrine'];
             $logger->info('entity manager');
             $secureId = $c->get('secureID');
             $doctrineSettings['connection']['dbname'] = $doctrineSettings['connection']['dbname'] . '_' . $secureId;
@@ -92,6 +94,11 @@ return function (ContainerBuilder $containerBuilder) {
                     $doctrineSettings['metadata_dirs']
                 )
             );
+
+            if ($settings['logSql']) {
+                $sqlLogger = new SqlLogger($logger);
+                $config->setSQLLogger($sqlLogger);
+            }
 
             $config->setMetadataCacheImpl(
                 new FilesystemCache($doctrineSettings['cache_dir'])

@@ -30,6 +30,7 @@ services:
             - POSTGRES_PORT=5432
             - ENV=dev
             - LOG_TARGET=/var/www/logs/app.log
+            - LOG_SQL=false
             - REDIS_HOST=localhost
             - REDIS_PORT=5530
             - VIRTUAL_HOST=api.navigate360.com
