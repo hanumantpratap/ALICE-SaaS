@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
 
@@ -39,6 +40,9 @@ class Person {
 
   /** @OneToOne(targetEntity="PersonName", mappedBy="person") */
   public ?PersonName $name;
+
+  /** @OneToOne(targetEntity="PersonDemographics", mappedBy="person") */
+  public ?PersonDemographics $personDemographics;
 
   /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
   protected Collection $phones;
@@ -73,6 +77,7 @@ class Person {
 
   public function __construct() {
     $this->name = new PersonName();
+    //$this->personDemographics = new PersonDemographics();
     $this->phones = new ArrayCollection();
     $this->flags = new ArrayCollection();
     $this->blacklist = new ArrayCollection();

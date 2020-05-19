@@ -25,6 +25,14 @@ interface PersonRepository
     public function findPersonsOfName(string $name): array;
 
     /**
+     * @param string $params
+     * @return Person[]
+     * @throws InvalidArgumentException
+     */
+    public function findPersonsByParams(array $params): array;
+
+
+    /**
      * @param Person Person
      * @return bool
      * @throws PersonNotCreatedException
