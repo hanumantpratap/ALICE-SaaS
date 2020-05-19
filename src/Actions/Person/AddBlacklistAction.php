@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Person;
 
-use App\Actions\ActionPayload;
 use App\Domain\Person\BlacklistItem;
 use Psr\Http\Message\ResponseInterface as Response;
 
