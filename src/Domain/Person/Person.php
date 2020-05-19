@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\SequenceGenerator;
 
 /**
  * @Entity
@@ -23,6 +24,7 @@ class Person {
    * @Id
    * @GeneratedValue
    * @Column(name="person_id")
+   * @SequenceGenerator(sequenceName="person_id_seq")
    */
   public ?int $personId = null;
 
@@ -38,7 +40,7 @@ class Person {
   /** @Column(name="type") */
   public ?string $type;
 
-  /** @OneToOne(targetEntity="PersonName", mappedBy="person") */
+  /** @OneToOne(targetEntity="PersonName", mappedBy="person", cascade={"persist", "remove"}) */
   public ?PersonName $name;
 
   /** @OneToOne(targetEntity="PersonDemographics", mappedBy="person") */
@@ -47,14 +49,50 @@ class Person {
   /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
   protected Collection $phones;
 
+  /** @OneToOne(targetEntity="PersonEmail", mappedBy="person", cascade={"persist", "remove"}) */
+  public ?PersonEmail $email = null;
+  
   /** @OneToMany(targetEntity="Flag", mappedBy="person") */
   protected Collection $flags;
 
-  /** @OneToMany(targetEntity="BlacklistItem", mappedBy="person") */
+  /** @OneToMany(targetEntity="BlacklistItem", mappedBy="person", cascade={"persist", "remove"}) */
   protected Collection $blacklist;
 
   public array $blacklistArray;
+  
+  public function getPersonId() {
+    return $this->personId;
+  }
 
+  public function getStatus() {
+    return $this->status;
+  }
+
+  public function setStatus(int $status) {
+    $this->status = $status;
+  }
+
+  public function getDisplayName() {
+    return $this->displayName;
+  }
+
+  public function getName() {
+    return $this->name;
+  }
+
+  public function setName(PersonName $name) {
+    $this->name = $name;
+    $this->displayName = $name->getFamilyName() . ', ' . $name->getGivenName();
+  }
+  
+  public function getEmail() {
+    return $this->email;
+  }
+
+  public function setEmail(PersonEmail $email) {
+    $this->email = $email;
+  }
+  
   public function getBlacklist(): Collection {
     return $this->blacklist;
   }
@@ -77,7 +115,6 @@ class Person {
 
   public function __construct() {
     $this->name = new PersonName();
-    //$this->personDemographics = new PersonDemographics();
     $this->phones = new ArrayCollection();
     $this->flags = new ArrayCollection();
     $this->blacklist = new ArrayCollection();

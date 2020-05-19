@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace App\Actions\User;
 
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Actions\Action;
 
-class ViewUserAction extends Action
+class ViewUserAction extends UserAction
 {
     /**
      * @OA\Get(
@@ -33,9 +32,11 @@ class ViewUserAction extends Action
     protected function action(): Response
     {
         $userId = (int) $this->resolveArg('id');
+        $user = $this->userRepository->findUserOfId($userId);
+        $user->loadPerson();
 
         $this->logger->info("User of id `${userId}` was viewed.");
 
-        return $this->respondWithData(['params' => 'value']);
+        return $this->respondWithData($user);
     }
 }

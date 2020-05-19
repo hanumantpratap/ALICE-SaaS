@@ -4,29 +4,86 @@ declare(strict_types=1);
 namespace App\Actions\Visit;
 
 use Psr\Http\Message\ResponseInterface as Response;
+use App\Actions\Action;
+use Psr\Log\LoggerInterface;
+use App\Domain\Visit\Visit;
+use App\Domain\Visit\VisitRepository;
+use App\Domain\Person\Person;
+use App\Domain\Person\PersonName;
+use App\Domain\Person\PersonEmail;
+use App\Domain\Person\PersonRepository;
 use App\Exceptions;
 
-class CreateVisitAction extends VisitAction
+class CreateVisitAction extends Action
 {
+    /**
+     * @param LoggerInterface $logger
+     * @param VisitRepository $visitRepository
+     */
+
+    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, PersonRepository $personRepository)
+    {
+        $this->visitRepository = $visitRepository;
+        $this->personRepository = $personRepository;
+        parent::__construct($logger);
+    }
+
     protected function action(): Response
     {
-        $visitData = $this->getFormData();
-        $bad_fields = array();
+        $formData = $this->getFormData();
 
-        if (!isset($visitData->visitorId)) {
-            array_push($bad_fields, ['field' => 'visitorId', 'message' => 'You must provide a visitorId.']);
+        if (!isset($formData->personId) && (!isset($formData->firstName) || !isset($formData->lastName) )) {
+            throw new Exceptions\BadRequestException('Please provide a person ID or information for creating a new visitor.');
         }
 
-        if (count($bad_fields) > 0) {
-            throw new Exceptions\BadRequestException(null, $bad_fields);
+        if (isset($formData->personId)) {
+            $person = $this->personRepository->findPersonOfId((int) $formData->personId);
+        }
+        else {
+            $person = new Person();
+            $person->setStatus(1);
+
+            $name = new PersonName();
+            $name->setGivenName($formData->firstName);
+            $name->setFamilyName($formData->lastName);
+            $name->setPerson($person);
+            $person->setName($name);
+
+            $this->personRepository->save($person);
+            
+            // The reason this has to be done as a separate save call is because 
+            // the person ID needs to be set to the email's source column.
+            // I don't yet know what the point of the column is.
+            if (isset($formData->email)) {
+                $email = new PersonEmail();
+                $email->setEmailAddress($formData->email);
+                $email->setPerson($person);
+                $email->setSource($person->getPersonId());
+                $person->setEmail($email);
+
+                $this->personRepository->save($person);
+            }
         }
 
-        $visitData->userId = $this->token->id;
+        $visit = new Visit();
+        $visit->setPerson($person);
 
-        $visitId = $this->visitsService->add($visitData);
-        $visit = $this->visitsService->fetch($visitId);
+        $userId = (int) $this->token->id;
+        $visit->setUserId($userId);
 
-        return $this->respondWithData($visit);
+        if (isset($formData->notes)) {
+            $visit->setNotes($formData->notes);
+        }
+
+        $this->visitRepository->save($visit);
+
+        $newId = $visit->getId();
+
+        $this->logger->info("Visit of id `${newId}` was created.");
+
+        $newVisit = $this->visitRepository->findVisitOfId($newId);
+
+        return $this->respondWithData($newVisit);
     }
 }
 
@@ -42,14 +99,14 @@ class CreateVisitAction extends VisitAction
  *             example={"statusCode": 200, 
  *                      "data": {
  *                            "id": 2,
- *                            "personId": 1,
- *                            "personName": "Lauren Admin",
- *                            "dateCreated": "2020-05-01 15:15:40.638842+00",
- *                            "checkIn": null,
- *                            "checkOut": null,
- *                            "userId": 200000037,
- *                            "userName": "Mae Admin",
- *                            "notes": "test"
+ *                            "userId": 1,
+ *                            "notes": "Lauren Admin",
+ *                            "visitor": {
+ *                                 "personId": 3185,
+ *                                 "firstName": "Rosalinda",
+ *                                 "lastName": "Walt",
+ *                                 "emailAddress": "Rosalinda.Walt@laureninnovations.com"
+ *                            }
  *                       }}
  *         )
  *     ),
@@ -57,7 +114,7 @@ class CreateVisitAction extends VisitAction
  *         @OA\MediaType(
  *             mediaType="application/json",
  *             example={
- *                  "visitorId": 3185,
+ *                  "personId": 3185,
  *                  "notes": "hello"
  *            }
  *         )

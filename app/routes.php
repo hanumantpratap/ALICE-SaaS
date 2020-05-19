@@ -14,7 +14,8 @@ use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
 use App\Actions\User\SignInAction;
 use App\Actions\ID\IDScanAction;
-
+use App\Actions\Person\AddBlacklistAction;
+use App\Actions\Person\ListBlacklistAction;
 use App\Middleware\AuthMiddleware;
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -45,10 +46,12 @@ return function (App $app) {
             $group->get('/{id}', ViewUserAction::class);
         });
 	
-	 $group->group('/persons', function (Group $group) {
+	    $group->group('/persons', function (Group $group) {
             $group->get('', ListPersonsAction::class);
             $group->get('/{id}', ViewPersonAction::class);
             $group->get('/search/query', SearchPersonsAction::class);
+            $group->get('/{id}/blacklist', ListBlacklistAction::class);
+            $group->post('/{id}/blacklist', AddBlacklistAction::class);
         });
     
         $group->post('/id-scan', IDScanAction::class);

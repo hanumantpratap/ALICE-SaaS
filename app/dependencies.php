@@ -19,30 +19,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
-use Doctrine\DBAL\Types\Type;
-
-Type::overrideType('datetime', 'Doctrine\DBAL\Types\VarDateTimeType');
-Type::overrideType('datetimetz', 'Doctrine\DBAL\Types\VarDateTimeType');
-Type::overrideType('time', 'Doctrine\DBAL\Types\VarDateTimeType');
-
-Type::overrideType('datetime_immutable', 'Doctrine\DBAL\Types\VarDateTimeImmutableType');
-Type::overrideType('datetimetz_immutable', 'Doctrine\DBAL\Types\VarDateTimeImmutableType');
-Type::overrideType('time_immutable', 'Doctrine\DBAL\Types\VarDateTimeImmutableType');
-
 use App\Classes\DatabaseConnection;
 use App\Classes\DistrictDatabaseConnection;
 use App\Classes\RedisConnector;
 use App\Classes\TokenProcessor;
-use App\Services\VisitsService;
-use App\Domain\Person\PersonRepository;
-use App\Infrastructure\Persistence\Person\SqlPersonRepository;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
-        PersonRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
-            return new SqlPersonRepository($logger, $em);
-        },
-        
         'Logger' => function (ContainerInterface $c) {
             $settings = $c->get('settings');
 

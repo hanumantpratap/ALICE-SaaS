@@ -30,7 +30,7 @@ class SqlPersonRepositoryTest extends TestCase
       $this->logger = new Logger("");
     }
 
-    public function testFindAll_findsAll() {
+    public function testFindAll_findsAll(): void {
       $personA = new Person();
       $personA->displayName = "John Doe";
       $personB = new Person();
@@ -43,7 +43,7 @@ class SqlPersonRepositoryTest extends TestCase
       $this->assertEquals($persons, $personRepository->findAll());
     }
 
-    public function testPersonOfId_findsOne() {
+    public function testPersonOfId_findsOne(): void {
       $person = new Person();
       $person->personId = 1;
       $person->displayName = "John Doe";
@@ -61,7 +61,7 @@ class SqlPersonRepositoryTest extends TestCase
       $this->assertEquals($person, $personRepository->findPersonOfId(1));
     }
 
-    public function testFindPersonOfId_findsNone() {
+    public function testFindPersonOfId_findsNone(): void {
       $this->objectRepository->findOneBy(Argument::any())->willReturn(NULL);
       $personRepository = new SqlPersonRepository($this->logger, $this->entityManager->reveal());
 
@@ -70,7 +70,7 @@ class SqlPersonRepositoryTest extends TestCase
       $persons = $personRepository->findPersonOfId(1);
     }
 
-    public function testFindPersonsOfName_findsOne() {
+    public function testFindPersonsOfName_findsOne(): void {
       $qb = $this->prophesize(QueryBuilder::class);
       $query = $this->prophesize(AbstractQuery::class);
 
