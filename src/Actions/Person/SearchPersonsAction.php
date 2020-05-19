@@ -13,10 +13,9 @@ class SearchPersonsAction extends PersonAction
     protected function action(): Response
     {
         $params = $this->request->getQueryParams();
-        $name = $params["name"] ?? "";
-        $persons = $this->personRepository->findPersonsOfName($name);
-
-        $this->logger->info("All persons retrieved.");
+        $persons = $this->personRepository->findPersonsByParams($params);
+ 
+        $this->logger->info("SearchPersonAction::action() retrieved the records." );
 
         return $this->respondWithData($persons);
     }

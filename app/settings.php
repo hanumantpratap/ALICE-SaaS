@@ -9,14 +9,14 @@ return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions(
         [
             'settings' => [
-                'displayErrorDetails' => $_ENV['env'] == 'dev',
+                'displayErrorDetails' => $_ENV['ENV'] == 'dev',
                 'logger' => [
                     'name' => 'visitor-management-service',
-                    'path' => $_ENV['LOG_TARGET'],
+                    'path' => $_ENV['LOG_TARGET'] ?? 'php://stdout',
                     'level' => $_ENV['LOG_LEVEL'] ?? Logger::DEBUG,
                 ],
                 'doctrine' => [
-                    'dev_mode' => $_ENV['ENV'] == 'dev',
+                    'dev_mode' => $_ENV['ENV'] ?? 'dev',
                     'cache_dir' => APP_ROOT . '/var/doctrine',
                     'metadata_dirs' => [APP_ROOT . '/src/Domain'],
                     'connection' => [
@@ -24,21 +24,21 @@ return function (ContainerBuilder $containerBuilder) {
                         'charset' => 'utf-8',
                         'host' => $_ENV['POSTGRES_HOST'] ?? 'localhost',
                         'port' => $_ENV['POSTGRES_PORT'] ?? 3306,
-                        'dbname' => $_ENV['POSTGRES_DB'],
-                        'user' => $_ENV['POSTGRES_USER'],
-                        'password' => $_ENV['POSTGRES_PASSWORD']
+                        'dbname' => $_ENV['POSTGRES_DB'] ?? 'navigate',
+                        'user' => $_ENV['POSTGRES_USER'] ?? 'user',
+                        'password' => $_ENV['POSTGRES_PASSWORD'] ?? 'password'
                     ]
                 ],
                 'database' => [
                     'host' => $_ENV['POSTGRES_HOST'] ?? 'localhost',
                     'port' => $_ENV['POSTGRES_PORT'] ?? 3306,
-                    'dbname' => $_ENV['POSTGRES_DB'],
-                    'user' => $_ENV['POSTGRES_USER'],
-                    'password' => $_ENV['POSTGRES_PASSWORD']
+                    'dbname' => $_ENV['POSTGRES_DB'] ?? 'navigate',
+                    'user' => $_ENV['POSTGRES_USER'] ?? 'user',
+                    'password' => $_ENV['POSTGRES_PASSWORD'] ?? 'password'
                 ],
                 'redis' => [
-                    'host' => $_ENV['REDIS_HOST'],
-                    'port' => $_ENV['REDIS_PORT']
+                    'host' => $_ENV['REDIS_HOST'] ?? 'localhost',
+                    'port' => $_ENV['REDIS_PORT'] ?? '6379'
                 ]
             ],
         ]
