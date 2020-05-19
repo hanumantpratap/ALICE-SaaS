@@ -100,6 +100,8 @@ return function (ContainerBuilder $containerBuilder) {
                 $config->setSQLLogger($sqlLogger);
             }
 
+            $config->setAutoGenerateProxyClasses(true);
+
             $config->setMetadataCacheImpl(
                 new FilesystemCache($doctrineSettings['cache_dir'])
             );

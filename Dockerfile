@@ -13,6 +13,8 @@ COPY . /app/
 
 RUN composer dump-autoload --no-dev --optimize
 
+#RUN ./vendor/bin/doctrine orm:generate-proxies
+
 FROM php:7-alpine
 
 RUN set -ex \
