@@ -10,6 +10,7 @@ return function (ContainerBuilder $containerBuilder) {
         [
             'settings' => [
                 'displayErrorDetails' => $_ENV['ENV'] == 'dev',
+                'logSql' => $_ENV['LOG_SQL'] == 'true',
                 'logger' => [
                     'name' => 'visitor-management-service',
                     'path' => $_ENV['LOG_TARGET'] ?? 'php://stdout',
