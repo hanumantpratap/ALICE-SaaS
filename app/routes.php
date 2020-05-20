@@ -9,10 +9,11 @@ use App\Actions\Person\SearchPersonsAction;
 use App\Actions\Person\ViewPersonAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\ViewUserAction;
+use App\Actions\User\AddNotificationGroupAction;
+use App\Actions\User\SignInAction;
 use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
-use App\Actions\User\SignInAction;
 use App\Actions\ID\IDScanAction;
 use App\Actions\Person\AddBlacklistAction;
 use App\Actions\Person\ListBlacklistAction;
@@ -44,6 +45,7 @@ return function (App $app) {
         $group->group('/users', function (Group $group) {
             $group->get('', ListUsersAction::class);
             $group->get('/{id}', ViewUserAction::class);
+            $group->post('/{id}/notificationGroups', AddNotificationGroupAction::class);
         });
 	
 	    $group->group('/persons', function (Group $group) {
