@@ -5,24 +5,10 @@ namespace App\Actions\User;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Log\LoggerInterface;
-use App\Domain\User\UserRepository;
-use App\Domain\NotificationGroup\NotificationGroupRepository;
 use App\Exceptions;
 
 class AddNotificationGroupAction extends UserAction
 {
-    /**
-     * @param LoggerInterface $logger
-     * @param UserRepository $userRepository
-     * @param NotificationGroupRepository $notificationGroupRepository
-     */
-
-    public function __construct(LoggerInterface $logger, UserRepository $userRepository, NotificationGroupRepository $notificationGroupRepository)
-    {
-        parent::__construct($logger, $userRepository);
-        $this->notificationGroupRepository = $notificationGroupRepository;
-    }
-
     /**
      * @OA\POST(
      *     path="/users/{userId}/notificationGroups",
@@ -48,7 +34,7 @@ class AddNotificationGroupAction extends UserAction
         $this->logger->info("adding Notification Group `${notificationGroupId}` to User `${userId}`");
 
         $notificationGroup = $this->notificationGroupRepository->findnotificationGroupOfId($notificationGroupId);
-        $notificationGroup->addUser($user);
+        $notificationGroup->addUser($user, $this->token->building);
         $this->notificationGroupRepository->save($notificationGroup);
 
         /* User Save has not been implemented yet. Special considerations need to be made for updating users.*/

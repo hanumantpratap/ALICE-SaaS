@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
 
@@ -39,21 +39,19 @@ class NotificationGroup {
   /** @Column(name="force_email") */
   public ?bool $forceEmail;
 
-  /** 
-   * @ManyToMany(targetEntity="\App\Domain\User\User", inversedBy="notificationGroups") 
-   * @JoinTable(name="visitor_management.notification_groups_has_users",
-   *    joinColumns={@JoinColumn(name="notification_groups_id", referencedColumnName="id")},
-   *    inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="pa_id")}
-   *  )
-   */
+  /** @OneToMany(targetEntity="NotificationGroupUser", mappedBy="notificationGroup", cascade={"persist", "remove"}) */
   protected Collection $users;
 
   public function getUsers() {
     return $this->users;
   }
 
-  public function addUser(User $user) {
-    $this->users->add($user);
+  public function addUser(User $user, int $buildingId) {
+    $notificationGroupUser = new NotificationGroupUser();
+    $notificationGroupUser->setNotificationGroup($this);
+    $notificationGroupUser->setUser($user);
+    $notificationGroupUser->setBuildingId($buildingId);
+    $this->users->add($notificationGroupUser);
   }
 
   public function __construct() {
