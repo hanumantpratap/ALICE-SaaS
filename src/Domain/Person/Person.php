@@ -60,6 +60,9 @@ class Person {
 
   public array $blacklistArray;
   
+  /** @OneToOne(targetEntity="VisitorSettings", mappedBy="person", cascade={"persist", "remove"}) */
+  protected ?VisitorSettings $visitorSettings;
+
   public function getPersonId() {
     return $this->personId;
   }
@@ -111,6 +114,14 @@ class Person {
 
   public function isOnBuildingBlacklist(int $buildingId): bool {
     return $this->blacklist->exists(fn($key, $value) => $value->buildingId == $buildingId);
+  }
+
+  public function getVisitorSettings() {
+    return $this->visitorSettings;
+  }
+
+  public function setVisitorSettings(VisitorSettings $visitorSettings) {
+    $this->visitorSettings = $visitorSettings;
   }
 
   public function __construct() {
