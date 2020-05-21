@@ -67,9 +67,8 @@ class CreateVisitAction extends Action
 
         $visit = new Visit();
         $visit->setPerson($person);
-
-        $userId = (int) $this->token->id;
-        $visit->setUserId($userId);
+        $visit->setBuildingId((int) $this->token->building);
+        $visit->setUserId((int) $this->token->id);
 
         if (isset($formData->notes)) {
             $visit->setNotes($formData->notes);
