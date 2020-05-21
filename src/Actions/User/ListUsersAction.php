@@ -19,7 +19,14 @@ class ListUsersAction extends UserAction
      */
     protected function action(): Response
     {
-        $users = $this->userRepository->findAll();
+        $params = $this->request->getQueryParams();
+
+        if (isset($params['displayNotificationGroups']) && $params['displayNotificationGroups'] == 't') {
+            $users = $this->userRepository->findAllWithNotificationGroups();
+        }
+        else {
+            $users = $this->userRepository->findAll();
+        }
 
         $this->logger->info("Users list was viewed.");
 
