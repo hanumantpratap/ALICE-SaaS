@@ -60,7 +60,7 @@ curl -X GET api.navigate360.com:8080/persons/1
 
 The XDebug configuration is automatically created in the container.  From there, you simply need to configure your editor/IDE.
 
-Here's an example launch configuration for VSCode:
+Here's an example launch configuration for Visual Studio Code:
 
 ```json
 {
