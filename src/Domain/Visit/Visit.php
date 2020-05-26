@@ -36,7 +36,7 @@ class Visit {
   public ?int $userId;
 
   /** @Column(name="identification_id") */
-  public ?int $identificationId;
+  public ?string $identificationId;
 
   /** @Column(name="reason_id") */
   public ?int $reasonId;
@@ -98,6 +98,10 @@ class Visit {
     $this->userId = $userId;
   }
 
+  public function getBuildingId() {
+    return $this->buildingId;
+  }
+
   public function setBuildingId(int $buildingId) {
     $this->buildingId = $buildingId;
   }
@@ -115,6 +119,10 @@ class Visit {
     $visitor->firstName = $person->getName()->givenName;
     $visitor->lastName = $person->getName()->familyName;
     $visitor->emailAddress = $person->getEmail()->emailAddress;
+
+    $visitor->blacklist = $person->getBlacklist()->filter(function ($item) {
+      return $item->getBuildingId() == $this->getBuildingId();
+    })->first() ?: null;
 
     return $visitor;
   }

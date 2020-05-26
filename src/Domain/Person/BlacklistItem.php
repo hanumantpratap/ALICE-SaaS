@@ -55,6 +55,10 @@ class BlacklistItem {
     $this->person = $person;
   }
 
+  public function getBuildingId() {
+    return $this->buildingId;
+  }
+
   public function __construct() {
     $this->createdAt = new DateTime();
     $this->updatedAt = new DateTime();
