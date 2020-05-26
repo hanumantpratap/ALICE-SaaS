@@ -47,17 +47,17 @@ class Visit {
   /** @Column */
   public ?string $notes;
 
-  /** @Column(name="requires_approval")*/
-  public ?string $requiresApproval;
+  /** @Column(name="requires_approval", type="boolean")*/
+  public ?bool $requiresApproval;
 
-  /** @Column */
-  public ?string $approved;
+  /** @Column(name="approved", type="boolean")*/
+  public ?bool $approved;
 
   /** @Column(name="approved_by")*/
   public ?int $approvedBy;
 
-   /** @Column(name="security_alerted") */
-  public ?string $securityAlerted;
+   /** @Column(name="security_alerted", type="boolean") */
+  public ?bool $securityAlerted;
 
   /** @Column(name="date_created", nullable=true, type="datetime") */
   public ?DateTime $dateCreated;
@@ -130,9 +130,9 @@ class Visit {
   public function __construct() {
     $this->dateCreated = new DateTime();
     $this->buildingId = 5240;
-    $this->requiresApproval = "false";
-    $this->approved = "false";
-    $this->securityAlerted = "false";
+    $this->requiresApproval = false;
+    $this->approved = false;
+    $this->securityAlerted = false;
     $this->checkIn = null;
     $this->checkOut = null;
     $this->estimatedCheckIn = null;

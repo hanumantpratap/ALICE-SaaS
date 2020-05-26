@@ -33,10 +33,10 @@ class NotificationGroup {
   /** @Column */
   public ?description $description;
 
-  /** @Column(name="force_text") */
+  /** @Column(name="force_text", type="boolean") */
   public ?bool $forceText;
 
-  /** @Column(name="force_email") */
+  /** @Column(name="force_email", type="boolean") */
   public ?bool $forceEmail;
 
   /** @OneToMany(targetEntity="NotificationGroupUser", mappedBy="notificationGroup", cascade={"persist", "remove"}) */
