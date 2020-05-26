@@ -98,6 +98,10 @@ class Visit {
     $this->userId = $userId;
   }
 
+  public function getBuildingId() {
+    return $this->buildingId;
+  }
+
   public function setBuildingId(int $buildingId) {
     $this->buildingId = $buildingId;
   }
