@@ -11,6 +11,7 @@ use App\Domain\Visit\VisitRepository;
 use App\Domain\Person\Person;
 use App\Domain\Person\PersonName;
 use App\Domain\Person\PersonEmail;
+use App\Domain\Person\Identification;
 use App\Domain\Person\PersonRepository;
 use App\Exceptions;
 
@@ -32,14 +33,24 @@ class CreateVisitAction extends Action
     {
         $formData = $this->getFormData();
 
-        if (!isset($formData->personId) && (!isset($formData->firstName) || !isset($formData->lastName) )) {
-            throw new Exceptions\BadRequestException('Please provide a person ID or information for creating a new visitor.');
-        }
-
+        $person = null;
         if (isset($formData->personId)) {
             $person = $this->personRepository->findPersonOfId((int) $formData->personId);
         }
-        else {
+
+        // if they scan an id, check if a person with that identification already exists
+        if (isset($formData->identificationId) && is_null($person)) {
+            try {
+                $person = $this->personRepository->findPersonByIdentification((string) $formData->identificationId);
+            } catch(\Exception $e) {}
+        }
+        
+        // create new person
+        if (is_null($person)) {
+            if (!isset($formData->firstName) || !isset($formData->lastName)) {
+                throw new Exceptions\BadRequestException('Please provide information for creating a new visitor.');
+            }
+
             $person = new Person();
             $person->setStatus(1);
 
@@ -48,6 +59,13 @@ class CreateVisitAction extends Action
             $name->setFamilyName($formData->lastName);
             $name->setPerson($person);
             $person->setName($name);
+
+            if (isset($formData->identificationId)) {
+                $identification = new Identification();
+                $identification->setId($formData->identificationId);
+                $identification->setPerson($person);
+                $person->addIdentification($identification);
+            }
 
             $this->personRepository->save($person);
             

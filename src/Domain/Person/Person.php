@@ -60,6 +60,9 @@ class Person {
 
   public array $blacklistArray;
   
+  /** @OneToMany(targetEntity="Identification", mappedBy="person", cascade={"persist", "remove"}) */
+  protected Collection $identifications;
+
   public function getPersonId() {
     return $this->personId;
   }
@@ -113,10 +116,23 @@ class Person {
     return $this->blacklist->exists(fn($key, $value) => $value->buildingId == $buildingId);
   }
 
+  public function getIdentifications() {
+    return $this->identifications;
+  }
+
+  public function addIdentification(Identification $identification) {
+    $this->identifications->add($identification);
+  }
+
+  public function removeIdentification(Identification $identification): void {
+    $this->identifications->removeElement($identification);
+  }
+
   public function __construct() {
     $this->name = new PersonName();
     $this->phones = new ArrayCollection();
     $this->flags = new ArrayCollection();
     $this->blacklist = new ArrayCollection();
+    $this->identifications = new ArrayCollection();
   }
 }

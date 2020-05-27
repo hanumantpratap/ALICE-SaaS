@@ -121,6 +121,30 @@ final class SqlPersonRepository implements PersonRepository
         return $qb->getQuery()->getResult() ?? [];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function findPersonByIdentification(string $identificationId): Person {
+        $this->logger->info("identification id: ${identificationId}");
+        /** @var Criteria */
+        $criteria = Criteria::create()
+                    ->where(Criteria::expr()->contains("displayName", $name));
+
+        $persons = $this->entityManager->createQueryBuilder("p")
+                    ->select('p')
+                    ->from(Person::class, "p")
+                    ->join('p.identifications', 'i')
+                    ->where('i.id = :identificationId')
+                    ->setParameter('identificationId', $identificationId)
+                    ->getQuery()
+                    ->getResult();
+
+        if (!is_null($persons) && !empty($persons)) {
+            return $persons[0];
+        }
+
+        throw new PersonNotFoundException();
+    }
 
 
     /**
