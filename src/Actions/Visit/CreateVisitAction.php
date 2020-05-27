@@ -110,31 +110,74 @@ class CreateVisitAction extends Action
  *     tags={"visits"},
  *     @OA\Response(
  *         response=200,
- *         description="Create Visitor",
+ *         description="New Visit",
  *         @OA\MediaType(
  *             mediaType="application/json",
  *             example={"statusCode": 200, 
  *                      "data": {
- *                            "id": 2,
- *                            "userId": 1,
- *                            "notes": "Lauren Admin",
- *                            "visitor": {
- *                                 "personId": 3185,
- *                                 "firstName": "Rosalinda",
- *                                 "lastName": "Walt",
- *                                 "emailAddress": "Rosalinda.Walt@laureninnovations.com"
- *                            }
+ *                          "id": 14,
+ *                          "buildingId": 5240,
+ *                          "userId": 200000127,
+ *                          "notes": "hello",
+ *                          "requiresApproval": false,
+ *                          "approved": false,
+ *                          "securityAlerted": false,
+ *                          "dateCreated": {
+ *                              "date": "2020-05-27 17:42:39.725931",
+ *                              "timezone_type": 3,
+ *                              "timezone": "UTC"
+ *                          },
+ *                          "checkIn": null,
+ *                          "checkOut": null,
+ *                          "estimatedCheckIn": null,
+ *                          "estimatedCheckOut": null,
+ *                          "visitor": {
+ *                              "personId": 3434,
+ *                              "firstName": "Ewan",
+ *                              "lastName": "McGregor",
+ *                              "emailAddress": "ewan@onlyhope.com",
+ *                              "blacklist": null
+ *                          }
  *                       }}
  *         )
  *     ),
  *     @OA\RequestBody(
+ *         description="Create new Visit",
+ *         required=true,
  *         @OA\MediaType(
  *             mediaType="application/json",
- *             example={
- *                  "personId": 3185,
- *                  "notes": "hello"
- *            }
- *         )
+ *             @OA\Schema(
+ *                  @OA\Property(
+ *                     property="personId",
+ *                     description="Id of person to use as Visitor (optional)",
+ *                     type="integer"
+ *                 ),
+ *                  @OA\Property(
+ *                     property="identificationId",
+ *                     description="Unique ID from Scan. Will create new person or use existing person. (optional)",
+ *                     type="string"
+ *                 ),
+ *                  @OA\Property(
+ *                     property="firstName",
+ *                     description="Used if no person/identification ID is provided.",
+ *                     type="string"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="lastName",
+ *                     description="Used if no person/identification ID is provided.",
+ *                     type="string"
+ *                 ),
+ *                  @OA\Property(
+ *                     property="email",
+ *                     description="Used if no person/identification ID is provided.",
+ *                     type="string"
+ *                 ),
+ *                  @OA\Property(
+ *                     property="notes",
+ *                     type="string"
+ *                 ),
+ *              )
+ *         ),
  *     )
  * )
  */

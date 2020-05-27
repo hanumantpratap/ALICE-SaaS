@@ -8,6 +8,7 @@ use App\Actions\Action;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ConnectionException;
 use App\Exceptions;
 
 class IDScanAction extends Action
@@ -88,6 +89,10 @@ class IDScanAction extends Action
             throw new Exceptions\BadRequestException($response->summary);
         }
         catch(ServerException $e) {
+            $response = json_decode($e->getResponse()->getBody()->getContents());
+            throw new Exceptions\ServiceUnavailableException($response->error->userMessage);
+        }
+        catch(ConnectionException $e) {
             $response = json_decode($e->getResponse()->getBody()->getContents());
             throw new Exceptions\ServiceUnavailableException($response->error->userMessage);
         }
