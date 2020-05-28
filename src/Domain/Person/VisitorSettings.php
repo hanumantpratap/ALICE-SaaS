@@ -22,14 +22,14 @@ class VisitorSettings {
    **/
   public ?Person $person;
 
-  /** @Column(name="email_notifications") */
+  /** @Column(name="email_notifications", type="boolean") */
   public bool $emailNotifications;
 
-  /** @Column(name="text_notifications") */
+  /** @Column(name="text_notifications", type="boolean") */
   public bool $textNotifications;
 
   /** @Column */
-  public ?text $picture;
+  public ?string $picture;
 
   public function getPerson() {
     return $this->person;
@@ -59,7 +59,7 @@ class VisitorSettings {
     return $this->picture;
   }
 
-  public function setPicture(text $picture) {
+  public function setPicture(string $picture) {
     $this->picture = $picture;
   }
 

@@ -124,8 +124,12 @@ class Person {
     $this->visitorSettings = $visitorSettings;
   }
 
+
   public function __construct() {
     $this->name = new PersonName();
+    $this->name->setPerson($this);
+    $this->visitorSettings = new VisitorSettings();
+    $this->visitorSettings->setPerson($this);
     $this->phones = new ArrayCollection();
     $this->flags = new ArrayCollection();
     $this->blacklist = new ArrayCollection();

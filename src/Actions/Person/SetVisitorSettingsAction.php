@@ -26,7 +26,7 @@ class SetVisitorSettingsAction extends PersonAction
             $person->setVisitorSettings($settings);
         }
 
-        $settings->setEmailNotifications(false);
+        //$settings->setEmailNotifications(false);
 
         $this->personRepository->save($person);
 
