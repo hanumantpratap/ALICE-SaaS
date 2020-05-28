@@ -26,29 +26,47 @@ class Visit {
    */
   public ?int $id;
 
-  /** @Column(name="people_id") */
+  /** @Column(name="person_id") */
   public int $personId;
 
-  /** @Column(name="date_created", nullable=true, type="datetime") */
-  public ?DateTime $dateCreated;
+  /** @Column(name="building_id") */
+  public int $buildingId;
+
+  /** @Column(name="user_id") */
+  public ?int $userId;
+
+  /** @Column(name="identification_id") */
+  public ?string $identificationId;
 
   /** @Column(name="reason_id") */
   public ?int $reasonId;
+
+  /** @Column(name="visitor_type_id") */
+  public ?int $visitorTypeId;
+
+  /** @Column */
+  public ?string $notes;
+
+  /** @Column(name="requires_approval", type="boolean")*/
+  public ?bool $requiresApproval;
+
+  /** @Column(name="approved", type="boolean")*/
+  public ?bool $approved;
+
+  /** @Column(name="approved_by")*/
+  public ?int $approvedBy;
+
+   /** @Column(name="security_alerted", type="boolean") */
+  public ?bool $securityAlerted;
+
+  /** @Column(name="date_created", nullable=true, type="datetime") */
+  public ?DateTime $dateCreated;
 
   /** @Column(name="check_in", nullable=true, type="datetime") */
   public ?DateTime $checkIn;
 
   /** @Column(name="check_out", nullable=true, type="datetime") */
   public ?DateTime $checkOut;
-
-  /** @Column(name="user_id") */
-  public ?int $userId;
-
-  /** @Column(name="identification_id") */
-  public ?int $identificationId;
-
-  /** @Column */
-  public ?string $notes;
 
   /** @Column(name="estimated_check_in", nullable=true, type="datetime") */
   public ?DateTime $estimatedCheckIn;
@@ -58,7 +76,7 @@ class Visit {
 
   /**
    * @ManyToOne(targetEntity="\App\Domain\Person\Person")
-   * @JoinColumn(name="people_id", referencedColumnName="person_id")
+   * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
   protected ?Person $person;
 
@@ -80,6 +98,14 @@ class Visit {
     $this->userId = $userId;
   }
 
+  public function getBuildingId() {
+    return $this->buildingId;
+  }
+
+  public function setBuildingId(int $buildingId) {
+    $this->buildingId = $buildingId;
+  }
+
   public function setNotes(string $notes) {
     $this->notes = $notes;
   }
@@ -94,11 +120,19 @@ class Visit {
     $visitor->lastName = $person->getName()->familyName;
     $visitor->emailAddress = $person->getEmail()->emailAddress;
 
+    $visitor->blacklist = $person->getBlacklist()->filter(function ($item) {
+      return $item->getBuildingId() == $this->getBuildingId();
+    })->first() ?: null;
+
     return $visitor;
   }
 
   public function __construct() {
     $this->dateCreated = new DateTime();
+    $this->buildingId = 5240;
+    $this->requiresApproval = false;
+    $this->approved = false;
+    $this->securityAlerted = false;
     $this->checkIn = null;
     $this->checkOut = null;
     $this->estimatedCheckIn = null;

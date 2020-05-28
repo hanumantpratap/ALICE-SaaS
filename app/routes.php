@@ -11,15 +11,17 @@ use App\Actions\Person\ViewVisitorSettingsAction;
 use App\Actions\Person\SetVisitorSettingsAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\ViewUserAction;
+use App\Actions\User\AddNotificationGroupAction;
+use App\Actions\User\SignInAction;
 use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
-use App\Actions\User\SignInAction;
 use App\Actions\ID\IDScanAction;
 use App\Actions\Person\AddBlacklistAction;
 use App\Actions\Person\ListBlacklistAction;
+use App\Actions\PreflightAction;
 use App\Middleware\AuthMiddleware;
-
+use Doctrine\ORM\Mapping\PreFlush;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -37,6 +39,8 @@ return function (App $app) {
 
     /* Routes that require signed in user */
     $app->group('', function (Group $group) {
+        $group->options('', PreflightAction::class);
+
         $group->group('/visits', function (Group $group) {
             $group->get('', ListVisitsAction::class);
             $group->get('/{id}', ViewVisitAction::class);
@@ -46,9 +50,11 @@ return function (App $app) {
         $group->group('/users', function (Group $group) {
             $group->get('', ListUsersAction::class);
             $group->get('/{id}', ViewUserAction::class);
+            $group->post('/{id}/notificationGroups', AddNotificationGroupAction::class);
         });
 	
 	    $group->group('/persons', function (Group $group) {
+            $group->options('/search/query', PreflightAction::class);
             $group->get('', ListPersonsAction::class);
             $group->get('/{id}', ViewPersonAction::class);
             $group->get('/search/query', SearchPersonsAction::class);
@@ -59,6 +65,7 @@ return function (App $app) {
         });
     
         $group->post('/id-scan', IDScanAction::class);
+        $group->options('/id-scan', PreflightAction::class);
               
         $group->group('/dev', function (Group $group) {
             $group->group('/examples', function (Group $group) {
@@ -74,4 +81,5 @@ return function (App $app) {
 
     
     $app->post('/sign-in', SignInAction::class);
+    $app->options('/sign-in', PreflightAction::class);
 };

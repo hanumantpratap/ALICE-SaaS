@@ -29,8 +29,9 @@ class SignInAction extends Action
 
     protected function action(): Response
     {
-        $login = $_POST["login"];
-        $password = $_POST["password"];
+        $formData = $this->getFormData();
+        $login = $formData->login;
+        $password = $formData->password;
 
         $client = new GuzzleClient(['base_uri' => AUTH_URL, 'verify' => APP_ROOT . '/cacert.pem']);
 
@@ -61,7 +62,12 @@ class SignInAction extends Action
         }
         catch(ClientException $e) {
             $response = json_decode($e->getResponse()->getBody()->getContents());
-            throw new Exceptions\BadRequestException($response->error->userMessage);
+            $fields = null;
+            
+            if (property_exists($response->error, 'fields') && is_array($response->error->fields)) {
+                $fields = $response->error->fields;
+            }
+            throw new Exceptions\BadRequestException($response->error->userMessage, $fields);
         }
         catch(ServerException $e) {
             $response = json_decode($e->getResponse()->getBody()->getContents());

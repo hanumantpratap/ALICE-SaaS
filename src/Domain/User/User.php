@@ -3,10 +3,15 @@ declare(strict_types=1);
 
 namespace App\Domain\User;
 
+use App\Domain\Person\Person;
+use App\Domain\NotificationGroup;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -57,7 +62,14 @@ class User {
    * @OneToOne(targetEntity="\App\Domain\Person\Person")
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
-  public \App\Domain\Person\Person $person;
+  public Person $person;
+
+  /** 
+   * @OneToMany(targetEntity="\App\Domain\NotificationGroup\NotificationGroupUser", mappedBy="user") 
+   */
+  protected Collection $notificationGroups;
+
+  public array $notificationGroupsList;
 
   public function getPerson() {
     return $this->person;
@@ -66,5 +78,19 @@ class User {
   // force user to load person object
   public function loadPerson() {
     $load = $this->getPerson()->getDisplayName();
+  }
+
+  public function getNotificationGroups() {
+    return $this->notificationGroups;
+  }
+
+  public function addNotificationGroup(NotificationGroup $notificationGroup) {
+    $notificationGroup->addUser($this);
+    $this->notificationGroups->add($notificationGroup);
+  }
+
+  public function __construct() {
+    $this->notificationGroups = new ArrayCollection();
+    $this->renderNotificationGroups = false;
   }
 }
