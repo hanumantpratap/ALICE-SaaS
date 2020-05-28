@@ -7,6 +7,8 @@ declare(strict_types=1);
 use App\Actions\Person\ListPersonsAction;
 use App\Actions\Person\SearchPersonsAction;
 use App\Actions\Person\ViewPersonAction;
+use App\Actions\Person\ViewVisitorSettingsAction;
+use App\Actions\Person\SetVisitorSettingsAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\ViewUserAction;
 use App\Actions\User\AddNotificationGroupAction;
@@ -58,6 +60,8 @@ return function (App $app) {
             $group->get('/search/query', SearchPersonsAction::class);
             $group->get('/{id}/blacklist', ListBlacklistAction::class);
             $group->post('/{id}/blacklist', AddBlacklistAction::class);
+            $group->get('/{id}/visitorSettings', ViewVisitorSettingsAction::class);
+            $group->put('/{id}/visitorSettings', SetVisitorSettingsAction::class);
         });
     
         $group->post('/id-scan', IDScanAction::class);
