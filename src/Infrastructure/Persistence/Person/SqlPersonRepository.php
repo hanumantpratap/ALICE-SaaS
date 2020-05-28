@@ -86,7 +86,7 @@ final class SqlPersonRepository implements PersonRepository
         // declare the QueryBuilder
         $qb = $this->entityManager->createQueryBuilder("p")
             ->from(Person::class, "p")
-            ->select("p")->LeftJoin( 'p.personDemographics', 'pd');
+            ->select("p")->LeftJoin( 'p.demographics', 'pd');
 
         // iterate through query params, and build the query
         foreach( $params as $key => $value ) {
@@ -101,12 +101,12 @@ final class SqlPersonRepository implements PersonRepository
                     $criteria = Criteria::create()->where(Criteria::expr()->eq( $key, $value ));
                     $qb->addCriteria( $criteria );                  
                     break;
-                // a partial string match in a PersonDemographics field
+                // a partial string match in a demographics field
                 case "marks":
                     $criteria = Criteria::create()->where(Criteria::expr()->contains( 'pd.'.$key, $value ));
                     $qb->addCriteria( $criteria );
                     break;
-                // an exact value in a PersonDemographics field
+                // an exact value in a demographics field
                 case "birthDate": case "gender": case "ethnicity": case "bloodType": case "maritalStatus":
                 case "eyeColor": case "hairColor": case "height": case "weight":
                     $criteria = Criteria::create()->where(Criteria::expr()->eq( 'pd.'.$key, $value ));

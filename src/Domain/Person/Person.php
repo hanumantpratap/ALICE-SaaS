@@ -43,8 +43,8 @@ class Person {
   /** @OneToOne(targetEntity="PersonName", mappedBy="person", cascade={"persist", "remove"}) */
   public ?PersonName $name;
 
-  /** @OneToOne(targetEntity="PersonDemographics", mappedBy="person") */
-  public ?PersonDemographics $personDemographics;
+  /** @OneToOne(targetEntity="PersonDemographics", mappedBy="person", cascade={"persist", "remove"}) */
+  public ?PersonDemographics $demographics;
 
   /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
   protected Collection $phones;
@@ -121,6 +121,7 @@ class Person {
   }
 
   public function addIdentification(Identification $identification) {
+    $identification->setPerson($this);
     $this->identifications->add($identification);
   }
 
@@ -128,8 +129,14 @@ class Person {
     $this->identifications->removeElement($identification);
   }
 
+  public function getDemographics() {
+    return $this->demographics;
+  }
+
   public function __construct() {
     $this->name = new PersonName();
+    $this->demographics = new PersonDemographics();
+    $this->demographics->setPerson($this);
     $this->phones = new ArrayCollection();
     $this->flags = new ArrayCollection();
     $this->blacklist = new ArrayCollection();

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Person;
 
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
@@ -13,6 +14,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\SequenceGenerator;
 
 /**
  * @Entity
@@ -23,14 +25,15 @@ class PersonDemographics {
      * @Id
      * @GeneratedValue
      * @Column(name="pd_id")
+     * @SequenceGenerator(sequenceName="pd_id_seq")
      */
     public int $pdId;
 
     /** @Column(name="gender") */
-    public int $gender;
+    public ?int $gender;
 
-    /** @Column(name="birth_date") */
-    public $birthDate;
+    /** @Column(name="birth_date", type="datetime") */
+    public ?DateTime $birthDate;
 
     /** @Column(name="ethnicity") */
     public ?int $ethnicity;
@@ -56,9 +59,24 @@ class PersonDemographics {
     /** @Column(name="weight") */
     public ?int $weight;
 
-    /** @OneToOne(targetEntity="Person", inversedBy="personDemographics")
+    /** @OneToOne(targetEntity="Person", inversedBy="demographics")
      * @JoinColumn(name="person_id", referencedColumnName="person_id")
      */
     protected ?Person $person;
 
+    public function getPerson() {
+        return $this->person;
+    }
+
+    public function setPerson(Person $person) {
+        $this->person = $person;
+    }
+
+    public function getBirthDate() {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(DateTime $birthDate) {
+        $this->birthDate = $birthDate;
+    }
 }

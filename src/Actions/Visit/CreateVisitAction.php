@@ -11,6 +11,7 @@ use App\Domain\Visit\VisitRepository;
 use App\Domain\Person\Person;
 use App\Domain\Person\PersonName;
 use App\Domain\Person\PersonEmail;
+use App\Domain\Person\PersonDemographics;
 use App\Domain\Person\Identification;
 use App\Domain\Person\PersonRepository;
 use App\Exceptions;
@@ -60,10 +61,15 @@ class CreateVisitAction extends Action
             $name->setPerson($person);
             $person->setName($name);
 
+            if (isset($formData->birthDate)) {
+                $date = new \DateTime($formData->birthDate, new \DateTimeZone('UTC'));
+                $person->getDemographics()->setBirthDate($date);
+            }
+
+
             if (isset($formData->identificationId)) {
                 $identification = new Identification();
                 $identification->setId($formData->identificationId);
-                $identification->setPerson($person);
                 $person->addIdentification($identification);
             }
 
