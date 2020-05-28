@@ -11,10 +11,11 @@ use App\Domain\Visit\VisitRepository;
 use App\Domain\Person\Person;
 use App\Domain\Person\PersonName;
 use App\Domain\Person\PersonEmail;
-use App\Domain\Person\PersonDemographics;
 use App\Domain\Person\Identification;
+use App\Domain\Person\PersonAddress;
 use App\Domain\Person\PersonRepository;
 use App\Exceptions;
+use DateTime;
 
 class CreateVisitAction extends Action
 {
@@ -33,6 +34,7 @@ class CreateVisitAction extends Action
     protected function action(): Response
     {
         $formData = $this->getFormData();
+        $this->logger->info('post visits', (array) $formData);
 
         $person = null;
         if (isset($formData->personId)) {
@@ -62,15 +64,19 @@ class CreateVisitAction extends Action
             $person->setName($name);
 
             if (isset($formData->birthDate)) {
-                $date = new \DateTime($formData->birthDate, new \DateTimeZone('UTC'));
-                $person->getDemographics()->setBirthDate($date);
+                $date = \DateTime::createFromFormat("m-d-Y", $formData->birthDate);
+                $person->getDemographics()->setBirthDate(new DateTime());
             }
-
 
             if (isset($formData->identificationId)) {
                 $identification = new Identification();
                 $identification->setId($formData->identificationId);
                 $person->addIdentification($identification);
+            }
+
+            if (isset($formData->address)) {
+                $address = new PersonAddress($formData->address);
+                $person->setAddress($address);
             }
 
             $this->personRepository->save($person);

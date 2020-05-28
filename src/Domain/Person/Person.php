@@ -63,6 +63,9 @@ class Person {
   /** @OneToMany(targetEntity="Identification", mappedBy="person", cascade={"persist", "remove"}) */
   protected Collection $identifications;
 
+  /** @OneToOne(targetEntity="PersonAddress", mappedBy="person", cascade={"persist", "remove"}) */
+  public PersonAddress $address;
+
   public function getPersonId() {
     return $this->personId;
   }
@@ -131,6 +134,15 @@ class Person {
 
   public function getDemographics() {
     return $this->demographics;
+  }
+
+  public function getAddress() {
+    return $this->address;
+  }
+
+  public function setAddress(PersonAddress $address) {
+    $address->setPerson($this);
+    $this->address = $address;
   }
 
   public function __construct() {
