@@ -23,14 +23,12 @@ class CreateVisitAction extends Action
      * @param LoggerInterface $logger
      * @param VisitRepository $visitRepository
      */
-
     public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, PersonRepository $personRepository)
     {
         $this->visitRepository = $visitRepository;
         $this->personRepository = $personRepository;
         parent::__construct($logger);
     }
-
     protected function action(): Response
     {
         $formData = $this->getFormData();
@@ -56,11 +54,9 @@ class CreateVisitAction extends Action
 
             $person = new Person();
             $person->setStatus(1);
-
-            $name = new PersonName();
+            $name = $person->getName();
             $name->setGivenName($formData->firstName);
             $name->setFamilyName($formData->lastName);
-            $name->setPerson($person);
             $person->setName($name);
 
             if (isset($formData->birthDate)) {
@@ -78,9 +74,14 @@ class CreateVisitAction extends Action
                 $address = new PersonAddress($formData->address);
                 $person->setAddress($address);
             }
-
+	    
+            if( isset($formData->picture)) {
+                $visitorSettings = $person->getVisitorSettings();
+                $visitorSettings->setPicture($formData->picture);
+            }
+	    
             $this->personRepository->save($person);
-            
+
             // The reason this has to be done as a separate save call is because 
             // the person ID needs to be set to the email's source column.
             // I don't yet know what the point of the column is.
@@ -90,11 +91,10 @@ class CreateVisitAction extends Action
                 $email->setPerson($person);
                 $email->setSource($person->getPersonId());
                 $person->setEmail($email);
-
                 $this->personRepository->save($person);
             }
         }
-
+        
         $visit = new Visit();
         $visit->setPerson($person);
         $visit->setBuildingId((int) $this->token->building);
@@ -103,19 +103,13 @@ class CreateVisitAction extends Action
         if (isset($formData->notes)) {
             $visit->setNotes($formData->notes);
         }
-
         $this->visitRepository->save($visit);
-
         $newId = $visit->getId();
-
         $this->logger->info("Visit of id `${newId}` was created.");
-
         $newVisit = $this->visitRepository->findVisitOfId($newId);
-
         return $this->respondWithData($newVisit);
     }
 }
-
 /**
  * @OA\Post(
  *     path="/visits",

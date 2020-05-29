@@ -65,7 +65,10 @@ class Person {
 
   /** @OneToOne(targetEntity="PersonAddress", mappedBy="person", cascade={"persist", "remove"}) */
   public PersonAddress $address;
-
+  
+  /** @OneToOne(targetEntity="VisitorSettings", mappedBy="person", cascade={"persist", "remove"}) */
+  protected ?VisitorSettings $visitorSettings;
+  
   public function getPersonId() {
     return $this->personId;
   }
@@ -144,11 +147,22 @@ class Person {
     $address->setPerson($this);
     $this->address = $address;
   }
+  
+  public function getVisitorSettings() {
+    return $this->visitorSettings;
+  }
+
+  public function setVisitorSettings(VisitorSettings $visitorSettings) {
+    $this->visitorSettings = $visitorSettings;
+  }
 
   public function __construct() {
     $this->name = new PersonName();
+    $this->name->setPerson($this);
     $this->demographics = new PersonDemographics();
     $this->demographics->setPerson($this);
+    $this->visitorSettings = new VisitorSettings();
+    $this->visitorSettings->setPerson($this);
     $this->phones = new ArrayCollection();
     $this->flags = new ArrayCollection();
     $this->blacklist = new ArrayCollection();

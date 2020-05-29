@@ -7,6 +7,8 @@ declare(strict_types=1);
 use App\Actions\Person\ListPersonsAction;
 use App\Actions\Person\SearchPersonsAction;
 use App\Actions\Person\ViewPersonAction;
+use App\Actions\Person\ViewVisitorSettingsAction;
+use App\Actions\Person\SetVisitorSettingsAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\ViewUserAction;
 use App\Actions\User\AddNotificationGroupAction;
@@ -17,8 +19,9 @@ use App\Actions\Visit\CreateVisitAction;
 use App\Actions\ID\IDScanAction;
 use App\Actions\Person\AddBlacklistAction;
 use App\Actions\Person\ListBlacklistAction;
+use App\Actions\PreflightAction;
 use App\Middleware\AuthMiddleware;
-
+use Doctrine\ORM\Mapping\PreFlush;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -36,6 +39,8 @@ return function (App $app) {
 
     /* Routes that require signed in user */
     $app->group('', function (Group $group) {
+        $group->options('', PreflightAction::class);
+
         $group->group('/visits', function (Group $group) {
             $group->get('', ListVisitsAction::class);
             $group->get('/{id}', ViewVisitAction::class);
@@ -49,14 +54,18 @@ return function (App $app) {
         });
 	
 	    $group->group('/persons', function (Group $group) {
+            $group->options('/search/query', PreflightAction::class);
             $group->get('', ListPersonsAction::class);
             $group->get('/{id}', ViewPersonAction::class);
             $group->get('/search/query', SearchPersonsAction::class);
             $group->get('/{id}/blacklist', ListBlacklistAction::class);
             $group->post('/{id}/blacklist', AddBlacklistAction::class);
+            $group->get('/{id}/visitorSettings', ViewVisitorSettingsAction::class);
+            $group->put('/{id}/visitorSettings', SetVisitorSettingsAction::class);
         });
     
         $group->post('/id-scan', IDScanAction::class);
+        $group->options('/id-scan', PreflightAction::class);
               
         $group->group('/dev', function (Group $group) {
             $group->group('/examples', function (Group $group) {
@@ -72,4 +81,5 @@ return function (App $app) {
 
     
     $app->post('/sign-in', SignInAction::class);
+    $app->options('/sign-in', PreflightAction::class);
 };
