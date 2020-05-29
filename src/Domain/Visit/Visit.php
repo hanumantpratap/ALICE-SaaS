@@ -36,14 +36,22 @@ class Visit {
   public ?int $userId;
 
   /** @Column(name="identification_id") */
-  public ?string $identificationId;
+  private ?string $identificationId;
 
   /** @Column(name="reason_id") */
-  public ?int $reasonId;
+  private ?int $reasonId;
 
   /** @Column(name="visitor_type_id") */
-  public ?int $visitorTypeId;
+  private ?int $visitorTypeId;
 
+  /*******  For now, setting reasons/visitor_types to simple text fields, but will eventually use the above ids and join them */
+
+  /** @Column */
+  public ?string $reason;
+
+  /** @Column(name="visitor_type") */
+  public ?string $visitorType;
+  
   /** @Column */
   public ?string $notes;
 
@@ -108,6 +116,22 @@ class Visit {
 
   public function setNotes(string $notes) {
     $this->notes = $notes;
+  }
+
+  public function getReason() {
+    return $this->reason;
+  }
+
+  public function setReason(string $reason) {
+    $this->reason = $reason;
+  }
+
+  public function getVisitorType() {
+    return $this->visitorType;
+  }
+
+  public function setVisitorType(string $visitorType) {
+    $this->visitorType = $visitorType;
   }
 
   public function getVisitor() {

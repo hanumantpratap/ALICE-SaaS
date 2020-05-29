@@ -16,6 +16,7 @@ use App\Actions\User\SignInAction;
 use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
+use App\Actions\Visit\UpdateVisitAction;
 use App\Actions\ID\IDScanAction;
 use App\Actions\Person\AddBlacklistAction;
 use App\Actions\Person\ListBlacklistAction;
@@ -45,6 +46,7 @@ return function (App $app) {
             $group->get('', ListVisitsAction::class);
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
+            $group->put('/{id}', UpdateVisitAction::class);
         });
 
         $group->group('/users', function (Group $group) {

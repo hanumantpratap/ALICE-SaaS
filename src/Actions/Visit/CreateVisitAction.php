@@ -23,12 +23,14 @@ class CreateVisitAction extends Action
      * @param LoggerInterface $logger
      * @param VisitRepository $visitRepository
      */
+
     public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, PersonRepository $personRepository)
     {
         $this->visitRepository = $visitRepository;
         $this->personRepository = $personRepository;
         parent::__construct($logger);
     }
+
     protected function action(): Response
     {
         $formData = $this->getFormData();
@@ -110,6 +112,7 @@ class CreateVisitAction extends Action
         return $this->respondWithData($newVisit);
     }
 }
+
 /**
  * @OA\Post(
  *     path="/visits",
