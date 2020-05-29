@@ -140,9 +140,18 @@ class Visit {
     $visitor = new \stdClass();
     $visitor->personId = $person->personId;
     
-    $visitor->firstName = $person->getName()->givenName;
-    $visitor->lastName = $person->getName()->familyName;
-    $visitor->emailAddress = $person->getEmail()->emailAddress;
+    $visitor->firstName = $person->getName()->getGivenName();
+    $visitor->lastName = $person->getName()->getFamilyName();
+    $visitor->emailAddress = $person->getEmail()->getEmailAddress();
+
+    $demographics = $person->getDemographics();
+    $visitor->birthDate = $demographics ? $demographics->getBirthDate() : null;
+
+    $address = $person->getAddress();
+    $visitor->address = $address ? $address->getAddress() : null;
+
+    $visitorSettings = $person->getVisitorSettings();
+    $visitor->picture = $visitorSettings ? $visitorSettings->getPicture() : null;
 
     $visitor->blacklist = $person->getBlacklist()->filter(function ($item) {
       return $item->getBuildingId() == $this->getBuildingId();
