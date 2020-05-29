@@ -102,10 +102,11 @@ return function (ContainerBuilder $containerBuilder) {
 
             $config->setAutoGenerateProxyClasses(true);
 
-            $config->setMetadataCacheImpl(
-                new FilesystemCache($doctrineSettings['cache_dir'])
-            );
-
+            if ($settings['environment'] != 'dev') {
+                $config->setMetadataCacheImpl(
+                    new FilesystemCache($doctrineSettings['cache_dir'])
+                );
+            }
             return EntityManager::create($doctrineSettings['connection'], $config);
         }
     ]);

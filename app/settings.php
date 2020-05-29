@@ -9,6 +9,7 @@ return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions(
         [
             'settings' => [
+                'environment' => $_ENV['ENV'] ?? 'production',
                 'displayErrorDetails' => $_ENV['ENV'] == 'dev',
                 'logSql' => $_ENV['LOG_SQL'] == 'true',
                 'logger' => [
