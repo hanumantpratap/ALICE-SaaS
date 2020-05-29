@@ -64,7 +64,7 @@ class Person {
   protected Collection $identifications;
 
   /** @OneToOne(targetEntity="PersonAddress", mappedBy="person", cascade={"persist", "remove"}) */
-  public PersonAddress $address;
+  public ?PersonAddress $address;
   
   /** @OneToOne(targetEntity="VisitorSettings", mappedBy="person", cascade={"persist", "remove"}) */
   protected ?VisitorSettings $visitorSettings;
