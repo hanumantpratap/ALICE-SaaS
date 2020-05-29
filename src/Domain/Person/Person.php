@@ -43,8 +43,8 @@ class Person {
   /** @OneToOne(targetEntity="PersonName", mappedBy="person", cascade={"persist", "remove"}) */
   public ?PersonName $name;
 
-  /** @OneToOne(targetEntity="PersonDemographics", mappedBy="person") */
-  public ?PersonDemographics $personDemographics;
+  /** @OneToOne(targetEntity="PersonDemographics", mappedBy="person", cascade={"persist", "remove"}) */
+  public ?PersonDemographics $demographics;
 
   /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
   protected Collection $phones;
@@ -60,9 +60,15 @@ class Person {
 
   public array $blacklistArray;
   
+  /** @OneToMany(targetEntity="Identification", mappedBy="person", cascade={"persist", "remove"}) */
+  protected Collection $identifications;
+
+  /** @OneToOne(targetEntity="PersonAddress", mappedBy="person", cascade={"persist", "remove"}) */
+  public PersonAddress $address;
+  
   /** @OneToOne(targetEntity="VisitorSettings", mappedBy="person", cascade={"persist", "remove"}) */
   protected ?VisitorSettings $visitorSettings;
-
+  
   public function getPersonId() {
     return $this->personId;
   }
@@ -116,6 +122,32 @@ class Person {
     return $this->blacklist->exists(fn($key, $value) => $value->buildingId == $buildingId);
   }
 
+  public function getIdentifications() {
+    return $this->identifications;
+  }
+
+  public function addIdentification(Identification $identification) {
+    $identification->setPerson($this);
+    $this->identifications->add($identification);
+  }
+
+  public function removeIdentification(Identification $identification): void {
+    $this->identifications->removeElement($identification);
+  }
+
+  public function getDemographics() {
+    return $this->demographics;
+  }
+
+  public function getAddress() {
+    return $this->address;
+  }
+
+  public function setAddress(PersonAddress $address) {
+    $address->setPerson($this);
+    $this->address = $address;
+  }
+  
   public function getVisitorSettings() {
     return $this->visitorSettings;
   }
@@ -124,14 +156,16 @@ class Person {
     $this->visitorSettings = $visitorSettings;
   }
 
-
   public function __construct() {
     $this->name = new PersonName();
     $this->name->setPerson($this);
+    $this->demographics = new PersonDemographics();
+    $this->demographics->setPerson($this);
     $this->visitorSettings = new VisitorSettings();
     $this->visitorSettings->setPerson($this);
     $this->phones = new ArrayCollection();
     $this->flags = new ArrayCollection();
     $this->blacklist = new ArrayCollection();
+    $this->identifications = new ArrayCollection();
   }
 }
