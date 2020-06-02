@@ -21,6 +21,8 @@ use App\Domain\Visit\VisitRepository;
 use App\Infrastructure\Persistence\Visit\SqlVisitRepository;
 use App\Domain\NotificationGroup\NotificationGroupRepository;
 use App\Infrastructure\Persistence\NotificationGroup\SqlNotificationGroupRepository;
+use App\Domain\Student\StudentRepository;
+use App\Infrastructure\Persistence\Student\SqlStudentRepository;
 use DI\ContainerBuilder;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -36,6 +38,9 @@ return function (ContainerBuilder $containerBuilder) {
         },
         NotificationGroupRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
             return new SqlNotificationGroupRepository($logger, $em);
+        },
+        StudentRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
+            return new SqlStudentRepository($logger, $em);
         },
     ]);
 };

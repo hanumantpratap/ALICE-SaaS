@@ -17,6 +17,7 @@ use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
 use App\Actions\Visit\UpdateVisitAction;
+use App\Actions\Student\ListStudentsAction;
 use App\Actions\ID\IDScanAction;
 use App\Actions\Person\AddBlacklistAction;
 use App\Actions\Person\ListBlacklistAction;
@@ -64,6 +65,10 @@ return function (App $app) {
             $group->post('/{id}/blacklist', AddBlacklistAction::class);
             $group->get('/{id}/visitorSettings', ViewVisitorSettingsAction::class);
             $group->put('/{id}/visitorSettings', SetVisitorSettingsAction::class);
+        });
+
+        $group->group('/students', function (Group $group) {
+            $group->get('', ListStudentsAction::class);
         });
     
         $group->post('/id-scan', IDScanAction::class);
