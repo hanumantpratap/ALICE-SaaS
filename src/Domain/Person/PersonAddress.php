@@ -61,7 +61,7 @@ class PersonAddress {
     }
 
     public function getAddress() {
-        return $this->$address;
+        return $this->address;
     }
 
     public function setAddress(string $address) {

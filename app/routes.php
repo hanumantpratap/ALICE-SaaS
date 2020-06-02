@@ -29,6 +29,8 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
+    $app->options('/{routes:.+}', PreflightAction::class);
+
     $app->get('/', function (Request $request, Response $response) {        
         $response->getBody()->write('Hello world!');
         return $response;
@@ -40,12 +42,11 @@ return function (App $app) {
 
     /* Routes that require signed in user */
     $app->group('', function (Group $group) {
-        $group->options('', PreflightAction::class);
-
         $group->group('/visits', function (Group $group) {
             $group->get('', ListVisitsAction::class);
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
+            $group->put('/{id}', UpdateVisitAction::class);
         });
 
         $group->group('/users', function (Group $group) {
@@ -55,7 +56,6 @@ return function (App $app) {
         });
 	
 	    $group->group('/persons', function (Group $group) {
-            $group->options('/search/query', PreflightAction::class);
             $group->get('', ListPersonsAction::class);
             $group->get('/{id}', ViewPersonAction::class);
             $group->get('/search/query', SearchPersonsAction::class);
@@ -64,9 +64,12 @@ return function (App $app) {
             $group->get('/{id}/visitorSettings', ViewVisitorSettingsAction::class);
             $group->put('/{id}/visitorSettings', SetVisitorSettingsAction::class);
         });
+
+        $group->group('/students', function (Group $group) {
+            $group->get('', ListStudentsAction::class);
+        });
     
         $group->post('/id-scan', IDScanAction::class);
-        $group->options('/id-scan', PreflightAction::class);
               
         $group->group('/dev', function (Group $group) {
             $group->group('/examples', function (Group $group) {
@@ -82,6 +85,6 @@ return function (App $app) {
 
     
     $app->post('/sign-in', SignInAction::class);
-    $app->options('/sign-in', PreflightAction::class);
+    //$app->options('/sign-in', PreflightAction::class);
     $app->post('/forgot-password', ForgotPasswordAction::class);
 };
