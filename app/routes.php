@@ -12,10 +12,11 @@ use App\Actions\Person\SetVisitorSettingsAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\ViewUserAction;
 use App\Actions\User\AddNotificationGroupAction;
-use App\Actions\User\SignInAction;
 use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
+use App\Actions\User\SignInAction;
+use App\Actions\User\ForgotPasswordAction;
 use App\Actions\ID\IDScanAction;
 use App\Actions\Person\AddBlacklistAction;
 use App\Actions\Person\ListBlacklistAction;
@@ -82,4 +83,5 @@ return function (App $app) {
     
     $app->post('/sign-in', SignInAction::class);
     $app->options('/sign-in', PreflightAction::class);
+    $app->post('/forgot-password', ForgotPasswordAction::class);
 };
