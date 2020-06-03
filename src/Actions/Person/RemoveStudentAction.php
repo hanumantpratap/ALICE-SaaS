@@ -28,4 +28,31 @@ class RemoveStudentAction extends PersonAction
 
     return $this->response->withStatus(201);
   }
+
+  /**
+ * @OA\Delete(
+ *     path="/persons/{personId}/students/{studentId}",
+ *     tags={"persons"},
+ *      @OA\Parameter(
+ *         name="personId",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\Parameter(
+ *         name="studentId",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Student Association removed.",
+ *     )
+ * )
+ */
 }

@@ -35,4 +35,37 @@ class AddStudentAction extends PersonAction
 
     return $this->response->withStatus(201);
   }
+
+  /**
+ * @OA\POST(
+ *     path="/persons/{personId}/students",
+ *     tags={"persons"},
+ *      @OA\Parameter(
+ *         name="personId",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Student Association added.",
+ *     ),
+ *     @OA\RequestBody(
+ *         description="Add Student Association",
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                  @OA\Property(
+ *                     property="studentId",
+ *                     description="Student ID (required)",
+ *                     type="integer"
+ *                 ),
+ *              )
+ *         ),
+ *     )
+ * )
+ */
 }
