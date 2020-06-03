@@ -20,7 +20,9 @@ use App\Actions\Visit\UpdateVisitAction;
 use App\Actions\Student\ListStudentsAction;
 use App\Actions\ID\IDScanAction;
 use App\Actions\Person\AddBlacklistAction;
+use App\Actions\Person\DeleteBlacklistAction;
 use App\Actions\Person\ListBlacklistAction;
+use App\Actions\Person\UpdateBlacklistAction;
 use App\Actions\PreflightAction;
 use App\Middleware\AuthMiddleware;
 use Doctrine\ORM\Mapping\PreFlush;
@@ -30,7 +32,10 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-    $app->options('/{routes:.+}', PreflightAction::class);
+    $app->options('/{routes:.*}', function (Request $request, Response $response) {
+        // CORS Pre-Flight OPTIONS Request Handler
+        return $response;
+    });
 
     $app->get('/', function (Request $request, Response $response) {        
         $response->getBody()->write('Hello world!');
@@ -62,8 +67,14 @@ return function (App $app) {
             $group->get('/search/query', SearchPersonsAction::class);
             $group->get('/{id}/blacklist', ListBlacklistAction::class);
             $group->post('/{id}/blacklist', AddBlacklistAction::class);
+            $group->put('/{id}/blacklist/{blacklistId}', UpdateBlacklistAction::class);
             $group->get('/{id}/visitorSettings', ViewVisitorSettingsAction::class);
             $group->put('/{id}/visitorSettings', SetVisitorSettingsAction::class);
+        });
+
+        $group->group('/blacklist', function (Group $group) {
+            $group->options('/{id}', PreflightAction::class);
+            $group->delete('/{id}', DeleteBlacklistAction::class);
         });
 
         $group->group('/students', function (Group $group) {
