@@ -53,8 +53,11 @@ return function (App $app) {
             $group->get('', ListVisitsAction::class);
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
-	    $group->put('/{id}', UpdateVisitAction::class);
+            $group->options('', PreflightAction::class);
+            $group->put('/{id}', UpdateVisitAction::class);
+            $group->options('/{id}', PreflightAction::class);
             $group->post('/{id}/badge', AddVisitBadgeAction::class);
+            $group->options('/{id}/badge', PreflightAction::class);
         });
 
         $group->group('/users', function (Group $group) {
