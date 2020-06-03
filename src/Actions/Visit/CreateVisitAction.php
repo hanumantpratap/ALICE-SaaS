@@ -29,6 +29,7 @@ class CreateVisitAction extends Action
         $this->personRepository = $personRepository;
         parent::__construct($logger);
     }
+
     protected function action(): Response
     {
         $formData = $this->getFormData();
@@ -106,10 +107,12 @@ class CreateVisitAction extends Action
         $this->visitRepository->save($visit);
         $newId = $visit->getId();
         $this->logger->info("Visit of id `${newId}` was created.");
-
-        return $this->respondWithData($person->getVisits());
+        
+        $newVisit = $this->visitRepository->findVisitOfId($newId);
+        return $this->respondWithData(['visit' => $newVisit, 'visitHistory' => $person->getVisits()]);
     }
 }
+
 /**
  * @OA\Post(
  *     path="/visits",

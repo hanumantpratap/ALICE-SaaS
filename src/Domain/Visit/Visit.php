@@ -148,7 +148,9 @@ class Visit {
     
     $visitor->firstName = $person->getName()->getGivenName();
     $visitor->lastName = $person->getName()->getFamilyName();
-    $visitor->emailAddress = $person->getEmail()->getEmailAddress();
+
+    $email = $person->getEmail();
+    $visitor->emailAddress = $email ? $email->getEmailAddress() : null;
 
     $demographics = $person->getDemographics();
     $visitor->birthDate = $demographics ? $demographics->getBirthDate() : null;
