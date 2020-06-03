@@ -79,3 +79,35 @@ Here's an example launch configuration for Visual Studio Code:
   ]
 }
 ```
+
+## Releases
+
+The first step of the "release" process is UAT.
+
+To trigger a UAT build, create a new *release* branch.  The naming scheme for the branch should be *release/{version}*, e.g., `release/3.1.4`.
+
+**IMPORTANT**: Releases require *Git tags*.  The tag on the branch indicates the release *version* and will be used to generate artifact tags.
+
+The process for promoting the current `develop` branch to UAT thus looks like, assuming a hypothetical v3.0.0:
+
+```bash
+git fetch
+git checkout develop
+git pull
+git checkout -b release/3.0.0
+git commit -m "Release v3.0.0"
+git tag -a 3.0.0 -m "v3.0.0"
+git push --set-upstream origin release/3.0.0 --follow-tags
+```
+
+The process for doing a *hotfix* release is slightly different, as the **source branch** will be an existing release rather than `develop`:
+
+```bash
+git fetch
+git checkout release/3.0.0
+git pull
+git checkout -b release/3.0.1
+git commit -m "Release v3.0.1"
+git tag -a 3.0.1 -m "v3.0.1"
+git push --set-upstream origin release/3.0.1 --follow-tags
+```
