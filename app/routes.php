@@ -16,6 +16,7 @@ use App\Actions\User\SignInAction;
 use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
+use App\Actions\Visit\AddVisitBadgeAction;
 use App\Actions\Visit\UpdateVisitAction;
 use App\Actions\Student\ListStudentsAction;
 use App\Actions\ID\IDScanAction;
@@ -52,7 +53,8 @@ return function (App $app) {
             $group->get('', ListVisitsAction::class);
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
-            $group->put('/{id}', UpdateVisitAction::class);
+	    $group->put('/{id}', UpdateVisitAction::class);
+            $group->post('/{id}/badge', AddVisitBadgeAction::class);
         });
 
         $group->group('/users', function (Group $group) {
