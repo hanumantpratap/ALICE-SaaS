@@ -26,18 +26,16 @@ use App\Actions\Person\ListBlacklistAction;
 use App\Actions\Person\UpdateBlacklistAction;
 use App\Actions\PreflightAction;
 use App\Middleware\AuthMiddleware;
-use Doctrine\ORM\Mapping\PreFlush;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-    $app->options('/{routes:.*}', function (Request $request, Response $response) {
-        // CORS Pre-Flight OPTIONS Request Handler
+    $app->options('/{routes:.+}', function ($request, $response, $args) {
         return $response;
     });
-
+    
     $app->get('/', function (Request $request, Response $response) {        
         $response->getBody()->write('Hello world!');
         return $response;
@@ -53,7 +51,7 @@ return function (App $app) {
             $group->get('', ListVisitsAction::class);
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
-	    $group->put('/{id}', UpdateVisitAction::class);
+            $group->put('/{id}', UpdateVisitAction::class);
             $group->post('/{id}/badge', AddVisitBadgeAction::class);
         });
 
@@ -75,7 +73,6 @@ return function (App $app) {
         });
 
         $group->group('/blacklist', function (Group $group) {
-            $group->options('/{id}', PreflightAction::class);
             $group->delete('/{id}', DeleteBlacklistAction::class);
         });
 
