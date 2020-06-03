@@ -165,6 +165,8 @@ class Visit {
       return $item->getBuildingId() == $this->getBuildingId();
     })->first() ?: null;
 
+    $visitor->students = $person->getStudents()->toArray();
+
     return $visitor;
   }
 

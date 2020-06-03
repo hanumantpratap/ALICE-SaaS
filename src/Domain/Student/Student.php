@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @Entity
@@ -48,4 +50,11 @@ class Student {
 
   /** @Column(name="inactive", type="boolean") */
   public ?bool $inactive;
+
+  /** @OneToMany(targetEntity="StudentAssociation", mappedBy="student", cascade={"persist", "remove"}) */
+  protected Collection $studentAssociations;
+  
+  public function getId() {
+    return $this->id;
+  }
 }
