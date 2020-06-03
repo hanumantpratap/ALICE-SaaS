@@ -108,8 +108,8 @@ class CreateVisitAction extends Action
         $this->visitRepository->save($visit);
         $newId = $visit->getId();
         $this->logger->info("Visit of id `${newId}` was created.");
-        $newVisit = $this->visitRepository->findVisitOfId($newId);
-        return $this->respondWithData($newVisit);
+
+        return $this->respondWithData($person->getVisits());
     }
 }
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Person;
 
+use App\Domain\Visit\Visit;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
@@ -10,7 +11,6 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\SequenceGenerator;
@@ -68,6 +68,13 @@ class Person {
   
   /** @OneToOne(targetEntity="VisitorSettings", mappedBy="person", cascade={"persist", "remove"}) */
   protected ?VisitorSettings $visitorSettings;
+
+  /** @OneToMany(targetEntity="\App\Domain\Visit\Visit", mappedBy="person", cascade={"persist", "remove"}) */
+  protected Collection $visits;
+
+  public function getVisits() {
+    return $this->visits->toArray();
+  }
   
   public function getPersonId() {
     return $this->personId;
@@ -167,5 +174,6 @@ class Person {
     $this->flags = new ArrayCollection();
     $this->blacklist = new ArrayCollection();
     $this->identifications = new ArrayCollection();
+    $this->visits = new ArrayCollection();
   }
 }
