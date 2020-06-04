@@ -35,6 +35,7 @@ final class SqlVisitRepository implements VisitRepository
 
         foreach ($visits as &$visit) {
             $visit->visitor = $visit->getVisitor();
+            $visit->badgeArray = $visit->getBadgeList();
         }
 
         return $visits;
@@ -49,6 +50,7 @@ final class SqlVisitRepository implements VisitRepository
 
       if (!is_null($visit)) {
           $visit->visitor = $visit->getVisitor();
+          $visit->badgeArray = $visit->getBadgeList();
           return $visit;
       }
 
