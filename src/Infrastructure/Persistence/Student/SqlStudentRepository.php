@@ -44,23 +44,23 @@ final class SqlStudentRepository implements StudentRepository
 
 
 
-    // find persons based on field searches in the people and person_demographics table.
+    // Find students based on field searches in the students table.
     // All search criteria in array, $params, will be concatenated by ANDs.
     public function findStudentsByParams(array $params): array {
         
       // declare the QueryBuilder
-      $qb = $this->entityManager->createQueryBuilder("p")
-          ->from(Student::class, "s");
+      $qb = $this->entityManager->createQueryBuilder("s")
+          ->from(Student::class, "s")->select("s");
 
       // iterate through query params, and build the query
       foreach( $params as $key => $value ) {
           switch( $key ) {
               // a partial string match in a Student field
-              case "lastName": case "lastName": case "middleInitial":  case "suffix":
+              case "firstName": case "lastName": case "middleInitial":  case "suffix":
                   $criteria = Criteria::create()->where(Criteria::expr()->contains( $key, $value ));
                   $qb->addCriteria( $criteria );
                   break;
-               // an exact value in a Person field
+               // an exact match in a Student field
                case "gender": case "dob": case "grade": case "inactive":
                   $criteria = Criteria::create()->where(Criteria::expr()->eq( $key, $value ));
                   $qb->addCriteria( $criteria );                  
@@ -70,7 +70,7 @@ final class SqlStudentRepository implements StudentRepository
           }
       }
 
-      // return the array of persons, or an empty array if no matches found
+      // return the array of records, or an empty array if no matches found
       return $qb->getQuery()->getResult() ?? [];
   }
 
