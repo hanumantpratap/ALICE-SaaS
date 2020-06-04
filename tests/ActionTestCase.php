@@ -27,6 +27,7 @@ class ActionTestCase extends TestCase
         $containerBuilder = new ContainerBuilder();
 
         // Container intentionally not compiled for tests.
+        define('APP_ROOT', realpath(__DIR__ . '/../') . '/');
 
         // Set up settings
         $settings = require __DIR__ . '/../app/settings.php';

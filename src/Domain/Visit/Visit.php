@@ -9,10 +9,13 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\DBAL\Types\VarDateTimeType;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Entity
@@ -82,6 +85,9 @@ class Visit {
   /** @Column(name="estimated_check_out", nullable=true, type="datetime") */
   public ?DateTime $estimatedCheckOut;
 
+  /** @OneToMany(targetEntity="VisitBadge", mappedBy="visit", cascade={"persist", "remove"}) */
+  protected Collection $badges;
+
   /**
    * @ManyToOne(targetEntity="\App\Domain\Person\Person")
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
@@ -142,7 +148,9 @@ class Visit {
     
     $visitor->firstName = $person->getName()->getGivenName();
     $visitor->lastName = $person->getName()->getFamilyName();
-    $visitor->emailAddress = $person->getEmail()->getEmailAddress();
+
+    $email = $person->getEmail();
+    $visitor->emailAddress = $email ? $email->getEmailAddress() : null;
 
     $demographics = $person->getDemographics();
     $visitor->birthDate = $demographics ? $demographics->getBirthDate() : null;
@@ -160,6 +168,22 @@ class Visit {
     return $visitor;
   }
 
+  public function getBadges(): Collection {
+    return $this->badges;
+  }
+
+  protected function setBadges(Collection $badges): void {
+    $this->badges = $badges;
+  }
+
+  public function addBadge(VisitBadge $badge): void {
+    $this->badges->add($badge);
+  }
+
+  public function removeBadge(VisitBadge $badge): void {
+    $this->badges->removeElement($badge);
+  }
+
   public function __construct() {
     $this->dateCreated = new DateTime();
     $this->buildingId = 5240;
@@ -170,5 +194,6 @@ class Visit {
     $this->checkOut = null;
     $this->estimatedCheckIn = null;
     $this->estimatedCheckOut = null;
+    $this->badges = new ArrayCollection();
   }
 }

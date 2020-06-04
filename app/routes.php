@@ -7,6 +7,8 @@ declare(strict_types=1);
 use App\Actions\Person\ListPersonsAction;
 use App\Actions\Person\SearchPersonsAction;
 use App\Actions\Person\ViewPersonAction;
+use App\Actions\Student\ListStudentsAction;
+use App\Actions\Student\SearchStudentsAction;
 use App\Actions\Person\ViewVisitorSettingsAction;
 use App\Actions\Person\SetVisitorSettingsAction;
 use App\Actions\User\ListUsersAction;
@@ -17,9 +19,14 @@ use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
 use App\Actions\User\SignInAction;
 use App\Actions\User\ForgotPasswordAction;
+use App\Actions\User\ResetPasswordAction;
+use App\Actions\Visit\AddVisitBadgeAction;
+use App\Actions\Visit\UpdateVisitAction;
 use App\Actions\ID\IDScanAction;
 use App\Actions\Person\AddBlacklistAction;
+use App\Actions\Person\DeleteBlacklistAction;
 use App\Actions\Person\ListBlacklistAction;
+use App\Actions\Person\UpdateBlacklistAction;
 use App\Actions\PreflightAction;
 use App\Middleware\AuthMiddleware;
 use Doctrine\ORM\Mapping\PreFlush;
@@ -29,7 +36,9 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-    $app->options('/{routes:.+}', PreflightAction::class);
+    $app->options('/{routes:.+}', function ($request, $response, $args) {
+        return $response;
+    });
 
     $app->get('/', function (Request $request, Response $response) {        
         $response->getBody()->write('Hello world!');
@@ -47,6 +56,7 @@ return function (App $app) {
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
             $group->put('/{id}', UpdateVisitAction::class);
+            $group->post('/{id}/badge', AddVisitBadgeAction::class);            
         });
 
         $group->group('/users', function (Group $group) {
@@ -61,12 +71,18 @@ return function (App $app) {
             $group->get('/search/query', SearchPersonsAction::class);
             $group->get('/{id}/blacklist', ListBlacklistAction::class);
             $group->post('/{id}/blacklist', AddBlacklistAction::class);
+            $group->put('/{id}/blacklist/{blacklistId}', UpdateBlacklistAction::class);
             $group->get('/{id}/visitorSettings', ViewVisitorSettingsAction::class);
             $group->put('/{id}/visitorSettings', SetVisitorSettingsAction::class);
         });
 
+        $group->group('/blacklist', function (Group $group) {
+            $group->delete('/{id}', DeleteBlacklistAction::class);
+        });
+
         $group->group('/students', function (Group $group) {
             $group->get('', ListStudentsAction::class);
+            $group->get('/search/query', SearchStudentsAction::class);
         });
     
         $group->post('/id-scan', IDScanAction::class);
@@ -83,8 +99,8 @@ return function (App $app) {
         });
     })->add(AuthMiddleware::class);
 
-    
+   
     $app->post('/sign-in', SignInAction::class);
-    //$app->options('/sign-in', PreflightAction::class);
     $app->post('/forgot-password', ForgotPasswordAction::class);
+    $app->post('/reset-password', ResetPasswordAction::class);
 };

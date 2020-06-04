@@ -23,7 +23,6 @@ class CreateVisitAction extends Action
      * @param LoggerInterface $logger
      * @param VisitRepository $visitRepository
      */
-
     public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, PersonRepository $personRepository)
     {
         $this->visitRepository = $visitRepository;
@@ -108,8 +107,9 @@ class CreateVisitAction extends Action
         $this->visitRepository->save($visit);
         $newId = $visit->getId();
         $this->logger->info("Visit of id `${newId}` was created.");
+        
         $newVisit = $this->visitRepository->findVisitOfId($newId);
-        return $this->respondWithData($newVisit);
+        return $this->respondWithData(['visit' => $newVisit, 'visitHistory' => $person->getVisits()]);
     }
 }
 
