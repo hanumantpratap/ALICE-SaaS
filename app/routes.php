@@ -11,6 +11,8 @@ use App\Actions\Student\ListStudentsAction;
 use App\Actions\Student\SearchStudentsAction;
 use App\Actions\Person\ViewVisitorSettingsAction;
 use App\Actions\Person\SetVisitorSettingsAction;
+use App\Actions\Person\AddStudentAction;
+use App\Actions\Person\RemoveStudentAction;
 use App\Actions\User\ListUsersAction;
 use App\Actions\User\ViewUserAction;
 use App\Actions\User\AddNotificationGroupAction;
@@ -74,6 +76,8 @@ return function (App $app) {
             $group->put('/{id}/blacklist/{blacklistId}', UpdateBlacklistAction::class);
             $group->get('/{id}/visitorSettings', ViewVisitorSettingsAction::class);
             $group->put('/{id}/visitorSettings', SetVisitorSettingsAction::class);
+            $group->post('/{id}/students', AddStudentAction::class);
+            $group->delete('/{id}/students/{studentId}', RemoveStudentAction::class);
         });
 
         $group->group('/blacklist', function (Group $group) {
