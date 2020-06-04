@@ -244,5 +244,6 @@ class Person {
     $this->visits = new ArrayCollection();
     $this->notes = new ArrayCollection();
     $this->studentAssociations = new ArrayCollection();
+    $this->address = null;
   }
 }
