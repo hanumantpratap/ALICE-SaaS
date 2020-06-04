@@ -54,7 +54,7 @@ class Visit {
 
   /** @Column(name="visitor_type") */
   public ?string $visitorType;
-  
+
   /** @Column */
   public ?string $notes;
 
@@ -87,6 +87,8 @@ class Visit {
 
   /** @OneToMany(targetEntity="VisitBadge", mappedBy="visit", cascade={"persist", "remove"}) */
   protected Collection $badges;
+
+  public array $badgeArray;
 
   /**
    * @ManyToOne(targetEntity="\App\Domain\Person\Person")
@@ -145,7 +147,7 @@ class Visit {
 
     $visitor = new \stdClass();
     $visitor->personId = $person->personId;
-    
+
     $visitor->firstName = $person->getName()->getGivenName();
     $visitor->lastName = $person->getName()->getFamilyName();
 
@@ -168,6 +170,18 @@ class Visit {
     $visitor->students = $person->getStudents()->toArray();
 
     return $visitor;
+  }
+
+  public function setCheckIn($datetime) {
+      if ($datetime instanceof DateTime) {
+          $this->checkIn = $datetime;
+      }
+  }
+
+  public function getBadgeList(): array {
+      return $this->badges->map(function($badge) {
+          return $badge->printedAt;
+      })->toArray();
   }
 
   public function getBadges(): Collection {

@@ -40,7 +40,7 @@ class VisitBadge {
     $this->visit = $visit;
   }
 
-  public function __construct() {
-    $this->printedAt = new DateTime();
+  public function __construct($datetime = null) {
+    $this->printedAt = ($datetime instanceof DateTime ? $datetime : new DateTime());
   }
 }
