@@ -14,7 +14,7 @@ use App\Classes\TokenProcessor;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Actions\Action;
 
-class ForgotPasswordAction extends Action
+class ResetPasswordAction extends Action
 {
     /**
      * @param LoggerInterface $logger
@@ -30,14 +30,16 @@ class ForgotPasswordAction extends Action
     protected function action(): Response
     {
         $formData = $this->getFormData();
-        $username= $formData->username;
+        $password= $formData->password;
+        $token= $formData->token;
+        $repeat_password= $formData->repeat_password;
 
         $client = new GuzzleClient(['base_uri' => AUTH_URL, 'verify' => APP_ROOT . '/cacert.pem']);
  
-        $data = ['app' => 'np', 'login' =>$username];
+        $data = ['app'=>'np', 'token'=>$token, 'new_password'=>$password, 'repeat_new_password'=>$repeat_password ];
         
         try{
-            $response = $client->post('api/password/emails', [
+            $response = $client->put('api/password/reset', [
                 'json' => $data
             ]);
 
