@@ -74,6 +74,9 @@ class Person {
 
   /** @OneToMany(targetEntity="\App\Domain\Visit\Visit", mappedBy="person", cascade={"persist", "remove"}) */
   protected Collection $visits;
+
+  /** @OneToMany(targetEntity="Note", mappedBy="person", cascade={"persist", "remove"}) */
+  protected Collection $notes;
   
   /** @OneToMany(targetEntity="\App\Domain\Student\StudentAssociation", mappedBy="person", cascade={"persist", "remove"}, orphanRemoval=true) */
   protected Collection $studentAssociations;
@@ -133,6 +136,26 @@ class Person {
 
   public function isOnBuildingBlacklist(int $buildingId): bool {
     return $this->blacklist->exists(fn($key, $value) => $value->buildingId == $buildingId);
+  }
+
+  public function addNote(Note $note): void {
+    $this->notes->add($note);
+  }
+
+  public function removeNote(Note $note): void {
+    $this->notes->removeElement($note);
+  }
+
+  public function updateNote(Note $note): void {
+    $this->notes->set($note->id, $note);
+  }
+
+  public function getNoteById(int $id): Note {
+    return $this->notes->filter(fn($value) => $value->id == $id)->first();
+  }
+
+  public function getNotes(): array {
+    return $this->notes->toArray();
   }
 
   public function getIdentifications() {
@@ -219,6 +242,7 @@ class Person {
     $this->blacklist = new ArrayCollection();
     $this->identifications = new ArrayCollection();
     $this->visits = new ArrayCollection();
+    $this->notes = new ArrayCollection();
     $this->studentAssociations = new ArrayCollection();
   }
 }
