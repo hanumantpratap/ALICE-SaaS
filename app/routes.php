@@ -24,7 +24,10 @@ use App\Actions\Person\AddBlacklistAction;
 use App\Actions\Person\DeleteBlacklistAction;
 use App\Actions\Person\ListBlacklistAction;
 use App\Actions\Person\UpdateBlacklistAction;
-use App\Actions\PreflightAction;
+use App\Actions\Person\Notes\GetNoteAction;
+use App\Actions\Person\Notes\ListNotesAction;
+use App\Actions\Person\Notes\CreateNoteAction;
+use App\Actions\Person\Notes\UpdateNoteAction;
 use App\Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -70,6 +73,10 @@ return function (App $app) {
             $group->put('/{id}/blacklist/{blacklistId}', UpdateBlacklistAction::class);
             $group->get('/{id}/visitorSettings', ViewVisitorSettingsAction::class);
             $group->put('/{id}/visitorSettings', SetVisitorSettingsAction::class);
+            $group->get('/{id}/notes', ListNotesAction::class);
+            $group->get('/{id}/notes/{noteId}', GetNoteAction::class);
+            $group->post('/{id}/notes', CreateNoteAction::class);
+            $group->put('/{id}/notes/{noteId}', UpdateNoteAction::class);
         });
 
         $group->group('/blacklist', function (Group $group) {
