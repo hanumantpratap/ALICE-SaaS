@@ -66,5 +66,6 @@ class VisitorSettings {
   public function __construct() {
     $this->emailNotifications = true;
     $this->textNotifications = true;
+    $this->picture = null;
   }
 }

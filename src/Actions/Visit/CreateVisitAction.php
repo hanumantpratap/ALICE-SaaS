@@ -14,6 +14,7 @@ use App\Domain\Person\PersonEmail;
 use App\Domain\Person\Identification;
 use App\Domain\Person\PersonAddress;
 use App\Domain\Person\PersonRepository;
+use App\Domain\Student\StudentRepository;
 use App\Exceptions;
 use DateTime;
 
@@ -23,10 +24,11 @@ class CreateVisitAction extends Action
      * @param LoggerInterface $logger
      * @param VisitRepository $visitRepository
      */
-    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, PersonRepository $personRepository)
+    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, PersonRepository $personRepository, StudentRepository $studentRepository)
     {
         $this->visitRepository = $visitRepository;
         $this->personRepository = $personRepository;
+        $this->studentRepository = $studentRepository;
         parent::__construct($logger);
     }
 
@@ -79,6 +81,13 @@ class CreateVisitAction extends Action
             if( isset($formData->picture)) {
                 $visitorSettings = $person->getVisitorSettings();
                 $visitorSettings->setPicture($formData->picture);
+            }
+
+            if (isset ($formData->students) && is_array($formData->students)) {
+                foreach ($formData->students as $studentId) {
+                    $student = $this->studentRepository->findStudentOfId((int) $studentId);
+                    $person->addStudent($student, 1);
+                }
             }
 	    
             $this->personRepository->save($person);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Domain\Person;
 
 use App\Domain\Visit\Visit;
+use App\Domain\Student\Student;
+use App\Domain\Student\StudentAssociation;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
@@ -11,6 +13,7 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\SequenceGenerator;
@@ -74,11 +77,14 @@ class Person {
 
   /** @OneToMany(targetEntity="Note", mappedBy="person", cascade={"persist", "remove"}) */
   protected Collection $notes;
-
+  
+  /** @OneToMany(targetEntity="\App\Domain\Student\StudentAssociation", mappedBy="person", cascade={"persist", "remove"}, orphanRemoval=true) */
+  protected Collection $studentAssociations;
+  
   public function getVisits() {
     return $this->visits->toArray();
   }
-  
+
   public function getPersonId() {
     return $this->personId;
   }
@@ -186,6 +192,44 @@ class Person {
     $this->visitorSettings = $visitorSettings;
   }
 
+  public function getStudentAssociations() {
+    return $this->studentAssociations;
+  }
+
+  public function addStudentAssociations(StudentAssociation $studentAssociation) {
+    $this->studentAssociations->add($studentAssociation);
+  }
+
+  public function getStudents() {
+    $students = new ArrayCollection();
+    $studentAssociations = $this->getStudentAssociations();
+
+    foreach($studentAssociations as $studentAssociation) {
+      $students->add($studentAssociation->getStudent());
+    }
+
+    return $students;
+  }
+
+  public function addStudent(Student $student, int $associationTypeId) {
+    $studentAssociation = new StudentAssociation();
+    $studentAssociation->setPerson($this);
+    $studentAssociation->setStudent($student);
+    $studentAssociation->setAssociationTypeId($associationTypeId);
+    $this->studentAssociations->add($studentAssociation);
+  }
+
+  public function removeStudent(Student $student) {
+    $studentId = $student->getId();
+
+    foreach($this->getStudentAssociations() as $studentAssociation) {
+      if ($studentAssociation->getStudent()->getId() == $studentId) {
+        $this->studentAssociations->removeElement($studentAssociation);
+        return;
+      }
+    }
+  }
+
   public function __construct() {
     $this->name = new PersonName();
     $this->name->setPerson($this);
@@ -199,5 +243,6 @@ class Person {
     $this->identifications = new ArrayCollection();
     $this->visits = new ArrayCollection();
     $this->notes = new ArrayCollection();
+    $this->studentAssociations = new ArrayCollection();
   }
 }
