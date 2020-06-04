@@ -79,4 +79,8 @@ class PersonDemographics {
     public function setBirthDate(DateTime $birthDate) {
         $this->birthDate = $birthDate;
     }
+
+    public function __construct() {
+        $this->birthDate = null;
+    }
 }
