@@ -20,6 +20,12 @@ INGRESS_PORT=81
 POSTGRES_PORT=5433
 ```
 
+For sending emails from your dev environment, you will also need an AWS credentials file:
+
+```env
+AWS_CREDS=C:\AWS\credentials
+```
+
 ## Running in Docker
 
 As long as your `.env` file is configured as documented above, just run `docker-compose up`.  The application will be available at `localhost:8080`.
