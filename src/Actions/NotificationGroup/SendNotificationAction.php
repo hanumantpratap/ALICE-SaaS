@@ -46,7 +46,7 @@ class SendNotificationAction extends NotificationGroupAction
             $this->visitRepository->save($visit);
         }
 
-        return $this->response->withStatus(201);
+        return $this->respondWithData(null, 201);
     }
 }
 

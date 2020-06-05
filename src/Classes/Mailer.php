@@ -70,4 +70,5 @@ class Mailer {
             throw new Exceptions\InternalServerErrorException($e->getMessage());
         }
     }
+}
 ?>
