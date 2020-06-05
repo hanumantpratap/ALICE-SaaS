@@ -33,9 +33,9 @@ final class SqlVisitRepository implements VisitRepository
     public function findAll(): array {
         $visits = $this->repository->findAll();
 
-        foreach ($visits as &$visit) {
-            $visit->visitor = $visit->getVisitor();
-            $visit->badgeArray = $visit->getBadgeList();
+         foreach ($visits as &$visit) {
+            $visit->visitor = $visit->getBasicVisitorInfo();
+            //$visit->badgeArray = $visit->getBadgeList();
         }
 
         return $visits;

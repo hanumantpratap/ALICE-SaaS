@@ -146,6 +146,17 @@ class Visit {
     $this->securityAlerted = $securityAlerted;
   }
 
+  public function getBasicVisitorInfo() {
+    $person = $this->getPerson();
+
+    $visitor = new \stdClass();
+    $visitor->personId = $person->personId;
+    $visitor->firstName = $person->getName()->getGivenName();
+    $visitor->lastName = $person->getName()->getFamilyName();
+
+    return $visitor;
+  }
+
   public function getVisitor() {
     $person = $this->getPerson();
 
