@@ -188,6 +188,8 @@ class Visit {
     $students = $person->getStudents();
     $visitor->students = $students->isEmpty() ? null : $students->toArray();
 
+    $visitor->notes = $person->getNotes();
+
     return $visitor;
   }
 
