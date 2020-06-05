@@ -29,6 +29,6 @@ class CreateNoteAction extends PersonAction
 
     $this->logger->info("Note Saved");
 
-    return $this->response->withStatus(201);
+    return $this->respondWithData(null, 200);
   }
 }
