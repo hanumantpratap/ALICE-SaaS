@@ -33,7 +33,7 @@ class NotificationGroupUser {
 
   /** 
    * @Id
-   * @ManyToOne(targetEntity="\App\Domain\User\User", inversedBy="notificationGroups")
+   * @ManyToOne(targetEntity="\App\Domain\User\User", inversedBy="notificationGroups", fetch="EAGER")
    * @JoinColumn(name="user_id", referencedColumnName="pa_id")
    **/
   protected User $user;
@@ -47,11 +47,19 @@ class NotificationGroupUser {
     $this->notificationGroup = $notificationGroup;
   }
 
+  public function getUser() {
+    return $this->user;
+  }
+
   public function setUser(User $user) {
     $this->user = $user;
   }
 
   public function setBuildingId(int $buildingId) {
     $this->buildingId = $buildingId;
+  }
+
+  public function getBuildingId() {
+    return $this->buildingId;
   }
 }

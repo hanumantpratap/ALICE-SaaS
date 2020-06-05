@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 use App\Classes\DatabaseConnection;
 use App\Classes\DistrictDatabaseConnection;
+use App\Classes\Mailer;
 use App\Classes\RedisConnector;
 use App\Classes\TokenProcessor;
 use App\Classes\SqlLogger;
@@ -76,6 +77,24 @@ return function (ContainerBuilder $containerBuilder) {
             return new TokenProcessor();
         },
 
+        Mailer::class => function (ContainerInterface $c, LoggerInterface $logger) {
+            $settings = $c->get('settings');
+            $config = [
+                'connection' => [
+                    'version' => '2010-12-01',
+                    'region' => 'us-east-1'
+                ],
+                'devMode' => false
+            ];
+            
+            if ($settings['environment'] == 'dev') {
+                $config['connection']['profile'] = 'ses_admin';
+                $config['devMode'] = true;
+            }
+
+            return new Mailer($config, $logger);
+        },
+
         EntityManagerInterface::class => function (ContainerInterface $c, LoggerInterface $logger): EntityManager {
             $settings = $c->get('settings');
             $doctrineSettings = $settings['doctrine'];
@@ -107,6 +126,7 @@ return function (ContainerBuilder $containerBuilder) {
                     new FilesystemCache($doctrineSettings['cache_dir'])
                 );
             }
+
             return EntityManager::create($doctrineSettings['connection'], $config);
         }
     ]);

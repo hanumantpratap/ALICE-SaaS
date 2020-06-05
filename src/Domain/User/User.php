@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Domain\User;
 
 use App\Domain\Person\Person;
-use App\Domain\NotificationGroup;
+use App\Domain\NotificationGroup\NotificationGroup;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
@@ -59,7 +59,7 @@ class User {
   public ?int $globalUserId;
 
   /**
-   * @OneToOne(targetEntity="\App\Domain\Person\Person")
+   * @OneToOne(targetEntity="\App\Domain\Person\Person", fetch="EAGER")
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
   public Person $person;
@@ -80,14 +80,22 @@ class User {
     $load = $this->getPerson()->getDisplayName();
   }
 
+  public function getFirstName() {
+    return $this->person->getName()->getGivenName();
+  }
+
+  public function getLastName() {
+    return $this->person->getName()->getFamilyName();
+  }
+
   public function getNotificationGroups() {
     return $this->notificationGroups;
   }
 
-  public function addNotificationGroup(NotificationGroup $notificationGroup) {
+  /* public function addNotificationGroup(NotificationGroup $notificationGroup) {
     $notificationGroup->addUser($this);
     $this->notificationGroups->add($notificationGroup);
-  }
+  } */
 
   public function __construct() {
     $this->notificationGroups = new ArrayCollection();

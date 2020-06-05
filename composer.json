@@ -3,6 +3,7 @@
     "require": {
         "php": ">=7.1",
         "ext-json": "*",
+        "aws/aws-sdk-php": "^3.140",
         "doctrine/collections": "1.6.4",
         "doctrine/orm": "^2.7",
         "firebase/php-jwt": "^5.2",
