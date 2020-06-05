@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Actions\Visit;
@@ -46,9 +47,10 @@ class CreateVisitAction extends Action
         if (isset($formData->identificationId) && is_null($person)) {
             try {
                 $person = $this->personRepository->findPersonByIdentification((string) $formData->identificationId);
-            } catch(\Exception $e) {}
+            } catch (\Exception $e) {
+            }
         }
-        
+
         // create new person
         if (is_null($person)) {
             if (!isset($formData->firstName) || !isset($formData->lastName)) {
@@ -77,19 +79,19 @@ class CreateVisitAction extends Action
                 $address = new PersonAddress($formData->address);
                 $person->setAddress($address);
             }
-	    
-            if( isset($formData->picture)) {
+
+            if (isset($formData->picture)) {
                 $visitorSettings = $person->getVisitorSettings();
                 $visitorSettings->setPicture($formData->picture);
             }
 
-            if (isset ($formData->students) && is_array($formData->students)) {
+            if (isset($formData->students) && is_array($formData->students)) {
                 foreach ($formData->students as $studentId) {
                     $student = $this->studentRepository->findStudentOfId((int) $studentId);
                     $person->addStudent($student, 1);
                 }
             }
-	    
+
             $this->personRepository->save($person);
 
             // The reason this has to be done as a separate save call is because 
@@ -104,7 +106,7 @@ class CreateVisitAction extends Action
                 $this->personRepository->save($person);
             }
         }
-        
+
         $visit = new Visit();
         $visit->setPerson($person);
         $visit->setBuildingId((int) $this->token->building);
@@ -116,9 +118,9 @@ class CreateVisitAction extends Action
         $this->visitRepository->save($visit);
         $newId = $visit->getId();
         $this->logger->info("Visit of id `${newId}` was created.");
-        
+
         $newVisit = $this->visitRepository->findVisitOfId($newId);
-        return $this->respondWithData(['visit' => $newVisit, 'visitHistory' => $person->getVisits()]);
+        return $this->respondWithData(['visit' => $newVisit, 'visitHistory' => $person->getVisits(), 'students' => $this->studentRepository->findAll()]);
     }
 }
 
