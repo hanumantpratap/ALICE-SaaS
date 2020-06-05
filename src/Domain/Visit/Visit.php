@@ -142,6 +142,10 @@ class Visit {
     $this->visitorType = $visitorType;
   }
 
+  public function setSecurityAlerted(bool $securityAlerted) {
+    $this->securityAlerted = $securityAlerted;
+  }
+
   public function getVisitor() {
     $person = $this->getPerson();
 

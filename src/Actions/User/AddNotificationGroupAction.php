@@ -34,7 +34,7 @@ class AddNotificationGroupAction extends UserAction
         $this->logger->info("adding Notification Group `${notificationGroupId}` to User `${userId}`");
 
         $notificationGroup = $this->notificationGroupRepository->findnotificationGroupOfId($notificationGroupId);
-        $notificationGroup->addUser($user, $this->token->building);
+        $notificationGroup->addUser($user, (int) $this->token->building);
         $this->notificationGroupRepository->save($notificationGroup);
 
         /* User Save has not been implemented yet. Special considerations need to be made for updating users.*/

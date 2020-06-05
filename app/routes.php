@@ -33,6 +33,8 @@ use App\Actions\Person\Notes\GetNoteAction;
 use App\Actions\Person\Notes\ListNotesAction;
 use App\Actions\Person\Notes\CreateNoteAction;
 use App\Actions\Person\Notes\UpdateNoteAction;
+use App\Actions\NotificationGroup\ListNotificationGroupsAction;
+use App\Actions\NotificationGroup\SendNotificationAction;
 use App\Middleware\AuthMiddleware;
 use Doctrine\ORM\Mapping\PreFlush;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -94,6 +96,11 @@ return function (App $app) {
         $group->group('/students', function (Group $group) {
             $group->get('', ListStudentsAction::class);
             $group->get('/search/query', SearchStudentsAction::class);
+        });
+
+        $group->group('/notificationGroups', function (Group $group) {
+            $group->get('', ListNotificationGroupsAction::class);
+            $group->post('/{id}/notifications', SendNotificationAction::class);
         });
     
         $group->post('/id-scan', IDScanAction::class);

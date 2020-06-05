@@ -42,8 +42,20 @@ class NotificationGroup {
   /** @OneToMany(targetEntity="NotificationGroupUser", mappedBy="notificationGroup", cascade={"persist", "remove"}) */
   protected Collection $users;
 
-  public function getUsers() {
+  public function getGroupUsers() {
     return $this->users;
+  }
+
+  public function getUsersByBuildingId(int $buildingId) {
+    $users = new ArrayCollection();
+
+    foreach ($this->users as $user) {
+      if ($user->getBuildingId() == $buildingId) {
+        $users->add($user->getUser());
+      }
+    }
+
+    return $users;
   }
 
   public function addUser(User $user, int $buildingId) {
