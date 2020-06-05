@@ -16,6 +16,10 @@ class CreateNoteAction extends PersonAction
     $data = $this->getFormData();
     $personId = (int) $this->resolveArg("id");
 
+    if (!isset($personId) || !isset($noteId) || !isset($data->userId) || !isset($data->note)) {
+      return $this->respondWithData(null, 400);
+    }
+
     $note = new Note();
     $note->personId = $personId;
     $note->userId = $data->userId;

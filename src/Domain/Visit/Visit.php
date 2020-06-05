@@ -85,6 +85,9 @@ class Visit {
   /** @Column(name="estimated_check_out", nullable=true, type="datetime") */
   public ?DateTime $estimatedCheckOut;
 
+  /** @Column(name="checked_out_by") */
+  public ?int $checkedOutBy;
+
   /** @OneToMany(targetEntity="VisitBadge", mappedBy="visit", cascade={"persist", "remove"}) */
   protected Collection $badges;
 

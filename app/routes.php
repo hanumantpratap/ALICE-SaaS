@@ -35,6 +35,7 @@ use App\Actions\Person\Notes\CreateNoteAction;
 use App\Actions\Person\Notes\UpdateNoteAction;
 use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
+use App\Actions\Visit\CheckOutAction;
 use App\Middleware\AuthMiddleware;
 use Doctrine\ORM\Mapping\PreFlush;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -63,7 +64,8 @@ return function (App $app) {
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
             $group->put('/{id}', UpdateVisitAction::class);
-            $group->post('/{id}/badge', AddVisitBadgeAction::class);            
+            $group->post('/{id}/badge', AddVisitBadgeAction::class);  
+            $group->put('/{id}/checkout', CheckOutAction::class);          
         });
 
         $group->group('/users', function (Group $group) {
