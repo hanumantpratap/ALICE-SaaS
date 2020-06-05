@@ -17,6 +17,10 @@ class UpdateNoteAction extends PersonAction
     $personId = (int) $this->resolveArg("id");
     $noteId = (int) $this->resolveArg("noteId");
 
+    if (!isset($personId) || !isset($noteId) || !isset($data->userId) || !isset($data->note)) {
+      return $this->respondWithData(null, 400);
+    }
+
     $person = $this->personRepository->findPersonOfId($personId);
 
     $note = $person->getNoteById($noteId);
@@ -30,6 +34,6 @@ class UpdateNoteAction extends PersonAction
 
     $this->logger->info("Note Saved");
 
-    return $this->response->withStatus(201);
+    return $this->respondWithData(null, 201);
   }
 }
