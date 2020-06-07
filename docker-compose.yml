@@ -32,11 +32,27 @@ services:
             - ENV=dev
             - LOG_TARGET=/var/www/logs/app.log
             - LOG_SQL=false
-            - REDIS_HOST=localhost
-            - REDIS_PORT=5530
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
             - VIRTUAL_HOST=api.navigate360.com
         depends_on:
             - postgres
+    redis:
+        image: alpine:latest
+        command:
+            - sh
+            - -c
+            - |
+                apk add putty
+                apk add openssh-client
+                puttygen /root/.ssh/key.ppk -O private-openssh -o /root/.ssh/id_rsa
+                while true; do ssh -4 -oStrictHostKeyChecking=no -nNT -L *:6379:test-redis.uooq9s.0001.use2.cache.amazonaws.com:6379 ubuntu@18.224.51.91 -i /root/.ssh/id_rsa; done
+        ports:
+            - "${REDIS_PORT:-6379}:6379"
+        volumes:
+            - ${PPK_FILE}:/root/.ssh/key.ppk:ro
+        networks:
+            - visitor-management
     postgres:
         image: alpine:latest
         command:

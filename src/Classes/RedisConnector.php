@@ -60,8 +60,8 @@ class RedisConnector {
     public function expire($key, $value) {
         $this->redis->expire($key, $value);
     }
-
-    // sets the value for a key on the the hash object
+    
+    // sets the value for a key on the hash object
     public function hashSet($hash, $key, $value) {
         $this->redis->hset($hash, $key, $value);
     }

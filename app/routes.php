@@ -1,9 +1,6 @@
 <?php
 declare(strict_types=1);
 
-// if we need to scale:
-//use some\namespace\{ClassA, ClassB, ClassC as C};
-
 use App\Actions\Person\ListPersonsAction;
 use App\Actions\Person\SearchPersonsAction;
 use App\Actions\Person\ViewPersonAction;
@@ -35,7 +32,7 @@ use App\Actions\Person\Notes\CreateNoteAction;
 use App\Actions\Person\Notes\UpdateNoteAction;
 use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
-use App\Actions\Visit\CheckOutAction;
+use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
 use App\Middleware\AuthMiddleware;
 use Doctrine\ORM\Mapping\PreFlush;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -112,6 +109,12 @@ return function (App $app) {
                 $group->get('/database-fetch', \App\Actions\Dev\Examples\DatabaseFetchAction::class);
                 $group->get('/database-fetchall', \App\Actions\Dev\Examples\DatabaseFetchAllAction::class);
                 $group->get('/entity-fetchall', \App\Actions\Dev\Examples\EntityFetchAll::class);
+            });
+
+            $group->group('/redis', function (Group $group) {
+                $group->get('', RedisListAction::class);
+                $group->post('', RedisSetAction::class);
+                $group->get('/{key}', RedisGetAction::class);
             });
 
             $group->get('/generate-docs', \App\Actions\Dev\GenerateOpenAPIDocs::class);
