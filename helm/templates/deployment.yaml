@@ -40,6 +40,10 @@ spec:
               value: "goFish49!zp9"
             - name: POSTGRES_PORT
               value: "5432"
+            - name: REDIS_HOST
+              value: "test-redis.uooq9s.0001.use2.cache.amazonaws.com"
+            - name: REDIS_PORT
+              value: "6379"
           ports:
             - name: http
               containerPort: 80

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Actions\Dev\Redis;
 
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Actions\Action;
 
 class RedisListAction extends RedisAction
 {
