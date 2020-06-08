@@ -68,7 +68,7 @@ return function (ContainerBuilder $containerBuilder) {
 
         RedisConnector::class => function (ContainerInterface $c) {
             $config = $c->get('settings')['redis'];
-            $redis = new RedisConnector(null, $config, $logger);
+            $redis = new RedisConnector($config);
             return $redis;
         },
 
