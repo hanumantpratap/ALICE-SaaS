@@ -97,6 +97,10 @@ class User {
     $this->notificationGroups->add($notificationGroup);
   } */
 
+  public function getPrimaryTeamId() {
+    return $this->primaryTeamId;
+  }
+
   public function __construct() {
     $this->notificationGroups = new ArrayCollection();
     $this->renderNotificationGroups = false;

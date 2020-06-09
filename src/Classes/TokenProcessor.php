@@ -3,6 +3,7 @@ namespace App\Classes;
 
 use \Firebase\JWT\JWT;
 use Psr\Http\Message\RequestInterface;
+use App\Classes\RedisConnector;
 
 class TokenProcessor {
     private $redis;
@@ -27,8 +28,8 @@ class TokenProcessor {
         "type" => null
     ];
 
-    function __construct() {
-        //$this->redis = $redis;
+    function __construct(RedisConnector $redis) {
+        $this->redis = $redis;
         $this->secret = "hereisanexamplesecret_v2";
     }
 

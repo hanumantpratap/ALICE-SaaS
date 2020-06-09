@@ -72,9 +72,8 @@ return function (ContainerBuilder $containerBuilder) {
             return $redis;
         },
 
-        TokenProcessor::class => function (ContainerInterface $c) {
-            //return new TokenProcessor($redis);
-            return new TokenProcessor();
+        TokenProcessor::class => function (RedisConnector $redis) {
+            return new TokenProcessor($redis);
         },
 
         Mailer::class => function (ContainerInterface $c, LoggerInterface $logger) {

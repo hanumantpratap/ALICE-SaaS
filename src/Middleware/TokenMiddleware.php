@@ -20,19 +20,7 @@ class TokenMiddleware implements MiddlewareInterface
     {
         $this->logger->info('process token');
 
-        $token = $this->tokenProcessor->processRequestToken($request, ['secure' => false]);
-        
-        // for now, hardcoding a token in so we can test app
-        if (!$token) {
-            $token = new \stdClass();
-
-            $token->type = 'auth';
-            $token->id = '200000127';
-            $token->gid = '65';
-            $token->dist = '5235';
-            $token->admin = 'f';
-            $token->building = '5240';
-        }
+        $token = $this->tokenProcessor->processRequestToken($request, ['secure' => false]); 
 
         $request = $request->withAttribute('token', $token);
 
