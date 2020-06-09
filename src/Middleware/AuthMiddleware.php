@@ -21,7 +21,7 @@ class AuthMiddleware implements MiddlewareInterface
         $token =  $request->getAttribute('token');
 
         // Validate Auth Token
-        if (!$token || $token->type != 'auth') {
+        if (!$token || $token->type != 'auth' || !isset($token->id) || !isset($token->building)) {
             throw new \App\Exceptions\UnauthorizedException();
         }
         

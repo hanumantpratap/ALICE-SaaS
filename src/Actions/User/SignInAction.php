@@ -13,16 +13,20 @@ use Psr\Log\LoggerInterface;
 use App\Classes\TokenProcessor;
 use Psr\Http\Message\ResponseInterface as Response;
 use App\Actions\Action;
+use Psr\Container\ContainerInterface;
+use App\Domain\User\UserRepository;
 
 class SignInAction extends Action
 {
     /**
+     * @param ContainerInterface $c
      * @param LoggerInterface $logger
      * @param TokenProcessor $tokenProcessor
      */
 
-    public function __construct(LoggerInterface $logger, TokenProcessor $tokenProcessor)
+    public function __construct(ContainerInterface $container, LoggerInterface $logger, TokenProcessor $tokenProcessor)
     {
+        $this->container = $container;
         $this->tokenProcessor = $tokenProcessor;
         parent::__construct($logger);
     }
@@ -35,8 +39,7 @@ class SignInAction extends Action
 
         $client = new GuzzleClient(['base_uri' => AUTH_URL, 'verify' => APP_ROOT . '/cacert.pem']);
 
- 
-        $data = ['app' => 'vm', 'login' =>$login, 'password' => $password];
+        $data = ['app' => 'vm', 'login' => $login, 'password' => $password, 'decoded'  => 'f'];
         
         try{
             $response = $client->post('api/authenticate', [
@@ -44,15 +47,20 @@ class SignInAction extends Action
             ]);
 
             $payload = json_decode($response->getBody()->getContents());
-            
-            if ($response->getStatusCode() == 201 && property_exists($payload, 'token') && $payload->type == 'auth') {
-                $token = $this->tokenProcessor->decode($payload->token);
-                $token->building = 5240;
+
+            if ($response->getStatusCode() == 201 && property_exists($payload, 'token') && $payload->type == 'auth') {                
+                $token = $payload->token;
+                $this->container->set('secureID', (int) $token->dist);
+                $this->userRepository = $this->container->get(UserRepository::class);
+
+                $user = $this->userRepository->findUserOfId((int) $token->id);
+                
+                $token->building = $user->getPrimaryTeamId();
                 $token->redexp = null;
                 $token->iat = null;
                 $token->exp = null;
 
-                $new_token = $this->tokenProcessor->create($token, 60*10, false);
+                $new_token = $this->tokenProcessor->create($token, 60*10, true);
 
                 return $this->respondWithData(['token' => $new_token, 'tokenDecoded' => $token]);
             }
