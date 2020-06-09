@@ -20,7 +20,7 @@ services:
             - ./tests:/var/www/tests
             - ./tmp/reports:/var/www/tmp/reports
             - ./phpunit.xml:/var/www/phpunit.xml
-            - ${AWS_CREDS}:/root/.aws/credentials
+            - ${AWS_CREDS:-./aws_creds_placeholder}:/root/.aws/credentials
         networks:
             - visitor-management
         environment:
