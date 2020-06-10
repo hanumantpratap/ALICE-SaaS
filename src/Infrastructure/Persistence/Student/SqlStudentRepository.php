@@ -47,7 +47,7 @@ final class SqlStudentRepository implements StudentRepository
     // Find students based on field searches in the students table.
     // All search criteria in array, $params, will be concatenated by ANDs.
     public function findStudentsByParams(array $params): array {
-        
+
       // declare the QueryBuilder
       $qb = $this->entityManager->createQueryBuilder("s")
           ->from(Student::class, "s")->select("s");
@@ -63,7 +63,7 @@ final class SqlStudentRepository implements StudentRepository
                // an exact match in a Student field
                case "gender": case "dob": case "grade": case "inactive":
                   $criteria = Criteria::create()->where(Criteria::expr()->eq( $key, $value ));
-                  $qb->addCriteria( $criteria );                  
+                  $qb->addCriteria( $criteria );
                   break;
               default:
                   throw new InvalidArgumentException( 'Query parameter, '.$key.', is not recognized.');

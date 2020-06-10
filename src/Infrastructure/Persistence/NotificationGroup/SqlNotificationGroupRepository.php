@@ -41,7 +41,7 @@ final class SqlNotificationGroupRepository implements NotificationGroupRepositor
 
       throw new Exceptions\NotFoundException('The Notification Group you requested does not exist.');
     }
-    
+
     public function save(NotificationGroup $group): void {
         try {
             $this->entityManager->persist($group);

@@ -1,7 +1,7 @@
 {
-    "name": "ALICE-SaaS/visitor-management-service",
+    "name": "navigate360/visitor-management-service",
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.4",
         "ext-json": "*",
         "aws/aws-sdk-php": "^3.140",
         "doctrine/collections": "1.6.4",
@@ -11,7 +11,6 @@
         "monolog/monolog": "^1.24",
         "php-di/php-di": "^6.0",
         "predis/predis": "^1.1",
-        "robmorgan/phinx": "^0.11.4",
         "slim/php-view": "^2.2",
         "slim/psr7": "^0.5",
         "slim/slim": "^4.1",

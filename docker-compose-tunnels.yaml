@@ -1,0 +1,39 @@
+version: "3.7"
+volumes:
+    logs:
+        driver: local
+services:    
+    redis:
+        image: alpine:latest
+        command:
+            - sh
+            - -c
+            - |
+                apk add putty
+                apk add openssh-client
+                puttygen /root/.ssh/key.ppk -O private-openssh -o /root/.ssh/id_rsa
+                while true; do ssh -4 -oStrictHostKeyChecking=no -nNT -L *:6379:test-redis.uooq9s.0001.use2.cache.amazonaws.com:6379 ubuntu@18.224.51.91 -i /root/.ssh/id_rsa; done
+        ports:
+            - "${REDIS_PORT:-6379}:6379"
+        volumes:
+            - ${PPK_FILE}:/root/.ssh/key.ppk:ro
+        networks:
+            - visitor-management
+            - n360-base
+    postgres:
+        image: alpine:latest
+        command:
+            - sh
+            - -c
+            - |
+                apk add putty
+                apk add openssh-client
+                puttygen /root/.ssh/key.ppk -O private-openssh -o /root/.ssh/id_rsa
+                while true; do ssh -4 -oStrictHostKeyChecking=no -nNT -L *:5432:test-innovations-v01.cm2dbdfl2yo8.us-east-2.rds.amazonaws.com:5432 ubuntu@18.224.51.91 -i /root/.ssh/id_rsa; done
+        ports:
+            - "${POSTGRES_PORT:-5432}:5432"
+        volumes:
+            - ${PPK_FILE}:/root/.ssh/key.ppk:ro
+        networks:
+            - visitor-management
+            - n360-base
