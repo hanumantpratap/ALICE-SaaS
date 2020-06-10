@@ -71,6 +71,10 @@ class User {
 
   public array $notificationGroupsList;
 
+  public function getId() {
+    return $this->id;
+  }
+  
   public function getPerson() {
     return $this->person;
   }
@@ -96,6 +100,10 @@ class User {
     $notificationGroup->addUser($this);
     $this->notificationGroups->add($notificationGroup);
   } */
+
+  public function getPrimaryTeamId() {
+    return $this->primaryTeamId;
+  }
 
   public function __construct() {
     $this->notificationGroups = new ArrayCollection();
