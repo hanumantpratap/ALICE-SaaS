@@ -77,4 +77,21 @@ final class SqlUserRepository implements UserRepository
 
       throw new Exceptions\NotFoundException('The User you requested does not exist.');
     }
+
+    public function findUserOfGlobalId(int $globalUserId): User {
+      /** @var User $User */
+      $user = $this->entityManager->createQueryBuilder("u")
+                    ->select('u')
+                    ->from(User::class, "u")
+                    ->where('u.globalUserId = :globalUserId')
+                    ->setParameter('globalUserId', $globalUserId)
+                    ->getQuery()
+                    ->getSingleResult();
+
+      if (!is_null($user)) {
+          return $user;
+      }
+
+      throw new Exceptions\NotFoundException('The User you requested does not exist.');
+    }
 }

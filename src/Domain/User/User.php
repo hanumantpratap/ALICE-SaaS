@@ -71,6 +71,10 @@ class User {
 
   public array $notificationGroupsList;
 
+  public function getId() {
+    return $this->id;
+  }
+  
   public function getPerson() {
     return $this->person;
   }
