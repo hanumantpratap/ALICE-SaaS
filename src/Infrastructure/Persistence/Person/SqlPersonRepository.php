@@ -82,7 +82,7 @@ final class SqlPersonRepository implements PersonRepository
     // find persons based on field searches in the people and person_demographics table.
     // All search criteria in array, $params, will be concatenated by ANDs.
     public function findPersonsByParams(array $params): array {
-        
+
         // declare the QueryBuilder
         $qb = $this->entityManager->createQueryBuilder("p")
             ->from(Person::class, "p")
@@ -99,7 +99,7 @@ final class SqlPersonRepository implements PersonRepository
                  // an exact value in a Person field
                  case "status":
                     $criteria = Criteria::create()->where(Criteria::expr()->eq( $key, $value ));
-                    $qb->addCriteria( $criteria );                  
+                    $qb->addCriteria( $criteria );
                     break;
                 // a partial string match in a demographics field
                 case "marks":
@@ -110,7 +110,7 @@ final class SqlPersonRepository implements PersonRepository
                 case "birthDate": case "gender": case "ethnicity": case "bloodType": case "maritalStatus":
                 case "eyeColor": case "hairColor": case "height": case "weight":
                     $criteria = Criteria::create()->where(Criteria::expr()->eq( 'pd.'.$key, $value ));
-                    $qb->addCriteria( $criteria );                  
+                    $qb->addCriteria( $criteria );
                     break;
                 default:
                     throw new InvalidArgumentException( 'Query parameter, '.$key.', is not recognized.');
@@ -126,9 +126,6 @@ final class SqlPersonRepository implements PersonRepository
      */
     public function findPersonByIdentification(string $identificationId): Person {
         $this->logger->info("identification id: ${identificationId}");
-        /** @var Criteria */
-        $criteria = Criteria::create()
-                    ->where(Criteria::expr()->contains("displayName", $name));
 
         $persons = $this->entityManager->createQueryBuilder("p")
                     ->select('p')

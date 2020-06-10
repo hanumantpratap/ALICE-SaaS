@@ -1,0 +1,40 @@
+version: "3.7"
+volumes:
+    logs:
+        driver: local
+services:
+    visitor-management:
+        build: .
+        environment:
+            docker: "true"
+            ENV: "dev"
+        ports:
+            - "${SERVICE_PORT:-8080}:80"
+        volumes:
+            - ./app:/var/www/app
+            - ./logs:/var/www/logs
+            - ./public:/var/www/public
+            - ./src:/var/www/src
+            - ./var:/var/www/var
+            - ./templates:/var/www/templates
+            - ./tests:/var/www/tests
+            - ./tmp/reports:/var/www/tmp/reports
+            - ./phpunit.xml:/var/www/phpunit.xml
+            - ${AWS_CREDS:-./aws_creds_placeholder}:/root/.aws/credentials
+        networks:
+            - n360-base
+        environment:
+            - POSTGRES_HOST=postgres
+            - POSTGRES_DB=navigate
+            - POSTGRES_USER=lauren
+            - POSTGRES_PASSWORD=goFish49!zp9
+            - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+            - ENV=dev
+            - LOG_TARGET=/var/www/logs/app.log
+            - LOG_SQL=false
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+            - VIRTUAL_HOST=api.navigate360.com
+networks:
+    n360-base:
+        name: n360-base
