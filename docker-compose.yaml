@@ -23,6 +23,7 @@ services:
             - ${AWS_CREDS:-./aws_creds_placeholder}:/root/.aws/credentials
         networks:
             - n360-base
+            - visitor-management
         environment:
             - POSTGRES_HOST=postgres
             - POSTGRES_DB=navigate
@@ -38,3 +39,5 @@ services:
 networks:
     n360-base:
         name: n360-base
+    visitor-management:
+        name: visitor-management
