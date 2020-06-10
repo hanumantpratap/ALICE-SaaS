@@ -53,8 +53,9 @@ class SignInAction extends Action
                 $this->container->set('secureID', (int) $token->dist);
                 $this->userRepository = $this->container->get(UserRepository::class);
 
-                $user = $this->userRepository->findUserOfId((int) $token->id);
+                $user = $this->userRepository->findUserOfGlobalId((int) $token->gid);
                 
+                $token->id = $user->getId();
                 $token->building = $user->getPrimaryTeamId();
                 $token->redexp = null;
                 $token->iat = null;
