@@ -15,4 +15,10 @@ interface BuildingRepository
      * @return Building
      */
     public function findBuildingOfId(int $id): Building;
+
+    /**
+     * @return Building[]
+     */
+    public function findActiveBuildings(): array;
+    
 }

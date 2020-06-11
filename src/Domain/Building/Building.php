@@ -42,6 +42,9 @@ class Building {
   /** @Column(name="team_level") */
   private int $level;
 
+  /** @Column(name="mt_id") */
+  private int $mtid;
+
   /** @Column */
   public bool $active;
 
