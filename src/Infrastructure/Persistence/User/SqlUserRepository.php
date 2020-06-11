@@ -80,13 +80,7 @@ final class SqlUserRepository implements UserRepository
 
     public function findUserOfGlobalId(int $globalUserId): User {
       /** @var User $User */
-      $user = $this->entityManager->createQueryBuilder("u")
-                    ->select('u')
-                    ->from(User::class, "u")
-                    ->where('u.globalUserId = :globalUserId')
-                    ->setParameter('globalUserId', $globalUserId)
-                    ->getQuery()
-                    ->getSingleResult();
+      $user = $this->repository->findOneBy(['globalUserId' => $globalUserId]);
 
       if (!is_null($user)) {
           return $user;
