@@ -22,8 +22,6 @@ class ViewVisitorSettingsAction extends PersonAction
             $this->logger->info("no settings found");
         }
         
-        testLog('settings', $settings);
-
         $this->logger->info("Visitor Settings for Person of id `${userId}` was viewed.");
 
         return $this->respondWithData($settings);

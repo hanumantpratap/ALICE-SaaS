@@ -35,9 +35,9 @@ use App\Actions\SexOffender\SexOffenderMatchAction;
 use App\Actions\SexOffender\SexOffenderNonMatchAction;
 use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
+use App\Actions\Building\ListBuildingsAction;
 use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
 use App\Middleware\AuthMiddleware;
-use Doctrine\ORM\Mapping\PreFlush;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -108,6 +108,10 @@ return function (App $app) {
             $group->post('/{id}/notifications', SendNotificationAction::class);
         });
 
+        $group->group('/buildings', function (Group $group) {
+            $group->get('', ListBuildingsAction::class);
+        });
+    
         $group->post('/id-scan', IDScanAction::class);
     })->add(AuthMiddleware::class);
 
