@@ -115,6 +115,7 @@ class Person {
   }
 
   public function setEmail(PersonEmail $email) {
+    $email->setPerson($this);
     $this->email = $email;
   }
   

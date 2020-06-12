@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Domain\User;
 
 use App\Domain\Person\Person;
-use App\Domain\NotificationGroup\NotificationGroup;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\SequenceGenerator;
 
 /**
  * @Entity
@@ -24,6 +25,7 @@ class User {
   /**
    * @Id
    * @GeneratedValue
+   * @SequenceGenerator(sequenceName="pa_id_seq")
    * @Column(name="pa_id")
    */
   public ?int $id;
@@ -38,7 +40,13 @@ class User {
   public ?string $password;
 
   /** @Column(name="regkey_id") */
-  public int $regKeyId = 1;
+  public int $regKeyId;
+
+  /** @Column(name="reg_date", type="datetime") */
+  public DateTime $regDate;
+
+  /** @Column(name="reg_ip") */
+  public string $regIp;
 
   /** @Column(name="agree_tos") */
   public ?int $agreedTOS;
@@ -59,7 +67,7 @@ class User {
   public ?int $globalUserId;
 
   /**
-   * @OneToOne(targetEntity="\App\Domain\Person\Person", fetch="EAGER")
+   * @OneToOne(targetEntity="\App\Domain\Person\Person", fetch="EAGER", cascade={"persist", "remove"})
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
   public Person $person;
@@ -75,8 +83,20 @@ class User {
     return $this->id;
   }
   
+  public function getLogin() {
+    return $this->login;
+  }
+
+  public function setLogin(string $login) {
+    $this->login = $login;
+  }
+
   public function getPerson() {
     return $this->person;
+  }
+
+  public function setPerson(Person $person) {
+    $this->person = $person;
   }
 
   // force user to load person object
@@ -108,5 +128,10 @@ class User {
   public function __construct() {
     $this->notificationGroups = new ArrayCollection();
     $this->renderNotificationGroups = false;
+    $this->accessType = 2;
+    $this->regKeyId = 1;
+    $this->regDate = new DateTime();
+    $this->regIp = $_SERVER['REMOTE_ADDR'];
+    $this->password = "NO_PASSWORD";
   }
 }
