@@ -18,6 +18,8 @@ class SetVisitorSettingsAction extends PersonAction
         $personId = (int) $this->resolveArg('id');
         $person = $this->personRepository->findPersonOfId($personId);
 
+        $data = $this->getFormData();
+
         $settings = $person->getVisitorSettings();
 
         if ($settings === null) {
@@ -26,10 +28,11 @@ class SetVisitorSettingsAction extends PersonAction
             $person->setVisitorSettings($settings);
         }
 
-        //$settings->setEmailNotifications(false);
+        if (isset($data->picture)) {
+            $settings->setPicture($data->picture);
+        }
 
         $this->personRepository->save($person);
-
         $this->logger->info("Visitor Settings for Person of id `${personId}` were saved.");
 
         return $this->respondWithData($settings);
