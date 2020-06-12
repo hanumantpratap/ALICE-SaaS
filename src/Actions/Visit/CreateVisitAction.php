@@ -16,6 +16,7 @@ use App\Domain\Person\Identification;
 use App\Domain\Person\PersonAddress;
 use App\Domain\Person\PersonRepository;
 use App\Domain\Student\StudentRepository;
+use App\Domain\Building\BuildingRepository;
 use App\Exceptions;
 use DateTime;
 
@@ -24,12 +25,15 @@ class CreateVisitAction extends Action
     /**
      * @param LoggerInterface $logger
      * @param VisitRepository $visitRepository
+     * @param StudentRepository $studentRepository
+     * @param BuildingRepository $buildingRepository
      */
-    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, PersonRepository $personRepository, StudentRepository $studentRepository)
+    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, PersonRepository $personRepository, StudentRepository $studentRepository, BuildingRepository $buildingRepository)
     {
         $this->visitRepository = $visitRepository;
         $this->personRepository = $personRepository;
         $this->studentRepository = $studentRepository;
+        $this->buildingRepository = $buildingRepository;
         parent::__construct($logger);
     }
 
@@ -109,7 +113,8 @@ class CreateVisitAction extends Action
 
         $visit = new Visit();
         $visit->setPerson($person);
-        $visit->setBuildingId((int) $this->token->building);
+        $building = $this->buildingRepository->findBuildingOfId((int) $this->token->building);
+        $visit->setBuilding($building);
         $visit->setUserId((int) $this->token->id);
 
         if (isset($formData->notes)) {
