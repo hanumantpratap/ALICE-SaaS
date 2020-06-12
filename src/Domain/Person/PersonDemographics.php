@@ -36,7 +36,7 @@ class PersonDemographics {
     public ?DateTime $birthDate;
 
     /** @Column(name="ethnicity") */
-    public ?int $ethnicity;
+    public ?string $ethnicity;
 
     /** @Column(name="blood_type") */
     public ?int $bloodType;
