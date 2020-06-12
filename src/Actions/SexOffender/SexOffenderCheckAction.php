@@ -5,30 +5,18 @@ namespace App\Actions\SexOffender;
 
 use Throwable;
 use DateTime;
-use App\Domain\SexOffender\SexOffender;
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Domain\SexOffender\SexOffenderRepository;
-use App\Actions\Action;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\ConnectionException;
 use App\Exceptions;
-use Psr\Log\LoggerInterface;
-use Doctrine\ORM\EntityManagerInterface;
 
-class SexOffenderCheckAction extends Action
+class SexOffenderCheckAction extends SexOffenderAction
 {
-    public function __construct(LoggerInterface $logger, SexOffenderRepository $sexOffenderRepository, EntityManagerInterface $entityManager)
-    {
-        $this->sexOffenderRepository = $sexOffenderRepository;
-        $this->entityManager = $entityManager;
-        parent::__construct($logger);
-    }
-
     protected function action(): Response
     {
-        $formData = $this->getFormData();
+        /* $formData = $this->getFormData();
 
         $firstName = trim($formData->firstName ?: '');
         $lastName = trim($formData->lastName ?: '');
@@ -38,17 +26,24 @@ class SexOffenderCheckAction extends Action
                 $date = new DateTime($formData->dob);
                 $dob = $date->format('m/d/Y');
             } catch (Throwable $e) {}
-        }
+        } */
+
+        $personId = (int) $this->resolveArg('id');
+        $person = $this->personRepository->findPersonOfId($personId);
+        $name = $person->getName();
 
         $data = [
             'key' => '32DEBCD7-5B3F-4A7B-B41F-9F6EFDA79296',
             'type' => 'searchbynamedob',
-            'fname' => $firstName,
-            'lname' => $lastName
+            'fname' => $name->getGivenName(),
+            'lname' => $name->getFamilyName()
         ];
 
-        if ($dob) {
-            $data['dob'] = $dob;
+        $demographics = $person->getDemographics();
+        $birthDate = $demographics ? $demographics->getBirthDate() : null;
+
+        if ($birthDate !== null) {
+            $data['dob'] = $birthDate;
         }
 
         $this->logger->info('FWD sex offender search', $data);
@@ -79,7 +74,7 @@ class SexOffenderCheckAction extends Action
             throw new Exceptions\ServiceUnavailableException($response->error->userMessage);
         }
 
-        if (count($payload->offenders)) {
+        /* if (count($payload->offenders)) {
             $sql = "
                 INSERT INTO
                     visitor_management.sex_offenders
@@ -99,7 +94,7 @@ class SexOffenderCheckAction extends Action
                     'data' => json_encode($offender)
                 ]);
             }
-        }
+        } */
 
         return $this->respondWithData($payload->offenders);
     }
@@ -115,26 +110,6 @@ class SexOffenderCheckAction extends Action
       *             mediaType="application/json",
       *             example={"id": 10, "name": "Jessica Smith"}
       *         )
-      *     ),
-      *     @OA\RequestBody(
-      *         @OA\MediaType(
-      *             mediaType="application/json",
-      *             example={"firstName": "Jeffrey", "lastName": "Dahmer", "dob": "05/32/1960"},
-      *             @OA\Schema(
-      *                  @OA\Property(
-      *                     property="firstName",
-      *                     type="string"
-      *                 ),
-      *                  @OA\Property(
-      *                     property="lastName",
-      *                     type="string"
-      *                 ),
-      *                  @OA\Property(
-      *                     property="dob",
-      *                     type="string"
-      *                 ),
-      *              )
-      *         ),
       *     )
       * )
       */
