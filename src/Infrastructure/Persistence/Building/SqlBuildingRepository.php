@@ -39,10 +39,6 @@ final class SqlBuildingRepository implements BuildingRepository
     }
 
     public function findActiveBuildings(): array {
-      $criteria = Criteria::create()
-                  ->where(Criteria::expr()->eq("active", true))
-                  ->where(Criteria::expr()->neq("id", "mtid"));
-
       $query = $this->entityManager->createQueryBuilder("b")
                     ->from(Building::class, "b")
                     ->select('b')
