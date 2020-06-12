@@ -30,6 +30,9 @@ use App\Actions\Person\Notes\GetNoteAction;
 use App\Actions\Person\Notes\ListNotesAction;
 use App\Actions\Person\Notes\CreateNoteAction;
 use App\Actions\Person\Notes\UpdateNoteAction;
+use App\Actions\SexOffender\SexOffenderCheckAction;
+use App\Actions\SexOffender\SexOffenderMatchAction;
+use App\Actions\SexOffender\SexOffenderNonMatchAction;
 use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
 use App\Actions\Building\ListBuildingsAction;
@@ -45,12 +48,12 @@ return function (App $app) {
         return $response;
     });
 
-    $app->get('/', function (Request $request, Response $response) {        
+    $app->get('/', function (Request $request, Response $response) {
         $response->getBody()->write('Hello world!');
         return $response;
     });
 
-    $app->get('/php-info', function (Request $request, Response $response) {        
+    $app->get('/php-info', function (Request $request, Response $response) {
         return phpinfo();
     });
 
@@ -61,8 +64,8 @@ return function (App $app) {
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
             $group->put('/{id}', UpdateVisitAction::class);
-            $group->post('/{id}/badge', AddVisitBadgeAction::class);  
-            $group->put('/{id}/checkout', CheckOutAction::class);          
+            $group->post('/{id}/badge', AddVisitBadgeAction::class);
+            $group->put('/{id}/checkout', CheckOutAction::class);
         });
 
         $group->group('/users', function (Group $group) {
@@ -70,8 +73,8 @@ return function (App $app) {
             $group->get('/{id}', ViewUserAction::class);
             $group->post('/{id}/notificationGroups', AddNotificationGroupAction::class);
         });
-	
-	    $group->group('/persons', function (Group $group) {
+
+        $group->group('/persons', function (Group $group) {
             $group->get('', ListPersonsAction::class);
             $group->get('/{id}', ViewPersonAction::class);
             $group->get('/search/query', SearchPersonsAction::class);
@@ -86,6 +89,9 @@ return function (App $app) {
             $group->put('/{id}/notes/{noteId}', UpdateNoteAction::class);
             $group->post('/{id}/students', AddStudentAction::class);
             $group->delete('/{id}/students/{studentId}', RemoveStudentAction::class);
+            $group->post('/{id}/sex-offender/check', SexOffenderCheckAction::class);
+            $group->post('/{id}/sex-offender/match', SexOffenderMatchAction::class);
+            //$group->post('/{id}/sex-offender/nonmatch', SexOffenderMatchAction::class);
         });
 
         $group->group('/blacklist', function (Group $group) {

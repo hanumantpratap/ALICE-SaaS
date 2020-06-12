@@ -25,6 +25,8 @@ use App\Domain\Student\StudentRepository;
 use App\Infrastructure\Persistence\Student\SqlStudentRepository;
 use App\Domain\Building\BuildingRepository;
 use App\Infrastructure\Persistence\Building\SqlBuildingRepository;
+use App\Domain\SexOffender\SexOffenderRepository;
+use App\Infrastructure\Persistence\SexOffender\SqlSexOffenderRepository;
 use DI\ContainerBuilder;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -47,5 +49,8 @@ return function (ContainerBuilder $containerBuilder) {
         BuildingRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
             return new SqlBuildingRepository($logger, $em);
         },
+	SexOffenderRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
+            return new SqlSexOffenderRepository($logger, $em);
+        }
     ]);
 };
