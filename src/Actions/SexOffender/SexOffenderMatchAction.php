@@ -3,29 +3,11 @@ declare(strict_types=1);
 
 namespace App\Actions\SexOffender;
 
-use Throwable;
-use DateTime;
-use App\Domain\SexOffender\SexOffender;
 use Psr\Http\Message\ResponseInterface as Response;
-use App\Domain\SexOffender\SexOffenderRepository;
-use App\Actions\Action;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Exception\ConnectionException;
-use App\Exceptions;
-use Psr\Log\LoggerInterface;
-use Doctrine\ORM\EntityManagerInterface;
 
-class SexOffenderMatchAction extends Action
+
+class SexOffenderMatchAction extends SexOffenderAction
 {
-    public function __construct(LoggerInterface $logger, SexOffenderRepository $sexOffenderRepository, EntityManagerInterface $entityManager)
-    {
-        $this->sexOffenderRepository = $sexOffenderRepository;
-        $this->entityManager = $entityManager;
-        parent::__construct($logger);
-    }
-
     protected function action(): Response
     {
         return $this->response->withStatus(201);

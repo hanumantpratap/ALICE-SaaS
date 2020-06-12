@@ -101,14 +101,44 @@ class SexOffenderCheckAction extends SexOffenderAction
 
      /**
       * @OA\Post(
-      *     path="/sex-offender-check",
+      *     path="/persons/{personId}/sex-offender-check",
       *     tags={"sex-offenders"},
       *     @OA\Response(
       *         response=200,
       *         description="Check if a person is a registered sex offender",
       *         @OA\MediaType(
       *             mediaType="application/json",
-      *             example={"id": 10, "name": "Jessica Smith"}
+      *             example={"statusCode": 200,
+      *                      "data": {
+      *                          {
+      *                             "offenderid": "ILE15A5858",
+      *                             "photo": "http://photo.familywatchdog.us/OffenderPhoto/OffenderPhoto.aspx?id=ILE15A5858",
+      *                             "name": "JEFFREY A HUFFMAN",
+      *                             "firstname": "JEFFREY",
+      *                             "middlename": "A",
+      *                             "lastname": "HUFFMAN",
+      *                             "suffix": "",
+      *                             "dob": "3/22/1963",
+      *                             "age": "57",
+      *                             "sex": "M",
+      *                             "race": "W",
+      *                             "hair": "",
+      *                             "eye": "",
+      *                             "height": "6ft 01in",
+      *                             "weight": "210",
+      *                             "street1": "1714 S WEST LN",
+      *                             "street2": "",
+      *                             "city": "PEORIA",
+      *                             "state": "IL",
+      *                             "zipcode": "61605",
+      *                             "county": "",
+      *                             "matchtype": "0",
+      *                             "latitude": "40.66856",
+      *                             "longitude": "-89.64806",
+      *                             "convictiontype": ""
+      *                        },
+     *                      }
+     *                  }
       *         )
       *     )
       * )
