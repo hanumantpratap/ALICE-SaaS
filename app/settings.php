@@ -10,6 +10,7 @@ return function (ContainerBuilder $containerBuilder) {
         [
             'settings' => [
                 'environment' => $_ENV['ENV'] ?? 'production',
+                'clientEndpoint' => $_ENV['CLIENT_ENDPOINT'],
                 'displayErrorDetails' => $_ENV['ENV'] == 'dev',
                 'logSql' => $_ENV['LOG_SQL'] == 'true',
                 'logger' => [

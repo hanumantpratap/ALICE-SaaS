@@ -130,6 +130,9 @@ return function (ContainerBuilder $containerBuilder) {
             return EntityManager::create($doctrineSettings['connection'], $config);
         },
 
-        AuthService::class => DI\create()
+        AuthService::class => function (ContainerInterface $c) {
+            $clientEndpoint = $c->get('settings')['clientEndpoint'];
+            return new AuthService($clientEndpoint);
+        }
     ]);
 };

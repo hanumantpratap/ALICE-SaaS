@@ -66,6 +66,9 @@ class User {
   /** @Column(name="global_user_id") */
   public ?int $globalUserId;
 
+  /** @Column(name="visitor_management_access") */
+  public ?bool $vmAccess;
+
   /**
    * @OneToOne(targetEntity="\App\Domain\Person\Person", fetch="EAGER", cascade={"persist", "remove"})
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
@@ -125,6 +128,26 @@ class User {
     return $this->primaryTeamId;
   }
 
+  public function getGlobalUserId() {
+    return $this->globalUserId;
+  }
+
+  public function setGlobalUserId(int $globalUserId) {
+    $this->globalUserId = $globalUserId;
+  }
+
+  public function canAccessVm() {
+    return $this->vmAccess;
+  }
+
+  public function enable() {
+    $this->vmAccess = true;
+  }
+
+  public function disable() {
+    $this->vmAccess = false;
+  }
+
   public function __construct() {
     $this->notificationGroups = new ArrayCollection();
     $this->renderNotificationGroups = false;
@@ -133,5 +156,6 @@ class User {
     $this->regDate = new DateTime();
     $this->regIp = $_SERVER['REMOTE_ADDR'];
     $this->password = "NO_PASSWORD";
+    $this->vmAccess = true;
   }
 }

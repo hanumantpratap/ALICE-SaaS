@@ -7,6 +7,7 @@ use App\Domain\User\User;
 use App\Exceptions;
 use App\Domain\User\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Doctrine\ORM\OptimisticLockException;
@@ -93,8 +94,17 @@ final class SqlUserRepository implements UserRepository
     }
 
 
-    public function findUsersByCredentials(string $credentials) {
+    public function findUsersByEmail(string $email) {
+      $query = $this->entityManager->createQueryBuilder("u")
+                    ->from(User::class, "u")
+                    ->select('u')
+                    ->leftJoin('u.person', 'p')
+                    ->leftJoin('p.email', 'e')
+                    ->where('LOWER(u.login) = :email')
+                    ->orWhere('LOWER(e.emailAddress) = :email')
+                    ->setParameter('email', $email);
 
+      return $query->getQuery()->getResult();
     }
     
     /**
