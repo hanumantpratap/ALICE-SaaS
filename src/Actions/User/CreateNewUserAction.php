@@ -62,29 +62,6 @@ class CreateNewUserAction extends UserAction
         $this->userRepository->save($user);
         $this->authService->sendWelcomeEmail($user->getGlobalUserId(), $formData->firstName, $formData->lastName);
 
-        /* if ($newUser) {
-            $this->authService->sendWelcomeEmail($user->getId(), $formData->firstName, $formData->lastName);
-        }
-        else {
-            $districtBuilding = $this->buildingRepository->findBuildingOfId((int) $this->token->building);
-            $districtName = $$districtBuilding->getName();
-
-            $sender = 'noreply@navigate360.com';
-            $subject = "Visitor Management Invite";
-
-            $plainText = ($formData->message ?? 'No message set.');
-            $html =  "<p>Hi ". $formData->firstName . " " . $formData->lastName . "</p>" .
-                      "You have been invited to "
-
-            $messageId = $this->mailer->send($recipients, $sender, $subject, $html, $plainText);
-
-            if (isset($formData->visitId)) {
-                $visit = $this->visitRepository->findVisitOfId((int) $formData->visitId);
-                $visit->setSecurityAlerted(true);
-                $this->visitRepository->save($visit);
-            }
-        } */
-
         return $this->respondWithData(null, 201);
     }
 }
