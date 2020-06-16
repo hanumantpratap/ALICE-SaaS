@@ -16,7 +16,7 @@ use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
 use App\Actions\Visit\ListVisitorTypesAction;
 use App\Actions\Visit\ListVisitReasonsAction;
-use App\Actions\User\{SignInAction, ForgotPasswordAction, ResetPasswordAction, ListUsersAction, ViewUserAction, AddNotificationGroupAction, CreateNewUserAction};
+use App\Actions\User\{SignInAction, ForgotPasswordAction, ResetPasswordAction, ListUsersAction, ViewUserAction, AddNotificationGroupAction, CreateNewUserAction, UpdateUserAction};
 use App\Actions\Visit\AddVisitBadgeAction;
 use App\Actions\Visit\UpdateVisitAction;
 use App\Actions\ID\IDScanAction;
@@ -77,6 +77,7 @@ return function (App $app) {
         $group->group('/users', function (Group $group) {
             $group->get('', ListUsersAction::class);
             $group->get('/{id}', ViewUserAction::class);
+            $group->put('/{id}', UpdateUserAction::class);
             $group->post('', CreateNewUserAction::class);
             $group->post('/{id}/notificationGroups', AddNotificationGroupAction::class);
         });
@@ -122,11 +123,6 @@ return function (App $app) {
     
         $group->post('/id-scan', IDScanAction::class);
     })->add(AuthMiddleware::class);
-
-    $app->group('/emailActions', function (Group $group) {
-        $group->get('/redirect', \App\Actions\Dev\GenerateOpenAPIDocs::class);
-        $group->get('/createUser', \App\Actions\Dev\ViewSwaggerAction::class);
-    });
 
     $app->group('/dev', function (Group $group) {
         $group->group('/redis', function (Group $group) {

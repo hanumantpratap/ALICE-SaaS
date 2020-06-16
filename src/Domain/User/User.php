@@ -66,7 +66,7 @@ class User {
   /** @Column(name="global_user_id") */
   public ?int $globalUserId;
 
-  /** @Column(name="visitor_management_access") */
+  /** @Column(name="visitor_management_access", type="boolean") */
   public ?bool $vmAccess;
 
   /**

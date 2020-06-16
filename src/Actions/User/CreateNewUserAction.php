@@ -13,7 +13,6 @@ class CreateNewUserAction extends UserAction
 {
     protected function action(): Response
     {
-        //$newUser = false;
         $formData = $this->getFormData();
         $email = $formData->email;
         $email = strtolower(trim($email));
@@ -24,15 +23,7 @@ class CreateNewUserAction extends UserAction
             throw new Exceptions\BadRequestException('A user with this email already exists in this district.');
         }
 
-        $payload = $this->authService->createUser($email, null, $this->token->dist);
-        
-        if ($payload->statusCode == 200) {
-            //$newUser = true;
-            $globalUserId = (int) $payload->global_user_id;
-        }
-        else { //303 - User already exists
-            $globalUserId = (int) $payload->error->resource->id;
-        }
+        $globalUserId = $this->authService->createUser($email, null, $this->token->dist);
 
         if (!is_numeric($globalUserId)) {
             throw new Exceptions\InternalServerErrorException('There was an issue setting up the user with authentication.');

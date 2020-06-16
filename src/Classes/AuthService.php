@@ -170,9 +170,12 @@ class AuthService {
             $payload = json_decode($response->getBody()->getContents());
             
             $code = $response->getStatusCode();
-
-            if ($code == 200 || $code == 303 ) {
-                return $payload;
+            if ($code == 200) {
+                //$newUser = true;
+                return (int) $payload->global_user_id;
+            }
+            else if ($code == 303) { //303 - User already exists
+                return (int) $payload->error->resource->id;
             }
             else {
                 throw new Exceptions\InternalServerErrorException();

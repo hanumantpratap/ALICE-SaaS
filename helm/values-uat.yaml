@@ -22,6 +22,10 @@ env:
     value: "test-redis.uooq9s.0001.use2.cache.amazonaws.com"
   - name: REDIS_PORT
     value: "6379"
+  - name: AUTH_URL
+    value: "https://test-auth.navigatep.com"
+  - name: CLIENT_URL
+    value: http://uat.navigatevm.com
 
 imagePullSecrets: []
 nameOverride: ""

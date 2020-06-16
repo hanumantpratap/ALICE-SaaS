@@ -21,7 +21,7 @@ class UpdateUserAction extends UserAction
         }
 
         if (isset($formData->lastName)) {
-            $name->setGivenName($formData->familyName);
+            $name->setFamilyName($formData->lastName);
         }
 
         if (isset($formData->firstName) || isset($formData->lastName)) {
@@ -41,6 +41,6 @@ class UpdateUserAction extends UserAction
 
         $this->logger->info("User of id `${userId}` was updated.");
 
-        return $this->respondWithData($user);
+        return $this->respondWithData(null, 200);
     }
 }
