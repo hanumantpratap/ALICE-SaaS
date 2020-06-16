@@ -5,6 +5,7 @@ namespace App\Domain\Visit;
 
 use DateTime;
 use App\Domain\Person\Person;
+use App\Domain\User\User;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
@@ -44,16 +45,20 @@ class Visit {
   /** @Column(name="reason_id") */
   private ?int $reasonId;
 
+  /**
+  * @ManyToOne(targetEntity="\App\Domain\Visit\VisitReason")
+  * @JoinColumn(name="reason", referencedColumnName="reason_id")
+  */
+  protected VisitReason $reason;
+
   /** @Column(name="visitor_type_id") */
   private ?int $visitorTypeId;
 
-  /*******  For now, setting reasons/visitor_types to simple text fields, but will eventually use the above ids and join them */
-
-  /** @Column */
-  public ?string $reason;
-
-  /** @Column(name="visitor_type") */
-  public ?string $visitorType;
+  /**
+  * @ManyToOne(targetEntity="\App\Domain\Visit\VisitorType")
+  * @JoinColumn(name="visitor_type", referencedColumnName="visitortype_id")
+  */
+  protected VisitorType $visitorType;
 
   /** @Column */
   public ?string $notes;
@@ -66,6 +71,11 @@ class Visit {
 
   /** @Column(name="approved_by")*/
   public ?int $approvedBy;
+  /**
+   * @ManyToOne(targetEntity="\App\Domain\User\User")
+   * @JoinColumn(name="approved_by", referencedColumnName="pa_id")
+   */
+  protected ?User $approvedByUser;
 
    /** @Column(name="security_alerted", type="boolean") */
   public ?bool $securityAlerted;
@@ -105,6 +115,14 @@ class Visit {
     return $this->id;
   }
 
+  public function getApprovedByUser() {
+    return $this->approvedByUser;
+  }
+
+  public function setApprovedByUser(User $approvedByUser) {
+    $this->approvedByUser = $approvedByUser;
+  }
+
   public function getPerson() {
     return $this->person;
   }
@@ -133,7 +151,7 @@ class Visit {
     return $this->reason;
   }
 
-  public function setReason(string $reason) {
+  public function setReason(VisitReason $reason) {
     $this->reason = $reason;
   }
 
@@ -141,7 +159,7 @@ class Visit {
     return $this->visitorType;
   }
 
-  public function setVisitorType(string $visitorType) {
+  public function setVisitorType(VisitorType $visitorType) {
     $this->visitorType = $visitorType;
   }
 

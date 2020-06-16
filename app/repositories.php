@@ -19,6 +19,10 @@ use App\Domain\User\UserRepository;
 use App\Infrastructure\Persistence\User\SqlUserRepository;
 use App\Domain\Visit\VisitRepository;
 use App\Infrastructure\Persistence\Visit\SqlVisitRepository;
+use App\Domain\Visit\VisitorTypeRepository;
+use App\Infrastructure\Persistence\Visit\SqlVisitorTypeRepository;
+use App\Domain\Visit\VisitReasonRepository;
+use App\Infrastructure\Persistence\Visit\SqlVisitReasonRepository;
 use App\Domain\NotificationGroup\NotificationGroupRepository;
 use App\Infrastructure\Persistence\NotificationGroup\SqlNotificationGroupRepository;
 use App\Domain\Student\StudentRepository;
@@ -35,6 +39,12 @@ return function (ContainerBuilder $containerBuilder) {
         },
         VisitRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
             return new SqlVisitRepository($logger, $em);
+        },
+        VisitorTypeRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
+            return new SqlVisitorTypeRepository($logger, $em);
+        },
+        VisitReasonRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
+            return new SqlVisitReasonRepository($logger, $em);
         },
         NotificationGroupRepository::class => function(LoggerInterface $logger, EntityManagerInterface $em) {
             return new SqlNotificationGroupRepository($logger, $em);
