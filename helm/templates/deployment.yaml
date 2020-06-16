@@ -27,23 +27,10 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.env }}
           env:
-            - name: "LOG_TARGET"
-              value: "php://stdout"
-            - name: POSTGRES_HOST
-              value: "test-innovations-v01.cm2dbdfl2yo8.us-east-2.rds.amazonaws.com"
-            - name: POSTGRES_DB
-              value: "navigate"
-            - name: POSTGRES_USER
-              value: "lauren"
-            - name: POSTGRES_PASSWORD
-              value: "goFish49!zp9"
-            - name: POSTGRES_PORT
-              value: "5432"
-            - name: REDIS_HOST
-              value: "test-redis.uooq9s.0001.use2.cache.amazonaws.com"
-            - name: REDIS_PORT
-              value: "6379"
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 80
