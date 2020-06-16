@@ -7,13 +7,12 @@ use GuzzleHttp\Exception\ServerException;
 use App\Exceptions;
 
 class AuthService {
-    private $clientEndpoint;
-    private $authEndpoint = 'https://test-auth.navigatep.com/';
+    private $clientUrl;
     private $serviceToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoic2VydmljZSIsImlhdCI6MTU5MTkyMTM1OH0.nXMKOW6XbcHVfYPi0gorSTQqfcV5bM9F0IYosHGspu8';
 
-    function __construct(string $clientEndpoint) {
-        $this->guzzle = new GuzzleClient(['base_uri' => $this->authEndpoint]);
-        $this->clientEndpoint = $clientEndpoint;
+    function __construct(string $clientUrl, string $authUrl) {
+        $this->guzzle = new GuzzleClient(['base_uri' => $authUrl]);
+        $this->clientUrl = $clientUrl;
     }
 
     public function signIn(string $login, string $password) {
@@ -57,8 +56,8 @@ class AuthService {
         $data = [
             'app' => 'vm', 
             'login' =>$login,
-            'reset-link' => $this->clientEndpoint . '/reset-password',
-            'expiration-link' => $this->clientEndpoint . '/signin'
+            'reset-link' => $this->clientUrl . '/reset-password',
+            'expiration-link' => $this->clientUrl . '/signin'
         ];
         
         try{
@@ -120,8 +119,8 @@ class AuthService {
     public function sendWelcomeEmail(int $globalUserId, string $firstName, string $lastName) { 
         $data = [
             'app' => 'vm',
-            'reset-link' => $this->clientEndpoint . '/reset-password',
-            'expiration-link' => $this->clientEndpoint . '/signin',
+            'reset-link' => $this->clientUrl . '/reset-password',
+            'expiration-link' => $this->clientUrl . '/signin',
             'firstName' => $firstName,
             'lastName' => $lastName
         ];

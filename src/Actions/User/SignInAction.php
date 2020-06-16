@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Actions\User;
 
-define("AUTH_URL", 'https://test-auth.navigatep.com/');
-
 use Psr\Log\LoggerInterface;
 use App\Classes\TokenProcessor;
 use Psr\Http\Message\ResponseInterface as Response;

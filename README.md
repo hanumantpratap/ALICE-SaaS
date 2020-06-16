@@ -28,7 +28,7 @@ AWS_CREDS=C:\AWS\credentials
 
 For linking password reset emails to front-end application:
 ```env
-CLIENT_ENDPOINT=http://localhost:3000
+CLIENT_URL=http://localhost:3000
 ```
 
 ## Running in Docker

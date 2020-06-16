@@ -131,8 +131,10 @@ return function (ContainerBuilder $containerBuilder) {
         },
 
         AuthService::class => function (ContainerInterface $c) {
-            $clientEndpoint = $c->get('settings')['clientEndpoint'];
-            return new AuthService($clientEndpoint);
+            $settings = $c->get('settings');
+            $clientUrl = $settings['clientUrl'];
+            $authUrl = $settings['authUrl'];
+            return new AuthService($clientUrl, $authUrl);
         }
     ]);
 };
