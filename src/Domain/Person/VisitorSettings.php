@@ -20,7 +20,7 @@ class VisitorSettings {
    * @OneToOne(targetEntity="Person", inversedBy="visitorSettings")
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
    **/
-  public ?Person $person;
+  private ?Person $person;
 
   /** @Column(name="email_notifications", type="boolean") */
   public bool $emailNotifications;
