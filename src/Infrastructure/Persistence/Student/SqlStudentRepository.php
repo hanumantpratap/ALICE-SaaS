@@ -74,4 +74,25 @@ final class SqlStudentRepository implements StudentRepository
       return $qb->getQuery()->getResult() ?? [];
   }
 
+
+  
+    /**
+     * @inheritdoc
+     */
+    public function save(Student $student): void {
+        try {
+            $this->entityManager->persist($student);
+        } catch(ORMInvalidArgumentException | ORMException $ex) {
+            $this->logger->error("Error saving Student", ['exception' => $ex]);
+            throw $ex;
+        }
+
+        try {
+            $this->entityManager->flush();
+        } catch(OptimisticLockException | ORMException $ex) {
+            $this->logger->error("Error saving Student", ['exception' => $ex]);
+            throw $ex;
+        }
+    }
+
 }
