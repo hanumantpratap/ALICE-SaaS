@@ -41,10 +41,6 @@ class CreateNewUserAction extends UserAction
         $email->setEmailAddress($formData->email);
         $person->setEmail($email);
 
-        // TA vulnerability
-        // if user already exists in another district, they can invite that user to their district, modify their credenntials, and sign into other district
-        // admins should not be allowed to update authentication credentials of any user. They can send a password reset only, or disable from within their district.
-
         $user = new User();
         $user->setPerson($person);
         $user->setLogin($formData->email);
