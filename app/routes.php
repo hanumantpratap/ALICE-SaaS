@@ -6,6 +6,7 @@ use App\Actions\Person\SearchPersonsAction;
 use App\Actions\Person\ViewPersonAction;
 use App\Actions\Student\ListStudentsAction;
 use App\Actions\Student\SearchStudentsAction;
+use App\Actions\Student\UpdateStudentAction;
 use App\Actions\Person\ViewVisitorSettingsAction;
 use App\Actions\Person\SetVisitorSettingsAction;
 use App\Actions\Person\AddStudentAction;
@@ -13,6 +14,8 @@ use App\Actions\Person\RemoveStudentAction;
 use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
+use App\Actions\Visit\ListVisitorTypesAction;
+use App\Actions\Visit\ListVisitReasonsAction;
 use App\Actions\User\{SignInAction, ForgotPasswordAction, ResetPasswordAction, ListUsersAction, ViewUserAction, AddNotificationGroupAction, CreateNewUserAction};
 use App\Actions\Visit\AddVisitBadgeAction;
 use App\Actions\Visit\UpdateVisitAction;
@@ -32,6 +35,7 @@ use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
 use App\Actions\Building\ListBuildingsAction;
 use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
+use App\Actions\Visit\ApproveVisitAction;
 use App\Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -59,8 +63,15 @@ return function (App $app) {
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
             $group->put('/{id}', UpdateVisitAction::class);
-            $group->post('/{id}/badge', AddVisitBadgeAction::class);
-            $group->put('/{id}/checkout', CheckOutAction::class);
+            $group->post('/{id}/badge', AddVisitBadgeAction::class);  
+            $group->put('/{id}/checkout', CheckOutAction::class);   
+            $group->put('/{id}/approvevisit', ApproveVisitAction::class);       
+        });
+        $group->group('/visitortype', function (Group $group) {
+            $group->get('', ListVisitorTypesAction::class);
+        });
+        $group->group('/visitreason', function (Group $group) {
+            $group->get('', ListVisitReasonsAction::class);
         });
 
         $group->group('/users', function (Group $group) {
@@ -97,6 +108,7 @@ return function (App $app) {
         $group->group('/students', function (Group $group) {
             $group->get('', ListStudentsAction::class);
             $group->get('/search/query', SearchStudentsAction::class);
+            $group->put('/{id}', UpdateStudentAction::class);
         });
 
         $group->group('/notificationGroups', function (Group $group) {

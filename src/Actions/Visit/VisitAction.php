@@ -6,6 +6,7 @@ namespace App\Actions\Visit;
 use App\Actions\Action;
 use Psr\Log\LoggerInterface;
 use App\Domain\Visit\VisitRepository;
+use App\Domain\User\UserRepository;
 
 abstract class VisitAction extends Action
 {
@@ -14,9 +15,10 @@ abstract class VisitAction extends Action
      * @param VisitRepository $visitRepository
      */
 
-    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository)
+    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, UserRepository $userRepository)
     {
         $this->visitRepository = $visitRepository;
+        $this->userRepository = $userRepository;
         parent::__construct($logger);
     }
 }
