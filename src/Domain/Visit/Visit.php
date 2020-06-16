@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Domain\Visit;
 
 use DateTime;
+use App\Domain\Building\Building;
 use App\Domain\Person\Person;
 use App\Domain\User\User;
 use Doctrine\ORM\Mapping\Entity;
@@ -33,8 +34,11 @@ class Visit {
   /** @Column(name="person_id") */
   public int $personId;
 
-  /** @Column(name="building_id") */
-  public int $buildingId;
+  /**
+   * @ManyToOne(targetEntity="\App\Domain\Building\Building", fetch="EAGER")
+   * @JoinColumn(name="building_id", referencedColumnName="team_id")
+   */
+  public ?Building $building;
 
   /** @Column(name="user_id") */
   public ?int $userId;
@@ -139,8 +143,8 @@ class Visit {
     return $this->buildingId;
   }
 
-  public function setBuildingId(int $buildingId) {
-    $this->buildingId = $buildingId;
+  public function setBuilding(Building $building) {
+    $this->building = $building;
   }
 
   public function setNotes(string $notes) {
