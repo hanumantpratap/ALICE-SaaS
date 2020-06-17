@@ -8,6 +8,9 @@ use App\Domain\Building\Building;
 use App\Domain\Building\BuildingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
 final class SqlBuildingRepository implements BuildingRepository
@@ -47,5 +50,21 @@ final class SqlBuildingRepository implements BuildingRepository
                     ->setParameter("active", true);
 
       return $query->getQuery()->getResult() ?? [];
+    }
+
+    public function save(Building $building): void {
+        try {
+            $this->entityManager->persist($building);
+        } catch(ORMInvalidArgumentException | ORMException $ex) {
+            $this->logger->error("Error saving Building", ['exception' => $ex]);
+            throw $ex;
+        }
+
+        try {
+            $this->entityManager->flush();
+        } catch(OptimisticLockException | ORMException $ex) {
+            $this->logger->error("Error saving Building", ['exception' => $ex]);
+            throw $ex;
+        }
     }
 }
