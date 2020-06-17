@@ -25,6 +25,7 @@ use App\Classes\Mailer;
 use App\Classes\RedisConnector;
 use App\Classes\TokenProcessor;
 use App\Classes\SqlLogger;
+use App\Classes\AuthService;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -127,6 +128,13 @@ return function (ContainerBuilder $containerBuilder) {
             }
 
             return EntityManager::create($doctrineSettings['connection'], $config);
+        },
+
+        AuthService::class => function (ContainerInterface $c) {
+            $settings = $c->get('settings');
+            $clientUrl = $settings['clientUrl'];
+            $authUrl = $settings['authUrl'];
+            return new AuthService($clientUrl, $authUrl);
         }
     ]);
 };

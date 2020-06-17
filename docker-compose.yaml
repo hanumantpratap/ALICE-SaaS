@@ -36,6 +36,8 @@ services:
             - REDIS_HOST=redis
             - REDIS_PORT=6379
             - VIRTUAL_HOST=api.navigate360.com
+            - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
+            - AUTH_URL=${AUTH_URL:-https://test-auth.navigatep.com}
 networks:
     n360-base:
         name: n360-base

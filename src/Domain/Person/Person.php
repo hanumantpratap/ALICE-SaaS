@@ -49,7 +49,7 @@ class Person {
   /** @OneToOne(targetEntity="PersonDemographics", mappedBy="person", cascade={"persist", "remove"}) */
   public ?PersonDemographics $demographics;
 
-  /** @OneToMany(targetEntity="PersonPhone", mappedBy="person") */
+  /** @OneToMany(targetEntity="PersonPhone", mappedBy="person", cascade={"persist", "remove"}, orphanRemoval=true) */
   protected Collection $phones;
 
   /** @OneToOne(targetEntity="PersonEmail", mappedBy="person", cascade={"persist", "remove"}) */
@@ -115,6 +115,7 @@ class Person {
   }
 
   public function setEmail(PersonEmail $email) {
+    $email->setPerson($this);
     $this->email = $email;
   }
   
@@ -228,6 +229,21 @@ class Person {
         return;
       }
     }
+  }
+
+  public function getPhones() {
+    return $this->phones;
+  }
+
+  public function addPhone(PersonPhone $phone) {
+    $phone->addPerson($this);
+    $this->phones->add($phone);
+  }
+
+  public function getPhoneByType(int $type) {
+    return $this->phones->filter(function ($phone) use ($type) {
+      return $phone->getType() == $type;
+    })->first() ?: null;
   }
 
   public function __construct() {

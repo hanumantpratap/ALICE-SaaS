@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\SequenceGenerator;
 
 /**
  * @Entity
@@ -21,19 +22,20 @@ class PersonPhone {
    * @Id
    * @GeneratedValue
    * @Column(name="phone_id")
+   * @SequenceGenerator(sequenceName="pphone_id_seq")
    */
-  public ?int $id = null;
+  public ?int $id;
 
   /** @Column(name="person_id") */
   public int $personId;
 
   /** @Column(name="phone_type") */
-  public int $phoneType;
+  public ?int $phoneType;
 
   /** @Column(name="phone_priority") */
   public int $phonePriority;
 
-  /** @Column(name="phone_stats") */
+  /** @Column(name="phone_status") */
   public int $phoneStatus;
 
   /** @Column(name="phone_number") */
@@ -42,15 +44,41 @@ class PersonPhone {
   /** @Column */
   public int $source;
 
-  /** @Column */
-  public DateTime $updated;
+  /** @Column(name="updated", type="datetime") */
+  public ?DateTime $updated;
 
   /** @Column(name="phone_number_extension") */
-  public string $extension;
+  public ?string $extension;
 
   /**
-   * @ManyToOne(targetEntity="App\Domain\Person\Person", inversedBy="phones")
+   * @ManyToOne(targetEntity="Person", inversedBy="phones")
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
-  public Person $person;
+  protected Person $person;
+
+  public function getPhoneNumber() {
+    return $this->phoneNumber;
+  }
+
+  public function setPhoneNumber(string $phoneNumber) {
+    $this->phoneNumber = $phoneNumber;
+  }
+  
+  public function getType() {
+    return $this->phoneType;
+  }
+
+  public function setType(int $type) {
+    $this->phoneType = $type;
+  }
+
+  public function addPerson(Person $person) {
+    $this->person = $person;
+  }
+
+  public function __construct() {
+    $this->phonePriority = 1;
+    $this->phoneStatus = 1;
+    $this->updated = new DateTime();;
+  }
 }

@@ -7,6 +7,10 @@ use App\Domain\User\User;
 use App\Exceptions;
 use App\Domain\User\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\ORMInvalidArgumentException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ObjectRepository;
 use Psr\Log\LoggerInterface;
 
@@ -87,5 +91,38 @@ final class SqlUserRepository implements UserRepository
       }
 
       throw new Exceptions\NotFoundException('The User you requested does not exist.');
+    }
+
+
+    public function findUsersByEmail(string $email) {
+      $query = $this->entityManager->createQueryBuilder("u")
+                    ->from(User::class, "u")
+                    ->select('u')
+                    ->leftJoin('u.person', 'p')
+                    ->leftJoin('p.email', 'e')
+                    ->where('LOWER(u.login) = :email')
+                    ->orWhere('LOWER(e.emailAddress) = :email')
+                    ->setParameter('email', $email);
+
+      return $query->getQuery()->getResult();
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function save(User $user): void {
+        try {
+            $this->entityManager->persist($user);
+        } catch(ORMInvalidArgumentException | ORMException $ex) {
+            $this->logger->error("Error saving User", ['exception' => $ex]);
+            throw $ex;
+        }
+
+        try {
+            $this->entityManager->flush();
+        } catch(OptimisticLockException | ORMException $ex) {
+            $this->logger->error("Error saving User", ['exception' => $ex]);
+            throw $ex;
+        }
     }
 }

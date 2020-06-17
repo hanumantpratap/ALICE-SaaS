@@ -26,6 +26,11 @@ For sending emails from your dev environment, you will also need an AWS credenti
 AWS_CREDS=C:\AWS\credentials
 ```
 
+For linking password reset emails to front-end application:
+```env
+CLIENT_URL=http://localhost:3000
+```
+
 ## Running in Docker
 
 As long as your `.env` file is configured as documented above, just run `docker-compose up`.  The application will be available at `localhost:8080`.

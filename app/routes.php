@@ -11,17 +11,12 @@ use App\Actions\Person\ViewVisitorSettingsAction;
 use App\Actions\Person\SetVisitorSettingsAction;
 use App\Actions\Person\AddStudentAction;
 use App\Actions\Person\RemoveStudentAction;
-use App\Actions\User\ListUsersAction;
-use App\Actions\User\ViewUserAction;
-use App\Actions\User\AddNotificationGroupAction;
 use App\Actions\Visit\ListVisitsAction;
 use App\Actions\Visit\ViewVisitAction;
 use App\Actions\Visit\CreateVisitAction;
 use App\Actions\Visit\ListVisitorTypesAction;
 use App\Actions\Visit\ListVisitReasonsAction;
-use App\Actions\User\SignInAction;
-use App\Actions\User\ForgotPasswordAction;
-use App\Actions\User\ResetPasswordAction;
+use App\Actions\User\{SignInAction, ForgotPasswordAction, ResetPasswordAction, ListUsersAction, ViewUserAction, AddNotificationGroupAction, CreateNewUserAction, UpdateUserAction};
 use App\Actions\Visit\AddVisitBadgeAction;
 use App\Actions\Visit\UpdateVisitAction;
 use App\Actions\ID\IDScanAction;
@@ -77,13 +72,13 @@ return function (App $app) {
         });
         $group->group('/visitreason', function (Group $group) {
             $group->get('', ListVisitReasonsAction::class);
-            $group->post('/{id}/badge', AddVisitBadgeAction::class);
-            $group->put('/{id}/checkout', CheckOutAction::class);
         });
 
         $group->group('/users', function (Group $group) {
             $group->get('', ListUsersAction::class);
             $group->get('/{id}', ViewUserAction::class);
+            $group->put('/{id}', UpdateUserAction::class);
+            $group->post('', CreateNewUserAction::class);
             $group->post('/{id}/notificationGroups', AddNotificationGroupAction::class);
         });
 

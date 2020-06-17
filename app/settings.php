@@ -10,6 +10,8 @@ return function (ContainerBuilder $containerBuilder) {
         [
             'settings' => [
                 'environment' => $_ENV['ENV'] ?? 'production',
+                'clientUrl' => $_ENV['CLIENT_URL'] ?? 'http://localhost:3000',
+                'authUrl' => $_ENV['AUTH_URL'] ?? 'https://test-auth.navigatep.com',
                 'displayErrorDetails' => $_ENV['ENV'] == 'dev',
                 'logSql' => $_ENV['LOG_SQL'] == 'true',
                 'logger' => [
