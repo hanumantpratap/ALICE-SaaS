@@ -36,11 +36,11 @@ class UpdateUserAction extends UserAction
                 throw new Exceptions\BadRequestException('Invalid phone number format.');
             }
 
-            $phone = $person->getPhoneByType(1);
+            $phone = $person->getPhoneByType(3);
 
             if ($phone === null) {
                 $phone = new PersonPhone();
-                $phone->setType(1);
+                $phone->setType(3);
                 $person->addPhone($phone);
             }
 
