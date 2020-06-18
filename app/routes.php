@@ -33,7 +33,7 @@ use App\Actions\SexOffender\SexOffenderMatchAction;
 use App\Actions\SexOffender\SexOffenderNonMatchAction;
 use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
-use App\Actions\Building\ListBuildingsAction;
+use App\Actions\Building\{ListBuildingsAction, UpdateBuildingAction, CreateBuildingAction};
 use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
 use App\Actions\Visit\ApproveVisitAction;
 use App\Middleware\AuthMiddleware;
@@ -119,6 +119,8 @@ return function (App $app) {
 
         $group->group('/buildings', function (Group $group) {
             $group->get('', ListBuildingsAction::class);
+            $group->post('', CreateBuildingAction::class);
+            $group->put('/{id}', UpdateBuildingAction::class);
         });
     
         $group->post('/id-scan', IDScanAction::class);
