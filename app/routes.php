@@ -33,8 +33,10 @@ use App\Actions\SexOffender\SexOffenderMatchAction;
 use App\Actions\SexOffender\SexOffenderNonMatchAction;
 use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
-use App\Actions\Building\ListBuildingsAction;
+use App\Actions\Building\{ListBuildingsAction, UpdateBuildingAction, CreateBuildingAction};
 use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
+use App\Actions\Person\ListCurrentVisitorsAction;
+use App\Actions\Person\ListFrequentVisitorsAction;
 use App\Actions\Visit\ApproveVisitAction;
 use App\Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -63,9 +65,9 @@ return function (App $app) {
             $group->get('/{id}', ViewVisitAction::class);
             $group->post('', CreateVisitAction::class);
             $group->put('/{id}', UpdateVisitAction::class);
-            $group->post('/{id}/badge', AddVisitBadgeAction::class);  
-            $group->put('/{id}/checkout', CheckOutAction::class);   
-            $group->put('/{id}/approvevisit', ApproveVisitAction::class);       
+            $group->post('/{id}/badge', AddVisitBadgeAction::class);
+            $group->put('/{id}/checkout', CheckOutAction::class);
+            $group->put('/{id}/approvevisit', ApproveVisitAction::class);
         });
         $group->group('/visitortype', function (Group $group) {
             $group->get('', ListVisitorTypesAction::class);
@@ -86,6 +88,7 @@ return function (App $app) {
         });
 
         $group->group('/persons', function (Group $group) {
+            $group->get('/frequent', ListFrequentVisitorsAction::class);
             $group->get('', ListPersonsAction::class);
             $group->get('/{id}', ViewPersonAction::class);
             $group->get('/search/query', SearchPersonsAction::class);
@@ -105,6 +108,11 @@ return function (App $app) {
             //$group->post('/{id}/sex-offender/nonmatch', SexOffenderMatchAction::class);
         });
 
+        $group->group('/visitors', function (Group $group) {
+            $group->get('/frequent', ListFrequentVisitorsAction::class);
+            $group->get('/current', ListCurrentVisitorsAction::class);
+        });
+
         $group->group('/blacklist', function (Group $group) {
             $group->delete('/{id}', DeleteBlacklistAction::class);
         });
@@ -122,8 +130,10 @@ return function (App $app) {
 
         $group->group('/buildings', function (Group $group) {
             $group->get('', ListBuildingsAction::class);
+            $group->post('', CreateBuildingAction::class);
+            $group->put('/{id}', UpdateBuildingAction::class);
         });
-    
+
         $group->post('/id-scan', IDScanAction::class);
     })->add(AuthMiddleware::class);
 

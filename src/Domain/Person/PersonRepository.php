@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Person;
 
+use Doctrine\Common\Collections\Collection;
+
 interface PersonRepository
 {
     /**
@@ -31,6 +33,21 @@ interface PersonRepository
      */
     public function findPersonsByParams(array $params): array;
 
+    /**
+     * @param int $threshold
+     * @param int $limit
+     * @param int $buildingId
+     * @return Collection
+     * @throws PersonNotFoundException
+     */
+    public function getFrequentVisitors(int $threshold, int $limit, int $buildingId): array;
+
+    /**
+     * @param int $buildingId
+     * @return Collection
+     * @throws PersonNotFoundException
+     */
+    public function getCurrentVisitors(int $buildingId): array;
 
     /**
      * @param Person Person
