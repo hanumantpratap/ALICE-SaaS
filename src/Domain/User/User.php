@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Domain\User;
 
 use App\Domain\Person\Person;
+use App\Domain\NotificationGroup\NotificationGroup;
+use App\Domain\NotificationGroup\NotificationGroupUser;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -73,15 +75,15 @@ class User {
   public ?string $role;
 
   /**
-   * @OneToOne(targetEntity="\App\Domain\Person\Person", fetch="EAGER", cascade={"persist", "remove"})
+   * @OneToOne(targetEntity="\App\Domain\Person\Person", cascade={"persist", "remove"}, fetch="EAGER")
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
   public Person $person;
 
   /** 
-   * @OneToMany(targetEntity="\App\Domain\NotificationGroup\NotificationGroupUser", mappedBy="user") 
+   * @OneToMany(targetEntity="\App\Domain\NotificationGroup\NotificationGroupUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true) 
    */
-  protected Collection $notificationGroups;
+  protected Collection $notificationGroupUsers;
 
   public array $notificationGroupsList;
 
@@ -118,14 +120,19 @@ class User {
     return $this->person->getName()->getFamilyName();
   }
 
-  public function getNotificationGroups() {
-    return $this->notificationGroups;
+  public function addNotificationGroup(NotificationGroup $notificationGroup, int $buildingId, bool $email, bool $text) {
+    $notificationGroupUser = new NotificationGroupUser();
+    $notificationGroupUser->setUser($this);
+    $notificationGroupUser->setNotificationGroup($notificationGroup);
+    $notificationGroupUser->setBuildingId($buildingId);
+    $notificationGroupUser->setEmail($email);
+    $notificationGroupUser->setText($text);
+    $this->notificationGroupUsers->add($notificationGroupUser);
   }
 
-  /* public function addNotificationGroup(NotificationGroup $notificationGroup) {
-    $notificationGroup->addUser($this);
-    $this->notificationGroups->add($notificationGroup);
-  } */
+  public function clearNotificationGroups() {
+    $this->notificationGroupUsers->clear();
+  }
 
   public function getPrimaryBuildingId() {
     return $this->primaryBuildingId;

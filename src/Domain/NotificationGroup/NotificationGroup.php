@@ -31,7 +31,7 @@ class NotificationGroup {
   public string $name;
 
   /** @Column */
-  public ?description $description;
+  public ?string $description;
 
   /** @Column(name="force_text", type="boolean") */
   public ?bool $forceText;
