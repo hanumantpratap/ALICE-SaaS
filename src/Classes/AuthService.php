@@ -116,13 +116,11 @@ class AuthService {
         }    
     }
 
-    public function sendWelcomeEmail(int $globalUserId, string $firstName, string $lastName) { 
+    public function sendWelcomeEmail(int $globalUserId) { 
         $data = [
             'app' => 'vm',
             'reset-link' => $this->clientUrl . '/reset-password',
-            'expiration-link' => $this->clientUrl . '/signin',
-            'firstName' => $firstName,
-            'lastName' => $lastName
+            'expiration-link' => $this->clientUrl . '/signin'
         ];
         
         $token = $this->serviceToken;

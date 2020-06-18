@@ -16,7 +16,7 @@ class CreateNewUserAction extends UserAction
         $formData = $this->getFormData();
         $email = $formData->email;
         $email = strtolower(trim($email));
-        
+
         $users = $this->userRepository->findUsersByEmail($email);
 
         if (count($users) > 0) {
@@ -32,10 +32,6 @@ class CreateNewUserAction extends UserAction
         $person = new Person();
         $person->setStatus(1);
 
-        $name = $person->getName();
-        $name->setGivenName($formData->firstName);
-        $name->setFamilyName($formData->lastName);
-        $person->setName($name);
 
         $email = new PersonEmail();
         $email->setEmailAddress($formData->email);
@@ -45,10 +41,13 @@ class CreateNewUserAction extends UserAction
         $user->setPerson($person);
         $user->setLogin($formData->email);
         $user->setGlobalUserId($globalUserId);
+        $user->setPrimaryBuildingId($this->token->building);
 
         $this->userRepository->save($user);
-        $this->authService->sendWelcomeEmail($user->getGlobalUserId(), $formData->firstName, $formData->lastName);
+        $this->authService->sendWelcomeEmail($user->getGlobalUserId());
+
 
         return $this->respondWithData(null, 201);
     }
 }
+

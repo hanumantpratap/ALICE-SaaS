@@ -82,4 +82,9 @@ class PersonName {
   public function setPerson(Person $person) {
     $this->person = $person;
   }
+
+  public function __construct() {
+    $this->givenName = " ";
+    $this->familyName = " ";
+  }
 }

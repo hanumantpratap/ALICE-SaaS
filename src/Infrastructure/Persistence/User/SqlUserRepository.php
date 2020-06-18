@@ -39,8 +39,10 @@ final class SqlUserRepository implements UserRepository
       // get notification groups assignments
       $sql = "SELECT
                Groups.id As \"notificationGroupId\",
+               Groups.name AS \"notificationGroupName\",
                GroupUsers.user_id AS \"userId\",
-               GroupUsers.building_id AS \"buildingId\"
+               GroupUsers.email,
+               GroupUsers.text
               FROM visitor_management.notification_groups AS Groups
               LEFT JOIN visitor_management.notification_groups_has_users AS GroupUsers
                 ON Groups.id = GroupUsers.notification_group_id";
@@ -55,6 +57,7 @@ final class SqlUserRepository implements UserRepository
            $group_users_ix[$userId] = [];
         }
         
+        unset($group_user['userId']);
         $group_users_ix[$userId][] = $group_user;
       }
 

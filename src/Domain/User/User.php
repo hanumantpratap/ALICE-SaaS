@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Domain\User;
 
 use App\Domain\Person\Person;
+use App\Domain\NotificationGroup\NotificationGroup;
+use App\Domain\NotificationGroup\NotificationGroupUser;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,28 +36,28 @@ class User {
   public int $personId;
 
   /** @Column */
-  public string $login;
+  private string $login;
 
   /** @Column(name="password") */
-  public ?string $password;
+  private ?string $password;
 
   /** @Column(name="regkey_id") */
-  public int $regKeyId;
+  private int $regKeyId;
 
   /** @Column(name="reg_date", type="datetime") */
-  public DateTime $regDate;
+  private DateTime $regDate;
 
   /** @Column(name="reg_ip") */
-  public string $regIp;
+  private string $regIp;
 
   /** @Column(name="agree_tos") */
-  public ?int $agreedTOS;
+  private ?int $agreedTOS;
 
   /** @Column(name="account_type") */
-  public ?string $accountType;
+  private ?string $accountType;
 
   /** @Column(name="primary_team_id") */
-  public ?int $primaryTeamId;
+  public ?int $primaryBuildingId;
 
   /** @Column(name="access_type") */
   public ?int $accessType;
@@ -69,16 +71,19 @@ class User {
   /** @Column(name="visitor_management_access", type="boolean") */
   public ?bool $vmAccess;
 
+  /** @Column(name="visitor_management_role") */
+  public ?string $role;
+
   /**
-   * @OneToOne(targetEntity="\App\Domain\Person\Person", fetch="EAGER", cascade={"persist", "remove"})
+   * @OneToOne(targetEntity="\App\Domain\Person\Person", cascade={"persist", "remove"}, fetch="EAGER")
    * @JoinColumn(name="person_id", referencedColumnName="person_id")
    */
   public Person $person;
 
   /** 
-   * @OneToMany(targetEntity="\App\Domain\NotificationGroup\NotificationGroupUser", mappedBy="user") 
+   * @OneToMany(targetEntity="\App\Domain\NotificationGroup\NotificationGroupUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true) 
    */
-  protected Collection $notificationGroups;
+  protected Collection $notificationGroupUsers;
 
   public array $notificationGroupsList;
 
@@ -115,17 +120,30 @@ class User {
     return $this->person->getName()->getFamilyName();
   }
 
-  public function getNotificationGroups() {
-    return $this->notificationGroups;
+  public function addNotificationGroup(NotificationGroup $notificationGroup, int $buildingId, bool $email, bool $text) {
+    $notificationGroupUser = new NotificationGroupUser();
+    $notificationGroupUser->setUser($this);
+    $notificationGroupUser->setNotificationGroup($notificationGroup);
+    $notificationGroupUser->setBuildingId($buildingId);
+    $notificationGroupUser->setEmail($email);
+    $notificationGroupUser->setText($text);
+    $this->notificationGroupUsers->add($notificationGroupUser);
   }
 
-  /* public function addNotificationGroup(NotificationGroup $notificationGroup) {
-    $notificationGroup->addUser($this);
-    $this->notificationGroups->add($notificationGroup);
-  } */
+  public function clearNotificationGroups() {
+    $this->notificationGroupUsers->clear();
+  }
 
-  public function getPrimaryTeamId() {
-    return $this->primaryTeamId;
+  public function notificationGroupUsers() {
+    return $this->notificationGroupUsers;
+  }
+
+  public function getPrimaryBuildingId() {
+    return $this->primaryBuildingId;
+  }
+
+  public function setPrimaryBuildingId(int $primaryBuildingId) {
+    $this->primaryBuildingId = $primaryBuildingId;
   }
 
   public function getGlobalUserId() {
@@ -146,6 +164,14 @@ class User {
 
   public function disable() {
     $this->vmAccess = false;
+  }
+
+  public function getRole() {
+    return $this->role;
+  }
+
+  public function setRole(string $role) {
+    $this->role = $role;
   }
 
   public function __construct() {

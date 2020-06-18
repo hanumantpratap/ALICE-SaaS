@@ -33,7 +33,7 @@ class NotificationGroupUser {
 
   /** 
    * @Id
-   * @ManyToOne(targetEntity="\App\Domain\User\User", inversedBy="notificationGroups", fetch="EAGER")
+   * @ManyToOne(targetEntity="\App\Domain\User\User", inversedBy="notificationGroupUsers")
    * @JoinColumn(name="user_id", referencedColumnName="pa_id")
    **/
   protected User $user;
@@ -42,6 +42,12 @@ class NotificationGroupUser {
    * @Id 
    * @Column(name="building_id") */
   public ?int $buildingId;
+
+  /** @Column(name="email", type="boolean") */
+  public bool $email;
+  
+  /** @Column(name="text", type="boolean") */
+  public bool $text;
 
   public function setNotificationGroup(NotificationGroup $notificationGroup) {
     $this->notificationGroup = $notificationGroup;
@@ -61,5 +67,18 @@ class NotificationGroupUser {
 
   public function getBuildingId() {
     return $this->buildingId;
+  }
+
+  public function setEmail(bool $email) {
+    $this->email = $email;
+  }
+
+  public function setText(bool $text) {
+    $this->text = $text;
+  }
+
+  public function __construct() {
+    $this->email = true;
+    $this->text = true;
   }
 }
