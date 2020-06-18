@@ -38,6 +38,7 @@ use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
 use App\Actions\Person\ListCurrentVisitorsAction;
 use App\Actions\Person\ListFrequentVisitorsAction;
 use App\Actions\Visit\ApproveVisitAction;
+use App\Actions\Setup\{AccountSetupAction};
 use App\Middleware\AuthMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -136,6 +137,8 @@ return function (App $app) {
 
         $group->post('/id-scan', IDScanAction::class);
     })->add(AuthMiddleware::class);
+
+    $app->post('/account/setup', AccountSetupAction::class);
 
     $app->group('/dev', function (Group $group) {
         $group->group('/redis', function (Group $group) {

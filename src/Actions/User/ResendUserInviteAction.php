@@ -12,6 +12,37 @@ class ResendUserInviteAction extends UserAction
         $userId = (int) $this->resolveArg('id');
         $user = $this->userRepository->findUserOfId($userId);
 
-        return $this->respondWithData(null, 201);
+        $email = $user->getPerson()->getEmail()->getEmailAddress();
+        $token = [
+            'id' => $user->getId(),
+            'gid' => $user->getGlobalUserId(),
+            'dist' => $this->token->dist,
+            'email' => $email,
+            'type' => 'invite'
+        ];
+
+        $token = $this->tokenProcessor->create((object) $token, 60*10);
+        $clientUrl = $this->container->get('settings')['clientUrl'];
+
+        $sender = 'Visitor Management <noreply@navigate360.com>';
+        $subject = 'Welcome to Visitor Management';
+
+        $html = "<html lang='en-US'>
+                    <head>
+                        <title>Welcome to Visitor Management</title>
+                    </head>
+                    <body>
+                        <p>Greetings!</p>
+                        <p>Welcome to Visitor Management. Please visit the following link to setup your account:</p>
+                        <p><a href='${clientUrl}/userSetup?token=${token}' target='_BLANK'>Setup Account</a></p>
+                        <p>Thank you</p>
+                        <hr>
+                        <img title='${subject}' alt='${subject} - Logo' src='images/360-logo-2.png' width='192' />
+                    </body>
+                </html>";
+
+        $messageId = $this->mailer->send([$email], $sender, $subject, $html);
+
+        return $this->respondWithData(['message' => 'Invite sent', 'messageId' => $messageId], 201);
     }
 }
