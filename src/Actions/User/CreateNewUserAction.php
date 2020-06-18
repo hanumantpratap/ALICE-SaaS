@@ -45,6 +45,7 @@ class CreateNewUserAction extends UserAction
         $user->setPerson($person);
         $user->setLogin($formData->email);
         $user->setGlobalUserId($globalUserId);
+        $user->setPrimaryBuildingId($this->token->building);
 
         $this->userRepository->save($user);
         $this->authService->sendWelcomeEmail($user->getGlobalUserId(), $formData->firstName, $formData->lastName);

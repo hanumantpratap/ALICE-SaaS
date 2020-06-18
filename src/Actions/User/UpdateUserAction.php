@@ -56,6 +56,10 @@ class UpdateUserAction extends UserAction
             }
         }
 
+        if (isset($formData->role)) {
+            $user->setRole($formData->role);
+        }
+
         $this->userRepository->save($user);
 
         $this->logger->info("User of id `${userId}` was updated.");

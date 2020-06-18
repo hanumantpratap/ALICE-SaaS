@@ -42,7 +42,7 @@ class SignInAction extends Action
         $this->userRepository = $this->container->get(UserRepository::class);
         $user = $this->userRepository->findUserOfGlobalId((int) $token->gid);
         $token->id = $user->getId();
-        $token->building = $user->getPrimaryTeamId();
+        $token->building = $user->getPrimaryBuildingId();
         $token->redexp = null;
         $token->iat = null;
         $token->exp = null;

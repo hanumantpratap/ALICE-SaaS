@@ -34,28 +34,28 @@ class User {
   public int $personId;
 
   /** @Column */
-  public string $login;
+  private string $login;
 
   /** @Column(name="password") */
-  public ?string $password;
+  private ?string $password;
 
   /** @Column(name="regkey_id") */
-  public int $regKeyId;
+  private int $regKeyId;
 
   /** @Column(name="reg_date", type="datetime") */
-  public DateTime $regDate;
+  private DateTime $regDate;
 
   /** @Column(name="reg_ip") */
-  public string $regIp;
+  private string $regIp;
 
   /** @Column(name="agree_tos") */
-  public ?int $agreedTOS;
+  private ?int $agreedTOS;
 
   /** @Column(name="account_type") */
-  public ?string $accountType;
+  private ?string $accountType;
 
   /** @Column(name="primary_team_id") */
-  public ?int $primaryTeamId;
+  public ?int $primaryBuildingId;
 
   /** @Column(name="access_type") */
   public ?int $accessType;
@@ -68,6 +68,9 @@ class User {
 
   /** @Column(name="visitor_management_access", type="boolean") */
   public ?bool $vmAccess;
+
+  /** @Column(name="visitor_management_role") */
+  public ?string $role;
 
   /**
    * @OneToOne(targetEntity="\App\Domain\Person\Person", fetch="EAGER", cascade={"persist", "remove"})
@@ -124,8 +127,12 @@ class User {
     $this->notificationGroups->add($notificationGroup);
   } */
 
-  public function getPrimaryTeamId() {
-    return $this->primaryTeamId;
+  public function getPrimaryBuildingId() {
+    return $this->primaryBuildingId;
+  }
+
+  public function setPrimaryBuildingId(int $primaryBuildingId) {
+    $this->primaryBuildingId = $primaryBuildingId;
   }
 
   public function getGlobalUserId() {
@@ -146,6 +153,14 @@ class User {
 
   public function disable() {
     $this->vmAccess = false;
+  }
+
+  public function getRole() {
+    return $this->role;
+  }
+
+  public function setRole(string $role) {
+    $this->role = $role;
   }
 
   public function __construct() {

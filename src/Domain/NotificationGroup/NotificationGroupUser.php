@@ -43,6 +43,12 @@ class NotificationGroupUser {
    * @Column(name="building_id") */
   public ?int $buildingId;
 
+  /** @Column(name="email", type="boolean") */
+  public bool $email;
+  
+  /** @Column(name="text", type="boolean") */
+  public bool $text;
+
   public function setNotificationGroup(NotificationGroup $notificationGroup) {
     $this->notificationGroup = $notificationGroup;
   }
@@ -61,5 +67,10 @@ class NotificationGroupUser {
 
   public function getBuildingId() {
     return $this->buildingId;
+  }
+
+  public function __construct() {
+    $this->email = true;
+    $this->text = true;
   }
 }
