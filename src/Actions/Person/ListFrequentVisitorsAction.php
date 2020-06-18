@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Actions\Person;
 
-use App\Domain\Person\PersonNotFoundException;
-use App\Exceptions\NotFoundException;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class ListFrequentVisitorsAction extends PersonAction
@@ -18,14 +16,10 @@ class ListFrequentVisitorsAction extends PersonAction
 
         $buildingId = (int) $this->token->building;
 
-        try {
-            $persons = $this->personRepository->getFrequentVisitors($threshold, $limit, $buildingId);
+        $persons = $this->personRepository->getFrequentVisitors($threshold, $limit, $buildingId);
 
-            $this->logger->info("All persons retrieved.");
+        $this->logger->info("All persons retrieved.");
 
-            return $this->respondWithData($persons);
-        } catch (PersonNotFoundException $ex) {
-            throw new NotFoundException("No frequent visitors found");
-        }
+        return $this->respondWithData($persons);
     }
 }
