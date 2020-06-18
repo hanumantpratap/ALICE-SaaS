@@ -116,6 +116,39 @@ class AuthService {
         }    
     }
 
+    public function updatePassword(int $globalUserId, string $password) { 
+        $data = [
+            'app'=>'vm', 
+            'new-password'=>$password
+        ];
+        
+        $token = $this->serviceToken;
+        
+        try{
+            $response = $this->guzzle->put("api/users/${globalUserId}/password", [
+                'json' => $data,
+                'headers' => ['Authorization' => "Bearer ${token}"]
+            ]);
+
+            $payload = json_decode($response->getBody()->getContents());
+            
+            if ($response->getStatusCode() == 200) {
+                return $payload;
+            }
+            else {
+                throw new Exceptions\InternalServerErrorException();
+            }
+        }
+        catch(ClientException $e) {
+            $response = json_decode($e->getResponse()->getBody()->getContents());
+            throw new Exceptions\BadRequestException($response->error->userMessage);
+        }
+        catch(ServerException $e) {
+            $response = json_decode($e->getResponse()->getBody()->getContents());
+            throw new Exceptions\InternalServerErrorException($response->error->userMessage);
+        }    
+    }
+
     public function sendWelcomeEmail(int $globalUserId) { 
         $data = [
             'app' => 'vm',
