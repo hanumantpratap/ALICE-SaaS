@@ -34,6 +34,9 @@ class Visit {
   /** @Column(name="person_id") */
   public int $personId;
 
+  /** @Column(name="building_id") */
+  public int $buildingId;
+
   /**
    * @ManyToOne(targetEntity="\App\Domain\Building\Building", fetch="EAGER")
    * @JoinColumn(name="building_id", referencedColumnName="team_id")

@@ -36,10 +36,18 @@ interface PersonRepository
     /**
      * @param int $threshold
      * @param int $limit
+     * @param int $buildingId
      * @return Collection
      * @throws PersonNotFoundException
      */
-    public function getFrequentVisitors(int $threshold, int $limit): array;
+    public function getFrequentVisitors(int $threshold, int $limit, int $buildingId): array;
+
+    /**
+     * @param int $buildingId
+     * @return Collection
+     * @throws PersonNotFoundException
+     */
+    public function getCurrentVisitors(int $buildingId): array;
 
     /**
      * @param Person Person
