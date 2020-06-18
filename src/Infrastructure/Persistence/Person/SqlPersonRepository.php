@@ -7,6 +7,7 @@ use App\Domain\Person\Person;
 use App\Domain\Person\PersonDemographics;
 use App\Domain\Person\PersonNotFoundException;
 use App\Domain\Person\PersonRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -143,6 +144,30 @@ final class SqlPersonRepository implements PersonRepository
         throw new PersonNotFoundException();
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getFrequentVisitors(int $threshold, int $limit): array {
+        $this->logger->info("Getting up to ${limit} frequent visitors with at least ${threshold} visits.");
+
+        $query = $this->entityManager->createQueryBuilder()
+                    ->select("p, count(p.personId) as visitsCount")
+                    ->from(Person::class, "p")
+                    ->join("p.visits", "v")
+                    ->groupBy("p.personId")
+                    ->having("count(p.personId) > ${threshold}")
+                    ->orderBy("visitsCount", "desc")
+                    ->setMaxResults($limit)
+                    ->getQuery();
+
+        $persons = $query->getResult();
+
+        if (!is_null($persons) && !empty($persons)) {
+            return $persons;
+        }
+
+        throw new PersonNotFoundException();
+    }
 
     /**
      * @inheritdoc
