@@ -34,7 +34,7 @@ class ViewUserAction extends UserAction
         $userId = (int) $this->resolveArg('id');
         $user = $this->userRepository->findUserOfId($userId);
         $user->loadPerson();
-        $user->notificationGroupsList = $user->getNotificationGroups()->toArray();
+        $user->notificationGroupsList = $user->notificationGroupUsers()->toArray();
 
         $this->logger->info("User of id `${userId}` was viewed.");
 

@@ -134,6 +134,10 @@ class User {
     $this->notificationGroupUsers->clear();
   }
 
+  public function notificationGroupUsers() {
+    return $this->notificationGroupUsers;
+  }
+
   public function getPrimaryBuildingId() {
     return $this->primaryBuildingId;
   }
