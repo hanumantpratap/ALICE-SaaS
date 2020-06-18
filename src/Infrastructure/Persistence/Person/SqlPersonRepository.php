@@ -147,7 +147,7 @@ final class SqlPersonRepository implements PersonRepository
     /**
      * @inheritdoc
      */
-    public function getFrequentVisitors(int $threshold, int $limit): array {
+    public function getFrequentVisitors(int $threshold, int $limit, int $buildingId): array {
         $this->logger->info("Getting up to ${limit} frequent visitors with at least ${threshold} visits.");
 
         $query = $this->entityManager->createQueryBuilder()
@@ -155,12 +155,36 @@ final class SqlPersonRepository implements PersonRepository
                     ->from(Person::class, "p")
                     ->join("p.visits", "v")
                     ->groupBy("p.personId")
-                    ->having("count(p.personId) > ${threshold}")
+                    ->having("count(p.personId) >= :threshold")
+                    ->where("v.buildingId = :buildingId")
                     ->orderBy("visitsCount", "desc")
                     ->setMaxResults($limit)
+                    ->setParameter("threshold", $threshold)
+                    ->setParameter("buildingId", $buildingId)
                     ->getQuery();
 
         $persons = $query->getResult();
+
+        if (!is_null($persons) && !empty($persons)) {
+            return $persons;
+        }
+
+        throw new PersonNotFoundException();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCurrentVisitors(int $buildingId): array {
+        $persons = $this->entityManager->createQueryBuilder()
+                        ->select("DISTINCT p")
+                        ->from(Person::class, "p")
+                        ->join("p.visits", "v")
+                        ->where("v.checkOut IS NULL")
+                        ->andWhere("v.buildingId = :buildingId")
+                        ->setParameter("buildingId", $buildingId)
+                        ->getQuery()
+                        ->getResult();
 
         if (!is_null($persons) && !empty($persons)) {
             return $persons;

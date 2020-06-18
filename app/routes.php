@@ -35,6 +35,7 @@ use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
 use App\Actions\Building\{ListBuildingsAction, UpdateBuildingAction, CreateBuildingAction};
 use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
+use App\Actions\Person\ListCurrentVisitorsAction;
 use App\Actions\Person\ListFrequentVisitorsAction;
 use App\Actions\Visit\ApproveVisitAction;
 use App\Middleware\AuthMiddleware;
@@ -102,6 +103,11 @@ return function (App $app) {
             $group->post('/{id}/sex-offender/check', SexOffenderCheckAction::class);
             $group->post('/{id}/sex-offender/match', SexOffenderMatchAction::class);
             //$group->post('/{id}/sex-offender/nonmatch', SexOffenderMatchAction::class);
+        });
+
+        $group->group('/visitors', function (Group $group) {
+            $group->get('/frequent', ListFrequentVisitorsAction::class);
+            $group->get('/current', ListCurrentVisitorsAction::class);
         });
 
         $group->group('/blacklist', function (Group $group) {
