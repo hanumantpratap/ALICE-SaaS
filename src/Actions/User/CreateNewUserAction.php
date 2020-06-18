@@ -31,11 +31,7 @@ class CreateNewUserAction extends UserAction
 
         $person = new Person();
         $person->setStatus(1);
-
-        $name = $person->getName();
-        $name->setGivenName($formData->firstName);
-        $name->setFamilyName($formData->lastName);
-        $person->setName($name);
+        
 
         $email = new PersonEmail();
         $email->setEmailAddress($formData->email);
