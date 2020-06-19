@@ -16,6 +16,9 @@ class ListFrequentVisitorsAction extends PersonAction
 
         $buildingId = (int) $this->token->building;
 
+        /**
+         * @var $persons array
+         */
         $persons = $this->personRepository->getFrequentVisitors($threshold, $limit, $buildingId);
 
         $this->logger->info("All persons retrieved.");
