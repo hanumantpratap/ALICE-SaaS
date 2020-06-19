@@ -17,10 +17,10 @@ class AddBlacklistAction extends PersonAction
 
     $blItem = new BlacklistItem();
     $blItem->personId = $personId;
-    $blItem->userId = $data->userId;
-    $blItem->buildingId = $data->buildingId;
     $blItem->notes = $data->notes;
-    $blItem->reason = $data->reason;
+    $blItem->userId = (int) $this->token->id;
+    $blItem->buildingId = (int) $this->token->building;
+    $blItem->reason = "";
 
     $person = $this->personRepository->findPersonOfId($blItem->personId);
     $blItem->setPerson($person);
