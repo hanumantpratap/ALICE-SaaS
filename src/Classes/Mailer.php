@@ -8,26 +8,26 @@ use Psr\Log\LoggerInterface;
 use App\Exceptions;
 
 class Mailer {
-    private array $allowedAddresses = ['navigateprepared.com', 'navigatemail.com', 'navigate360.com', 'alicetraining.com'];
-    
+    private array $allowedAddresses = ['navigateprepared.com', 'navigatemail.com', 'navigate360.com', 'alicetraining.com', 'uxcabin.com'];
+
     private bool $devMode = false;
     private $SeSClient;
     private $PHPMailer = null;
     private $Emogrifier = null;
-    
+
     function __construct(array $config, LoggerInterface $logger) {
         $this->SesClient = new SesClient($config['connection']);
         $this->devMode = $config['devMode'];
         $this->logger = $logger;
     }
-    
+
     public function send($recipientEmails, $senderEmail, $subject, $htmlBody, $plainTextBody = null) {
         $charset = 'UTF-8';
-        
+
         if ($plainTextBody === null) {
             $plainTextBody = $this->toFormattedPlainText($htmlBody);
         }
-        
+
         if ($this->devMode) {
             $actualRecipients = [];
 
@@ -48,38 +48,38 @@ class Mailer {
                 'ReplyToAddresses' => [$senderEmail],
                 'Source' => $senderEmail,
                 'Message' => [
-                'Body' => [
-                    'Html' => [
-                        'Charset' => $charset,
-                        'Data' => $htmlBody,
+                    'Body' => [
+                        'Html' => [
+                            'Charset' => $charset,
+                            'Data' => $htmlBody,
+                        ],
+                        'Text' => [
+                            'Charset' => $charset,
+                            'Data' => $plainTextBody,
+                        ],
                     ],
-                    'Text' => [
+                    'Subject' => [
                         'Charset' => $charset,
-                        'Data' => $plainTextBody,
+                        'Data' => $subject,
                     ],
-                ],
-                'Subject' => [
-                    'Charset' => $charset,
-                    'Data' => $subject,
-                ],
                 ]
             ]);
-            
+
             $messageId = $result['MessageId'];
             $this->logger->info("Email sent! Message ID: $messageId"."\n");
             return $messageId;
         } catch (AwsException $e) {
             // output error message if fails
-             $this->logger->error("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
-            throw new Exceptions\InternalServerErrorException($e->getMessage());
-        }
-    }
+           $this->logger->error("The email was not sent. Error message: ".$e->getAwsErrorMessage()."\n");
+           throw new Exceptions\InternalServerErrorException($e->getMessage());
+       }
+   }
 
-    
-    private function toFormattedPlainText($body) {
-        if (!$body || !strlen($body)) {
-            return '';
-        }
+
+   private function toFormattedPlainText($body) {
+    if (!$body || !strlen($body)) {
+        return '';
+    }
 
         $body = preg_replace("/>((?:\s|\r|\n)+)</", "><", $body); //remove space between html tags
         $body = preg_replace('/<a(?:(?!href=).)+href=("[^"]+"|\'[^\']+\')[^>]*>((?:(?!<\/a).)+)<\/a>/i', '$2 &lt;$1&gt;', $body); //replace a tags with new formating
