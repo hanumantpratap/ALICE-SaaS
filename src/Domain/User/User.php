@@ -45,7 +45,7 @@ class User {
   private int $regKeyId;
 
   /** @Column(name="reg_date", type="datetime") */
-  private DateTime $regDate;
+  public DateTime $regDate;
 
   /** @Column(name="reg_ip") */
   private string $regIp;
@@ -80,8 +80,8 @@ class User {
    */
   public Person $person;
 
-  /** 
-   * @OneToMany(targetEntity="\App\Domain\NotificationGroup\NotificationGroupUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true) 
+  /**
+   * @OneToMany(targetEntity="\App\Domain\NotificationGroup\NotificationGroupUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
    */
   protected Collection $notificationGroupUsers;
 
@@ -89,38 +89,38 @@ class User {
 
   public function getId() {
     return $this->id;
-  }
-  
-  public function getLogin() {
+}
+
+public function getLogin() {
     return $this->login;
-  }
+}
 
-  public function setLogin(string $login) {
+public function setLogin(string $login) {
     $this->login = $login;
-  }
+}
 
-  public function getPerson() {
+public function getPerson() {
     return $this->person;
-  }
+}
 
-  public function setPerson(Person $person) {
+public function setPerson(Person $person) {
     $this->person = $person;
-  }
+}
 
   // force user to load person object
-  public function loadPerson() {
+public function loadPerson() {
     $load = $this->getPerson()->getDisplayName();
-  }
+}
 
-  public function getFirstName() {
+public function getFirstName() {
     return $this->person->getName()->getGivenName();
-  }
+}
 
-  public function getLastName() {
+public function getLastName() {
     return $this->person->getName()->getFamilyName();
-  }
+}
 
-  public function addNotificationGroup(NotificationGroup $notificationGroup, int $buildingId, bool $email, bool $text) {
+public function addNotificationGroup(NotificationGroup $notificationGroup, int $buildingId, bool $email, bool $text) {
     $notificationGroupUser = new NotificationGroupUser();
     $notificationGroupUser->setUser($this);
     $notificationGroupUser->setNotificationGroup($notificationGroup);
@@ -128,53 +128,53 @@ class User {
     $notificationGroupUser->setEmail($email);
     $notificationGroupUser->setText($text);
     $this->notificationGroupUsers->add($notificationGroupUser);
-  }
+}
 
-  public function clearNotificationGroups() {
+public function clearNotificationGroups() {
     $this->notificationGroupUsers->clear();
-  }
+}
 
-  public function notificationGroupUsers() {
+public function notificationGroupUsers() {
     return $this->notificationGroupUsers;
-  }
+}
 
-  public function getPrimaryBuildingId() {
+public function getPrimaryBuildingId() {
     return $this->primaryBuildingId;
-  }
+}
 
-  public function setPrimaryBuildingId(int $primaryBuildingId) {
+public function setPrimaryBuildingId(int $primaryBuildingId) {
     $this->primaryBuildingId = $primaryBuildingId;
-  }
+}
 
-  public function getGlobalUserId() {
+public function getGlobalUserId() {
     return $this->globalUserId;
-  }
+}
 
-  public function setGlobalUserId(int $globalUserId) {
+public function setGlobalUserId(int $globalUserId) {
     $this->globalUserId = $globalUserId;
-  }
+}
 
-  public function canAccessVm() {
+public function canAccessVm() {
     return $this->vmAccess;
-  }
+}
 
-  public function enable() {
+public function enable() {
     $this->vmAccess = true;
-  }
+}
 
-  public function disable() {
+public function disable() {
     $this->vmAccess = false;
-  }
+}
 
-  public function getRole() {
+public function getRole() {
     return $this->role;
-  }
+}
 
-  public function setRole(string $role) {
+public function setRole(string $role) {
     $this->role = $role;
-  }
+}
 
-  public function __construct() {
+public function __construct() {
     $this->notificationGroups = new ArrayCollection();
     $this->renderNotificationGroups = false;
     $this->accessType = 2;
@@ -183,5 +183,5 @@ class User {
     $this->regIp = $_SERVER['REMOTE_ADDR'];
     $this->password = "NO_PASSWORD";
     $this->vmAccess = true;
-  }
+}
 }
