@@ -151,17 +151,18 @@ final class SqlPersonRepository implements PersonRepository
         $this->logger->info("Getting up to ${limit} frequent visitors with at least ${threshold} visits.");
 
         return $this->entityManager->createQueryBuilder()
-                    ->select("p, count(p.personId) as visitsCount")
+                    ->select("p", "MAX(v.checkIn) as lastCheckIn")
                     ->from(Person::class, "p")
                     ->join("p.visits", "v")
                     ->groupBy("p.personId")
                     ->having("count(p.personId) >= :threshold")
                     ->where("v.buildingId = :buildingId")
-                    ->orderBy("visitsCount", "desc")
+                    ->orderBy("count(p.personId)", "desc")
                     ->setMaxResults($limit)
                     ->setParameter("threshold", $threshold)
                     ->setParameter("buildingId", $buildingId)
-                    ->getQuery();
+                    ->getQuery()
+                    ->getResult();
     }
 
     /**
