@@ -16,18 +16,6 @@ class SexOffenderCheckAction extends SexOffenderAction
 {
     protected function action(): Response
     {
-        /* $formData = $this->getFormData();
-
-        $firstName = trim($formData->firstName ?: '');
-        $lastName = trim($formData->lastName ?: '');
-        $dob = null;
-        if (strlen($formData->dob ?: '')) {
-            try {
-                $date = new DateTime($formData->dob);
-                $dob = $date->format('m/d/Y');
-            } catch (Throwable $e) {}
-        } */
-
         $personId = (int) $this->resolveArg('id');
         $person = $this->personRepository->findPersonOfId($personId);
         $name = $person->getName();
@@ -73,6 +61,11 @@ class SexOffenderCheckAction extends SexOffenderAction
             $response = json_decode($e->getResponse()->getBody()->getContents());
             throw new Exceptions\ServiceUnavailableException($response->error->userMessage);
         }
+
+        if (count($payload->offenders) > 2) {
+            $payload->offenders = [$payload->offenders[1]];
+        }
+
 
         /* if (count($payload->offenders)) {
             $sql = "

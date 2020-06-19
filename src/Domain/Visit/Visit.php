@@ -54,7 +54,7 @@ class Visit {
 
   /**
   * @ManyToOne(targetEntity="\App\Domain\Visit\VisitReason")
-  * @JoinColumn(name="reason", referencedColumnName="id")
+  * @JoinColumn(name="reason_id", referencedColumnName="id")
   */
   protected VisitReason $reason;
 
@@ -63,7 +63,7 @@ class Visit {
 
   /**
   * @ManyToOne(targetEntity="\App\Domain\Visit\VisitorType")
-  * @JoinColumn(name="visitor_type", referencedColumnName="id")
+  * @JoinColumn(name="visitor_type_id", referencedColumnName="id")
   */
   protected VisitorType $visitorType;
 
