@@ -53,19 +53,19 @@ class Visit {
   private ?int $reasonId;
 
   /**
-  * @ManyToOne(targetEntity="\App\Domain\Visit\VisitReason")
+  * @ManyToOne(targetEntity="\App\Domain\Visit\VisitReason", fetch="EAGER")
   * @JoinColumn(name="reason_id", referencedColumnName="id")
   */
-  protected VisitReason $reason;
+  public ?VisitReason $reason;
 
   /** @Column(name="visitor_type_id") */
   private ?int $visitorTypeId;
 
   /**
-  * @ManyToOne(targetEntity="\App\Domain\Visit\VisitorType")
+  * @ManyToOne(targetEntity="\App\Domain\Visit\VisitorType", fetch="EAGER")
   * @JoinColumn(name="visitor_type_id", referencedColumnName="id")
   */
-  protected VisitorType $visitorType;
+  public ?VisitorType $visitorType;
 
   /** @Column */
   public ?string $notes;

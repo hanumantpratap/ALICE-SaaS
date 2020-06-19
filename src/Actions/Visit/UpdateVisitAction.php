@@ -18,13 +18,13 @@ class UpdateVisitAction extends VisitAction
 
         $this->logger->info("Updating Visit of id `${visitId}`");
 
-        if (isset($formData->reason)) {
-            $visit->setReason($formData->reason);
-        }
+        $reasonId = $formData->reasonId;
+        $reason = $this->visitReasonRepository->findVisitReasonOfId($reasonId);
+        $visit->setReason($reason);
 
-        if (isset($formData->visitorType)) {
-            $visit->setVisitorType($formData->visitorType);
-        }
+        $visitorTypeId = $formData->visitorTypeId;
+        $visitorType = $this->visitorTypeRepository->findVisitorTypeOfId($visitorTypeId);
+        $visit->setVisitorType($visitorType);
 
         if (isset($formData->notes)) {
             $visit->setNotes($formData->notes);

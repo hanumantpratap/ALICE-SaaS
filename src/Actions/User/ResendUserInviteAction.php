@@ -34,7 +34,7 @@ class ResendUserInviteAction extends UserAction
                     <body>
                         <p>Greetings!</p>
                         <p>Welcome to Visitor Management. Please visit the following link to setup your account:</p>
-                        <p><a href='${clientUrl}/userSetup?token=${token}' target='_BLANK'>Setup Account</a></p>
+                        <p><a href='${clientUrl}/welcome/${token}' target='_BLANK'>Setup Account</a></p>
                         <p>Thank you</p>
                         <hr>
                         <img title='${subject}' alt='${subject} - Logo' src='images/360-logo-2.png' width='192' />
