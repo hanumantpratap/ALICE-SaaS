@@ -170,12 +170,13 @@ final class SqlPersonRepository implements PersonRepository
      */
     public function getCurrentVisitors(int $buildingId): array {
         return $this->entityManager->createQueryBuilder()
-                        ->select("DISTINCT p")
+                        ->select("DISTINCT p, MAX(v.checkIn) as lastCheckIn, MAX(v.id) as lastCheckInId")
                         ->from(Person::class, "p")
                         ->join("p.visits", "v")
                         ->where("v.checkOut IS NULL")
                         ->andWhere("v.buildingId = :buildingId")
                         ->setParameter("buildingId", $buildingId)
+                        ->groupBy("p.personId")
                         ->getQuery()
                         ->getResult();
     }
