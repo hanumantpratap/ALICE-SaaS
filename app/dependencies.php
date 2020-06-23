@@ -26,6 +26,7 @@ use App\Classes\RedisConnector;
 use App\Classes\TokenProcessor;
 use App\Classes\SqlLogger;
 use App\Classes\AuthService;
+use App\Classes\FamilyWatchDog;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -135,6 +136,10 @@ return function (ContainerBuilder $containerBuilder) {
             $clientUrl = $settings['clientUrl'];
             $authUrl = $settings['authUrl'];
             return new AuthService($clientUrl, $authUrl);
-        }
+        },
+
+        FamilyWatchDog::class => function (LoggerInterface $logger) {
+            return new FamilyWatchDog($logger);
+        },
     ]);
 };

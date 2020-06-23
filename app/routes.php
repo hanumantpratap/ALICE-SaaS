@@ -28,9 +28,7 @@ use App\Actions\Person\Notes\GetNoteAction;
 use App\Actions\Person\Notes\ListNotesAction;
 use App\Actions\Person\Notes\CreateNoteAction;
 use App\Actions\Person\Notes\UpdateNoteAction;
-use App\Actions\SexOffender\SexOffenderCheckAction;
-use App\Actions\SexOffender\SexOffenderMatchAction;
-use App\Actions\SexOffender\SexOffenderNonMatchAction;
+use App\Actions\SexOffender\{SexOffenderCheckAction, PositiveMatchAction, NonMatchesAction};
 use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
 use App\Actions\Building\{ListBuildingsAction, UpdateBuildingAction, CreateBuildingAction};
@@ -105,8 +103,8 @@ return function (App $app) {
             $group->post('/{id}/students', AddStudentAction::class);
             $group->delete('/{id}/students/{studentId}', RemoveStudentAction::class);
             $group->post('/{id}/sex-offender/check', SexOffenderCheckAction::class);
-            $group->post('/{id}/sex-offender/match', SexOffenderMatchAction::class);
-            //$group->post('/{id}/sex-offender/nonmatch', SexOffenderMatchAction::class);
+            $group->put('/{id}/sex-offender/match', PositiveMatchAction::class);
+            $group->post('/{id}/sex-offender/nonMatches', NonMatchesAction::class);
         });
 
         $group->group('/visitors', function (Group $group) {

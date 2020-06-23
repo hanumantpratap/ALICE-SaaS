@@ -22,6 +22,10 @@ class SexOffender {
     /** @Column(type="json",options={"jsonb"=true}) */
     public ?array $data;
 
+    public function getId() {
+        return $this->id;
+    }
+
     public function setId(string $id) {
         $this->id = $id;
     }

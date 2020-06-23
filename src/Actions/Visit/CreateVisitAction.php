@@ -70,7 +70,7 @@ class CreateVisitAction extends Action
 
             if (isset($formData->birthDate)) {
                 $date = \DateTime::createFromFormat("m-d-Y", $formData->birthDate);
-                $person->getDemographics()->setBirthDate(new DateTime());
+                $person->getDemographics()->setBirthDate($date);
             }
 
             if (isset($formData->identificationId)) {
