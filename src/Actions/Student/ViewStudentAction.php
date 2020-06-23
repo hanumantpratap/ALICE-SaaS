@@ -16,7 +16,7 @@ class ViewStudentAction extends StudentAction
     {
         $studentId = (int) $this->resolveArg('id');
         $student = $this->studentRepository->findStudentOfId($studentId);
-        $student->getParentAssociations();
+        $student->getParentAssociations();  // called so that the associations will be fetched and returned in json request
 
         $this->logger->info("Student of id `${studentId}` was viewed.");
 
