@@ -6,6 +6,7 @@ use App\Actions\Person\SearchPersonsAction;
 use App\Actions\Person\ViewPersonAction;
 use App\Actions\Student\ListStudentsAction;
 use App\Actions\Student\SearchStudentsAction;
+use App\Actions\Student\ViewStudentAction;
 use App\Actions\Student\UpdateStudentAction;
 use App\Actions\Person\ViewVisitorSettingsAction;
 use App\Actions\Person\SetVisitorSettingsAction;
@@ -126,6 +127,7 @@ return function (App $app) {
 
         $group->group('/students', function (Group $group) {
             $group->get('', ListStudentsAction::class);
+            $group->get('/{id}', ViewStudentAction::class);
             $group->get('/search/query', SearchStudentsAction::class);
             $group->put('/{id}', UpdateStudentAction::class);
         });
