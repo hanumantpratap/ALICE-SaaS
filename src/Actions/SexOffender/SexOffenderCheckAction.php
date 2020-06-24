@@ -3,14 +3,7 @@ declare(strict_types=1);
 
 namespace App\Actions\SexOffender;
 
-use Throwable;
-use DateTime;
 use Psr\Http\Message\ResponseInterface as Response;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Exception\ConnectionException;
-use App\Exceptions;
 
 class SexOffenderCheckAction extends SexOffenderAction
 {
@@ -18,56 +11,28 @@ class SexOffenderCheckAction extends SexOffenderAction
     {
         $personId = (int) $this->resolveArg('id');
         $person = $this->personRepository->findPersonOfId($personId);
-        $name = $person->getName();
 
-        $data = [
-            'key' => '32DEBCD7-5B3F-4A7B-B41F-9F6EFDA79296',
-            'type' => 'searchbynamedob',
-            'fname' => $name->getGivenName(),
-            'lname' => $name->getFamilyName()
-        ];
+        $alreadyMatched = false;
+        $sexOffenderMatch = $person->getSexOffenderMatch();
 
-        $demographics = $person->getDemographics();
-        $birthDate = $demographics ? $demographics->getBirthDate() : null;
+        if ($sexOffenderMatch !== null) {
+            // visitor has already been matched to a sex offender - pull updated information
+            $payload = $this->familyWatchDog->get($sexOffenderMatch->getSexOffenderId());
+            $offenders[] = $payload->offender;
+            $alreadyMatched = true;
+        }
+        else {
+            // visitor has not been matched - perform regular search
+            $name = $person->getName();
+            $demographics = $person->getDemographics();
+            $birthDate = $demographics ? $demographics->getBirthDate() : null;
+            $birthDate = $birthDate ? $birthDate->format('m/d/Y') : null;
 
-        if ($birthDate !== null) {
-            $data['dob'] = $birthDate;
+            $payload = $this->familyWatchDog->search($name->getGivenName(), $name->getFamilyName(), $birthDate);
+            $offenders = $payload->offenders;
         }
 
-        $this->logger->info('FWD sex offender search', $data);
-
-        $client = new Client(['base_uri' => 'http://services.familywatchdog.us/rest/json.asp']);
-
-        try {
-            $response = $client->request('GET', '', [
-                'query' => $data
-            ]);
-
-            $payload = json_decode($response->getBody()->getContents());
-
-            if ($payload->status != 'ok') {
-                throw new Exceptions\BadRequestException('Connection to SOR failed.');
-            }
-        }
-        catch(ClientException $e) {
-            $response = json_decode($e->getResponse()->getBody()->getContents());
-            throw new Exceptions\BadRequestException($response->summary);
-        }
-        catch(ServerException $e) {
-            $response = json_decode($e->getResponse()->getBody()->getContents());
-            throw new Exceptions\ServiceUnavailableException($response->error->userMessage);
-        }
-        catch(ConnectionException $e) {
-            $response = json_decode($e->getResponse()->getBody()->getContents());
-            throw new Exceptions\ServiceUnavailableException($response->error->userMessage);
-        }
-
-        if (count($payload->offenders) > 2) {
-            $payload->offenders = [$payload->offenders[1]];
-        }
-
-
-        /* if (count($payload->offenders)) {
+        if (count($offenders)) {
             $sql = "
                 INSERT INTO
                     visitor_management.sex_offenders
@@ -80,16 +45,26 @@ class SexOffenderCheckAction extends SexOffenderAction
                 SET data = :data;
             ";
 
-            foreach ($payload->offenders as $offender) {
+            foreach ($offenders as $offender) {
                 $stmt = $this->entityManager->getConnection()->prepare($sql);
                 $stmt->execute([
                     'offender_id' => $offender->offenderid,
                     'data' => json_encode($offender)
                 ]);
             }
-        } */
+        }
+        else {
+            return $this->respondWithData([]);
+        }
 
-        return $this->respondWithData($payload->offenders);
+        if (!$alreadyMatched) {
+            // remove from list if this offender has already been marked as a non-match
+            $offenders = $person->pruneOffendersList($offenders);
+            return $this->respondWithData(['possibleMatches' => $offenders]);
+        }
+        else {
+            return $this->respondWithData(['match' => $offenders[0]]);
+        }
     }
 
      /**

@@ -11,10 +11,10 @@ interface SexOffenderRepository
     public function findAll(): array;
 
     /**
-     * @param int $id
+     * @param string $id
      * @return SexOffender
      */
-    public function findSexOffenderOfId(int $id): SexOffender;
+    public function findSexOffenderOfId(string $id): SexOffender;
 
     /**
      * @param SexOffender $group

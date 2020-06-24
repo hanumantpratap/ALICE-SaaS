@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace App\Domain\Person;
 
-use App\Domain\Visit\Visit;
 use App\Domain\Student\Student;
 use App\Domain\Student\StudentAssociation;
+use App\Domain\SexOffender\SexOffenderMatch;
+use App\Domain\SexOffender\SexOffenderNonMatch;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Entity;
@@ -81,6 +82,12 @@ class Person {
   /** @OneToMany(targetEntity="\App\Domain\Student\StudentAssociation", mappedBy="person", cascade={"persist", "remove"}, orphanRemoval=true) */
   protected Collection $studentAssociations;
   
+  /** @OneToOne(targetEntity="\App\Domain\SexOffender\SexOffenderMatch", mappedBy="person", cascade={"persist", "remove"}) */
+  public ?SexOffenderMatch $sexOffenderMatch;
+  
+  /** @OneToMany(targetEntity="\App\Domain\SexOffender\SexOffenderNonMatch", mappedBy="person", cascade={"persist", "remove"}, orphanRemoval=true) */
+  protected Collection $sexOffenderNonMatches;
+
   public function getVisits() {
     return $this->visits->toArray();
   }
@@ -246,6 +253,42 @@ class Person {
     })->first() ?: null;
   }
 
+  public function getSexOffenderMatch() {
+    return $this->sexOffenderMatch;
+  }
+
+  public function setSexOffenderMatch(SexOffenderMatch $sexOffenderMatch) {
+    $sexOffenderMatch->setPerson($this);
+    $this->sexOffenderMatch = $sexOffenderMatch;
+  }
+
+  public function getSexOffenderNonMatches() {
+    return $this->sexOffenderNonMatches;
+  }
+
+  public function addSexOffenderNonMatch(SexOffenderNonMatch $sexOffenderNonMatch) {
+    $sexOffenderNonMatch->setPerson($this);
+    $this->sexOffenderNonMatches->add($sexOffenderNonMatch);
+  }
+
+  public function pruneOffendersList(array $offenders) {
+    $nonMatchesIx = [];
+    $nonMatches = $this->getSexOffenderNonMatches()->toArray();
+
+    foreach ($nonMatches as $nonMatch) {
+      $nonMatchesIx[$nonMatch->getSexOffenderId()] = 1;
+    }
+
+    $return = [];
+    foreach ($offenders as $offender) {
+      if (!isset($nonMatchesIx[$offender->offenderid])) {
+        $return[] = $offender; 
+      }
+    }
+
+    return $return;
+  }
+
   public function __construct() {
     $this->name = new PersonName();
     $this->name->setPerson($this);
@@ -260,6 +303,7 @@ class Person {
     $this->visits = new ArrayCollection();
     $this->notes = new ArrayCollection();
     $this->studentAssociations = new ArrayCollection();
+    $this->sexOffenderNonMatches = new ArrayCollection();
     $this->address = null;
   }
 }
