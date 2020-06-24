@@ -10,11 +10,11 @@ use Psr\Log\LoggerInterface;
 use App\Domain\Visit\Visit;
 use App\Domain\Visit\VisitRepository;
 use App\Domain\Person\Person;
-use App\Domain\Person\PersonName;
 use App\Domain\Person\PersonEmail;
 use App\Domain\Person\Identification;
 use App\Domain\Person\PersonAddress;
 use App\Domain\Person\PersonRepository;
+use App\Domain\Person\BlacklistItem;
 use App\Domain\Student\StudentRepository;
 use App\Domain\Building\BuildingRepository;
 use App\Exceptions;
@@ -57,6 +57,20 @@ class CreateVisitAction extends Action
 
         // test scenarios
         if (isset($formData->testScenario)) {
+            if ($formData->testScenario == 'cleanVisitor') {
+                try {
+                    $person = $this->personRepository->findPersonByType("demoCleanVisitor");
+                }
+                catch (\Exception $e) {
+                    $formData->firstName = "Charles";
+                    $formData->lastName = "Morgan";
+                    $formData->email = "cmorgan@email.com";
+                    $formData->birthDate = "12-13-1985";
+                    $formData->address = "123 West Main Street Boston, MA 12345";
+                    $formData->type = "demoCleanVisitor"; 
+                }
+            }
+            
             if ($formData->testScenario == 'sexOffender') {
                 try {
                     $person = $this->personRepository->findPersonByType("demoSexOffender");
@@ -66,8 +80,38 @@ class CreateVisitAction extends Action
                     $formData->lastName = "Tucker";
                     $formData->email = "lmtucker@email.com";
                     $formData->birthDate = "07-07-1969";
-                    $formData->address = "123 Sesame Street Philadelphia, PA 12987";
+                    $formData->address = "123 North Main Street Chicago, IL 12345";
                     $formData->type = "demoSexOffender"; 
+                }
+            }
+
+            if ($formData->testScenario == 'blacklist') {
+                try {
+                    $person = $this->personRepository->findPersonByType("demoBlackList");
+                }
+                catch (\Exception $e) {
+                    $formData->firstName = "Allison";
+                    $formData->lastName = "Hayes";
+                    $formData->email = "ahayes@email.com";
+                    $formData->birthDate = "03-10-1982";
+                    $formData->address = "123 East Main Street Cleveland, OH 12345";
+                    $formData->type = "demoBlackList";
+                    $formData->blacklist = true;
+                }
+            }
+
+            if ($formData->testScenario == 'sexOffenderBlacklist') {
+                try {
+                    $person = $this->personRepository->findPersonByType("demoSexOffenderBlacklist");
+                }
+                catch (\Exception $e) {
+                    $formData->firstName = "Thomas";
+                    $formData->lastName = "Brown";
+                    $formData->email = "tbornw@email.com";
+                    $formData->birthDate = "03-26-1968";
+                    $formData->address = "123 Main Street Miami, FL 12345";
+                    $formData->type = "demoSexOffenderBlacklist";
+                    $formData->blacklist = true;
                 }
             }
         }
@@ -125,6 +169,20 @@ class CreateVisitAction extends Action
                 $email->setPerson($person);
                 $email->setSource($person->getPersonId());
                 $person->setEmail($email);
+                $this->personRepository->save($person);
+            }
+
+            // Add blacklist for test scenarios
+            if (isset($formData->blacklist)) {
+                $blItem = new BlacklistItem();
+                $blItem->personId = $person->getPersonId();
+                $blItem->notes = 'Notes';
+                $blItem->userId = (int) $this->token->id;
+                $blItem->buildingId = (int) $this->token->building;
+                $blItem->reason = "Reason";
+                $blItem->setPerson($person);
+                $person->addBlacklistItem($blItem);
+
                 $this->personRepository->save($person);
             }
         }
@@ -218,6 +276,11 @@ class CreateVisitAction extends Action
  *                 ),
  *                  @OA\Property(
  *                     property="notes",
+ *                     type="string"
+ *                 ),
+ *                  @OA\Property(
+ *                     property="testScenario",
+ *                     description="Pass in to demo different scenarios. Possible values: ['demoCleanVisitor', 'demoSexOffender', 'demoBlackList', 'demoSexOffenderBlacklist']",
  *                     type="string"
  *                 ),
  *              )

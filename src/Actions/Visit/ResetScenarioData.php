@@ -9,10 +9,14 @@ class ResetScenarioData extends VisitAction
 {
     protected function action(): Response
     {
-        try {
-            $person = $this->personRepository->findPersonByType("demoSexOffender");
-            $this->personRepository->remove($person);
-        } catch (\Exception $e) {
+        $demoVisitorTypes = ["demoCleanVisitor", "demoSexOffender", "demoBlackList", "demoSexOffenderBlacklist"];
+
+        foreach ($demoVisitorTypes as $type) {
+            try {
+            $person = $this->personRepository->findPersonByType($type);
+                $this->personRepository->remove($person);
+            } catch (\Exception $e) {
+            }
         }
 
         return $this->respondWithData(['message' => 'Scenario Data Reset'], 200);

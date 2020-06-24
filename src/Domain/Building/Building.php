@@ -59,6 +59,10 @@ class Building {
   /** @OneToMany(targetEntity="SubBuilding", mappedBy="parent", cascade={"persist", "remove"}, orphanRemoval=true) */
   protected Collection $subBuildings;
 
+  public function getId() {
+    return $this->id;
+  }
+  
   public function getName() {
     return $this->name;
   }
