@@ -33,16 +33,27 @@ class VisitReason {
   /** @Column(name="type") */
   public ?string $type;
 
+    /** @Column(name="inactive", type="boolean") */
+    public ?bool $inactive;
+
   public function getId() {
     return $this->id;
   }
 
   public function getType() {
-    return $this->getType;
+    return $this->type;
   }
 
   public function setType(String $type) {
     $this->type = $type;
   }
-  
+
+  public function getInactive() {
+    return $this->inactive;
+  }
+
+  public function setInactive(bool $inactive) {
+    $this->inactive = $inactive;
+  }
+
 }
