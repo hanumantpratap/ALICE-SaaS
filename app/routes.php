@@ -21,6 +21,7 @@ use App\Actions\Visit\CreateVisitReasonAction;
 use App\Actions\Visit\UpdateVisitReasonAction;
 use App\Actions\Visit\ListVisitorTypesAction;
 use App\Actions\Visit\ListVisitReasonsAction;
+use App\Actions\Visit\ResetScenarioData;
 use App\Actions\User\{SignInAction, ForgotPasswordAction, ResetPasswordAction, ListUsersAction, ViewUserAction, AddNotificationGroupAction, CreateNewUserAction, UpdateUserAction, UpdateUserNotificationGroups, ToggleUserEnabled, ResendUserInviteAction};
 use App\Actions\Visit\AddVisitBadgeAction;
 use App\Actions\Visit\UpdateVisitAction;
@@ -72,6 +73,7 @@ return function (App $app) {
             $group->post('/{id}/badge', AddVisitBadgeAction::class);
             $group->put('/{id}/checkout', CheckOutAction::class);
             $group->put('/{id}/approvevisit', ApproveVisitAction::class);
+            $group->delete('/scenarioData', ResetScenarioData::class);
         });
         $group->group('/visitortype', function (Group $group) {
             $group->get('', ListVisitorTypesAction::class);

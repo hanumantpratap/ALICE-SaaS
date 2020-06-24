@@ -9,6 +9,7 @@ use App\Domain\Visit\VisitRepository;
 use App\Domain\User\UserRepository;
 use App\Domain\Visit\VisitorTypeRepository;
 use App\Domain\Visit\VisitReasonRepository;
+use App\Domain\Person\PersonRepository;
 
 abstract class VisitAction extends Action
 {
@@ -17,14 +18,16 @@ abstract class VisitAction extends Action
      * @param VisitRepository $visitRepository
      * @param VisitorTypeRepository $visitorTypeRepository
      * @param visitReasonRepository $visitReasonRepository
+     * @param PersonRepository $personRepository
      */
 
-    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, UserRepository $userRepository, VisitorTypeRepository $visitorTypeRepository, visitReasonRepository $visitReasonRepository)
+    public function __construct(LoggerInterface $logger, VisitRepository $visitRepository, UserRepository $userRepository, VisitorTypeRepository $visitorTypeRepository, visitReasonRepository $visitReasonRepository, PersonRepository $personRepository)
     {
         $this->visitRepository = $visitRepository;
         $this->userRepository = $userRepository;
         $this->visitorTypeRepository = $visitorTypeRepository;
         $this->visitReasonRepository = $visitReasonRepository;
+        $this->personRepository = $personRepository;
         parent::__construct($logger);
     }
 }

@@ -207,7 +207,7 @@ class Visit {
     $visitor->picture = $visitorSettings ? $visitorSettings->getPicture() : null;
 
     $visitor->blacklist = $person->getBlacklist()->filter(function ($item) {
-      return $item->getBuildingId() == $this->getBuildingId();
+      return $item->getBuildingId() == $this->building->getId();
     })->first() ?: null;
 
     $students = $person->getStudents();
@@ -248,7 +248,6 @@ class Visit {
 
   public function __construct() {
     $this->dateCreated = new DateTime();
-    $this->buildingId = 5240;
     $this->requiresApproval = false;
     $this->approved = false;
     $this->securityAlerted = false;

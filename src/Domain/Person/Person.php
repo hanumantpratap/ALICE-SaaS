@@ -55,7 +55,7 @@ class Person {
 
   /** @OneToOne(targetEntity="PersonEmail", mappedBy="person", cascade={"persist", "remove"}) */
   public ?PersonEmail $email = null;
-  
+
   /** @OneToMany(targetEntity="Flag", mappedBy="person") */
   protected Collection $flags;
 
@@ -69,7 +69,7 @@ class Person {
 
   /** @OneToOne(targetEntity="PersonAddress", mappedBy="person", cascade={"persist", "remove"}) */
   public ?PersonAddress $address;
-  
+
   /** @OneToOne(targetEntity="VisitorSettings", mappedBy="person", cascade={"persist", "remove"}) */
   protected ?VisitorSettings $visitorSettings;
 
@@ -78,13 +78,13 @@ class Person {
 
   /** @OneToMany(targetEntity="Note", mappedBy="person", cascade={"persist", "remove"}) */
   protected Collection $notes;
-  
+
   /** @OneToMany(targetEntity="\App\Domain\Student\StudentAssociation", mappedBy="person", cascade={"persist", "remove"}, orphanRemoval=true) */
   protected Collection $studentAssociations;
-  
+
   /** @OneToOne(targetEntity="\App\Domain\SexOffender\SexOffenderMatch", mappedBy="person", cascade={"persist", "remove"}) */
   public ?SexOffenderMatch $sexOffenderMatch;
-  
+
   /** @OneToMany(targetEntity="\App\Domain\SexOffender\SexOffenderNonMatch", mappedBy="person", cascade={"persist", "remove"}, orphanRemoval=true) */
   protected Collection $sexOffenderNonMatches;
 
@@ -106,6 +106,14 @@ class Person {
 
   public function getDisplayName() {
     return $this->displayName;
+  }
+
+  public function getType() {
+    return $this->type;
+  }
+
+  public function setType(string $type) {
+    $this->type = $type;
   }
 
   public function getName() {
