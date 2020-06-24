@@ -29,6 +29,15 @@ final class SqlStudentRepository implements StudentRepository
         return $this->repository->findAll();
     }
 
+    public function findActive(): array {
+      $query = $this->entityManager->createQueryBuilder("s")
+                    ->from(Student::class, "s")
+                    ->select('s')
+                    ->where('s.inactive = false');
+
+      return $query->getQuery()->getResult() ?? [];
+    }
+    
     public function findStudentOfId(int $id): Student {
       /** @var Student $student */
       $student = $this->repository->findOneBy(['id' => $id]);
@@ -39,10 +48,6 @@ final class SqlStudentRepository implements StudentRepository
 
       throw new Exceptions\NotFoundException('The Student you requested does not exist.');
     }
-
-
-
-
 
     // Find students based on field searches in the students table.
     // All search criteria in array, $params, will be concatenated by ANDs.
@@ -61,7 +66,7 @@ final class SqlStudentRepository implements StudentRepository
                   $qb->addCriteria( $criteria );
                   break;
                // an exact match in a Student field
-               case "gender": case "dob": case "grade": case "inactive":
+               case "gender": case "dob": case "grade":
                   $criteria = Criteria::create()->where(Criteria::expr()->eq( $key, $value ));
                   $qb->addCriteria( $criteria );
                   break;
@@ -69,6 +74,9 @@ final class SqlStudentRepository implements StudentRepository
                   throw new InvalidArgumentException( 'Query parameter, '.$key.', is not recognized.');
           }
       }
+
+      $criteria = Criteria::create()->where(Criteria::expr()->eq("inactive", "false" ));
+      $qb->addCriteria( $criteria );
 
       // return the array of records, or an empty array if no matches found
       return $qb->getQuery()->getResult() ?? [];
