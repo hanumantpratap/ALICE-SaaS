@@ -55,6 +55,23 @@ class CreateVisitAction extends Action
             }
         }
 
+        // test scenarios
+        if (isset($formData->testScenario)) {
+            if ($formData->testScenario == 'sexOffender') {
+                try {
+                    $person = $this->personRepository->findPersonByType("demoSexOffender");
+                }
+                catch (\Exception $e) {
+                    $formData->firstName = "Mike";
+                    $formData->lastName = "Tucker";
+                    $formData->email = "lmtucker@email.com";
+                    $formData->birthDate = "07-07-1969";
+                    $formData->address = "123 Sesame Street Philadelphia, PA 12987";
+                    $formData->type = "demoSexOffender"; 
+                }
+            }
+        }
+
         // create new person
         if (is_null($person)) {
             if (!isset($formData->firstName) || !isset($formData->lastName)) {
@@ -63,6 +80,7 @@ class CreateVisitAction extends Action
 
             $person = new Person();
             $person->setStatus(1);
+            $person->setType($formData->type ?? "visitor");
             $name = $person->getName();
             $name->setGivenName($formData->firstName);
             $name->setFamilyName($formData->lastName);

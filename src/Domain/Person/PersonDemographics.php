@@ -27,7 +27,7 @@ class PersonDemographics {
      * @Column(name="pd_id")
      * @SequenceGenerator(sequenceName="pd_id_seq")
      */
-    public int $pdId;
+    public ?int $pdId;
 
     /** @Column(name="gender") */
     public ?int $gender;

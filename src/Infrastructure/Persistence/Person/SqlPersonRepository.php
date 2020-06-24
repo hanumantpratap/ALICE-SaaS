@@ -181,6 +181,19 @@ final class SqlPersonRepository implements PersonRepository
                         ->getResult();
     }
 
+     /**
+     * @inheritdoc
+     */
+    public function findPersonByType(string $type): Person {
+      $person = $this->repository->findOneBy(['type' => $type]);
+
+      if (!is_null($person)) {
+        return $person;
+      }
+
+      throw new PersonNotFoundException();
+    }
+
     /**
      * @inheritdoc
      */
@@ -196,6 +209,25 @@ final class SqlPersonRepository implements PersonRepository
             $this->entityManager->flush();
         } catch(OptimisticLockException | ORMException $ex) {
             $this->logger->error("Error saving Person", ['exception' => $ex]);
+            throw $ex;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function remove(Person $person): void {
+        try {
+            $this->entityManager->remove($person);
+        } catch(ORMInvalidArgumentException | ORMException $ex) {
+            $this->logger->error("Error removing Person", ['exception' => $ex]);
+            throw $ex;
+        }
+
+        try {
+            $this->entityManager->flush();
+        } catch(OptimisticLockException | ORMException $ex) {
+            $this->logger->error("Error removing Person", ['exception' => $ex]);
             throw $ex;
         }
     }
