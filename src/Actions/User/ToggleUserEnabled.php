@@ -34,3 +34,13 @@ class ToggleUserEnabled extends UserAction
         return $this->respondWithData($user);
     }
 }
+ /**
+     * @OA\PUT(
+     *     path="/users/{userId}/enabled",
+     *     tags={"users"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="enable user"
+     *     )
+     * )
+     */

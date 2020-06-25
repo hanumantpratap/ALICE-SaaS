@@ -67,3 +67,13 @@ class UpdateUserAction extends UserAction
         return $this->respondWithData(null, 200);
     }
 }
+/**
+ * @OA\Put(
+ *     path="/users/{userId}",
+ *     tags={"users"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Update User",
+ *     )
+ * )
+ */

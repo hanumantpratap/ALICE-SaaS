@@ -32,3 +32,46 @@ class ApproveVisitAction extends VisitAction
         return $this->respondWithData();
     }
 }
+
+/**
+ * @OA\Put(
+ *     path="/visits/{visitId}/approveVisit",
+ *     tags={"visits"},
+ *      @OA\Parameter(
+ *         name="visitId",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Approve Visit",
+ *     ),
+ *     @OA\RequestBody(
+ *         description="Approve Visit",
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                  @OA\Property(
+ *                     property="reason",
+ *                     description="Visit reason",
+ *                     type="string"
+ *                 ),
+ *                  @OA\Property(
+ *                     property="visitorType",
+ *                     description="Type of visitor",
+ *                     type="string"
+ *                 ),
+ *                  @OA\Property(
+ *                     property="notes",
+ *                     description="Visit notes.",
+ *                     type="string"
+ *                 ),
+ *              )
+ *         ),
+ *     )
+ * )
+ */

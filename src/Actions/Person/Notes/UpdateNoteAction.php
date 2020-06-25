@@ -37,3 +37,13 @@ class UpdateNoteAction extends PersonAction
     return $this->respondWithData(null, 201);
   }
 }
+/**
+ * @OA\Put(
+ *     path="/persons/{personId}/notes/{noteId}",
+ *     tags={"persons"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Update Notes",
+ *     )
+ * )
+ */

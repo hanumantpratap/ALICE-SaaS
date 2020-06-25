@@ -36,3 +36,36 @@ class CreateNoteAction extends PersonAction
     return $this->respondWithData(null, 200);
   }
 }
+
+/**
+ * @OA\POST(
+ *     path="/persons/{personId}/notes",
+ *     tags={"persons"},
+ *      @OA\Parameter(
+ *         name="personId",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Create Notes",
+ *     ),
+ *     @OA\RequestBody(
+ *         description="Create Notes",
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                  @OA\Property(
+ *                     property="persontId",
+ *                     description="person ID (required)",
+ *                     type="integer"
+ *                 ),
+ *              )
+ *         ),
+ *     )
+ * )
+ */

@@ -52,3 +52,25 @@ class CreateBuildingAction extends BuildingAction
         return $this->respondWithData(null, 201);
     }
 }
+
+/**
+ * @OA\Post(
+ *     path="/buildings",
+ *     tags={"buildings"},
+ *     @OA\Parameter(
+ *         name="Buildings",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="create building",
+ *         @OA\MediaType(
+ *             mediaType="application/json"
+ *         )
+ *     )
+ * )
+ */

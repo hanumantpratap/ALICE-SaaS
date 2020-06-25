@@ -44,3 +44,14 @@ class UpdateBlacklistAction extends PersonAction
     return $this->respondWithData($blItem);
   }
 }
+
+/**
+ * @OA\Put(
+ *     path="/persons/{personId}/blacklist/{blacklistId}",
+ *     tags={"persons"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Update BlackList",
+ *     )
+ * )
+ */

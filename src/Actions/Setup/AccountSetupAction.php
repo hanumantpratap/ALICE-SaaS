@@ -53,4 +53,23 @@ class AccountSetupAction extends SetupAction
 
         return $this->respondWithData(['token' => $newToken, 'tokenDecoded' => $authToken]);
     }
+
+     /**
+     * @OA\Post(
+     *     path="/account/setup",
+     *     tags={"account"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Account setup",
+     *         @OA\MediaType(
+     *             mediaType="application/json"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json"
+     *         )
+     *     )
+     * )
+     */
 }
