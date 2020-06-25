@@ -37,9 +37,9 @@ final class SqlSexOffenderRepository implements SexOffenderRepository
     /**
      * @inheritdoc
      */
-    public function findSexOffenderOfId(int $id): SexOffender {
+    public function findSexOffenderOfId(string $id): SexOffender {
       /** @var SexOffender $sexOffender */
-      $sexOffender = $this->repository->findOneBy(['offender_id' => $id]);
+      $sexOffender = $this->repository->findOneBy(['id' => $id]);
 
       if (!is_null($sexOffender)) {
           return $sexOffender;

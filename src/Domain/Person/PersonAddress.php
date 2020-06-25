@@ -24,7 +24,7 @@ class PersonAddress {
      * @Column(name="address_id")
      * @SequenceGenerator(sequenceName="paddress_id_seq")
      */
-    public int $addressId;
+    public ?int $addressId;
 
     /** @Column(name="person_id") */
     public int $personId;

@@ -18,7 +18,6 @@ class ViewPersonAction extends PersonAction
         $person = $this->personRepository->findPersonOfId($userId);
 
         $this->logger->info("Person of id `${userId}` was viewed.");
-
         return $this->respondWithData($person);
     }
      /**

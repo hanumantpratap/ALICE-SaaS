@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Entity
@@ -51,10 +52,31 @@ class Student {
   /** @Column(name="inactive", type="boolean") */
   public ?bool $inactive;
 
-  /** @OneToMany(targetEntity="StudentAssociation", mappedBy="student", cascade={"persist", "remove"}) */
-  protected Collection $studentAssociations;
+
+  // populated only when retrieving an individual student through ViewStudentAction.php
+ 
+  /** @OneToMany(targetEntity="\App\Domain\Person\ParentAssociation", mappedBy="student", cascade={"persist", "remove"}, orphanRemoval=true) */
+  private Collection $parentAssociations;
+
+  public ?array $parentAssociationArray = null;
+
   
   public function getId() {
     return $this->id;
+  }
+
+
+
+  public function getParentAssociations() {
+    if( $this->parentAssociationArray === null ) {
+      $this->parentAssociationArray = array();
+
+      foreach($this->parentAssociations as $parentAssociation) {
+        $parentAssociation->getPerson();
+        $this->parentAssociationArray[] = $parentAssociation;
+      }
+    }
+
+    return $this->parentAssociationArray;
   }
 }
