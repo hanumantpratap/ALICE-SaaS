@@ -30,3 +30,30 @@ class CreateVisitorTypeAction extends VisitorTypeAction
     return $this->respondWithData(['message' => 'Visitor Type created', 'id' => $visitorType->id], 201);
   }
 }
+/**
+ * @OA\Post(
+ *     path="/visitortype",
+ *     tags={"visitor-type"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="New Visitor Type",
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             example={"statusCode": 200, 
+ *                      "data": {
+ *                          
+ *                       }}
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         description="Create new Visitor Type",
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                  
+ *              )
+ *         ),
+ *     )
+ * )
+ */

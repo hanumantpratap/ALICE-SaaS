@@ -15,4 +15,34 @@ class ListVisitorTypesAction extends VisitorTypeAction
         
         return $this->respondWithData($visitorTypes);
     }
+
+
+    /**
+     * @OA\Get(
+     *     path="/visitortype",
+     *     tags={"visitor-type"},
+     *     @OA\Parameter(
+     *         name="visitor_name",
+     *         in="query",
+     *         description="Filter by visitor",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *      @OA\Response(
+     *         response=200,
+     *         description="View Visitor Type",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             example={"statusCode": 200,
+     *                      "data": {
+     *                          
+     *                          
+     *                      }
+     *                  }
+     *         )
+     *     )
+     * )
+     */
 }

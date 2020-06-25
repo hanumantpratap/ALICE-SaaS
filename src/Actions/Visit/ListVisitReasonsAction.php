@@ -15,4 +15,32 @@ class ListVisitReasonsAction extends VisitReasonAction
         
         return $this->respondWithData($visitReasons);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/visitreason",
+     *     tags={"visit-reason"},
+     *     @OA\Parameter(
+     *         name="visitor_name",
+     *         in="query",
+     *         description="Filter by visitor",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *      @OA\Response(
+     *         response=200,
+     *         description="View Visit Reason",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             example={"statusCode": 200,
+     *                      "data": {
+     *                          
+     *                      }
+     *                  }
+     *         )
+     *     )
+     * )
+     */
 }

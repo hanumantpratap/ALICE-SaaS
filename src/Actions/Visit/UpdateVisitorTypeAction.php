@@ -31,3 +31,31 @@ class UpdateVisitorTypeAction extends VisitorTypeAction
         return $this->respondWithData();
     }
 }
+/**
+ * @OA\Put(
+ *     path="/visitortype/{visitortypeId}",
+ *     tags={"visitor-type"},
+ *      @OA\Parameter(
+ *         name="visitortypeId",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Update Visitor Type",
+ *     ),
+ *     @OA\RequestBody(
+ *         description="Update Visitor Type",
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                  
+ *              )
+ *         ),
+ *     )
+ * )
+ */
