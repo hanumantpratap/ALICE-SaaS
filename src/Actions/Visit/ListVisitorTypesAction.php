@@ -15,8 +15,7 @@ class ListVisitorTypesAction extends VisitorTypeAction
         
         return $this->respondWithData($visitorTypes);
     }
-
-
+  
     /**
      * @OA\Get(
      *     path="/visitortype",

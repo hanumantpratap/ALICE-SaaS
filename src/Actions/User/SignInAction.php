@@ -51,6 +51,25 @@ class SignInAction extends Action
 
         return $this->respondWithData(['token' => $new_token, 'tokenDecoded' => $token]);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/sign-in",
+     *     tags={"Sign-in"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Sign In",
+     *         @OA\MediaType(
+     *             mediaType="application/json"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json"
+     *         )
+     *     )
+     * )
+     */
 }
 /**
      * @OA\Post(

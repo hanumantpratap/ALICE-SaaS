@@ -46,3 +46,13 @@ class ResendUserInviteAction extends UserAction
         return $this->respondWithData(['message' => 'Invite sent', 'messageId' => $messageId], 201);
     }
 }
+/**
+     * @OA\POST(
+     *     path="/users/{userId}/resend-invite",
+     *     tags={"users"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="Resend invite"
+     *     )
+     * )
+     */

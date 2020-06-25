@@ -79,3 +79,14 @@ class CreateNewUserAction extends UserAction
     }
 }
 
+
+/**
+     * @OA\POST(
+     *     path="/users",
+     *     tags={"users"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="create new user"
+     *     )
+     * )
+     */

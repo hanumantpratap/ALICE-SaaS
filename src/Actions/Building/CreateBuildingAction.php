@@ -52,6 +52,7 @@ class CreateBuildingAction extends BuildingAction
         return $this->respondWithData(null, 201);
     }
 }
+
 /**
  * @OA\Post(
  *     path="/buildings",
