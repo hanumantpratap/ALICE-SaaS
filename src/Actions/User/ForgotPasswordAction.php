@@ -31,3 +31,21 @@ class ForgotPasswordAction extends Action
         return $this->respondWithData(null, 201);        
     }
 }
+ /**
+     * @OA\Post(
+     *     path="/forgot-password",
+     *     tags={"forgot-password"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="forgot-password",
+     *         @OA\MediaType(
+     *             mediaType="application/json"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json"
+     *         )
+     *     )
+     * )
+     */

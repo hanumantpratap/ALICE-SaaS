@@ -50,3 +50,22 @@ class SendNotificationAction extends NotificationGroupAction
     }
 }
 
+/**
+ * @OA\POST(
+ *     path="/notificationGroups/{notificationId}/notifications",
+ *     tags={"notificationGroups"},
+ *      @OA\Parameter(
+ *         name="notificationId",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Notification send",
+ *     ),
+ *     @OA\RequestBody( )
+ * )
+ */

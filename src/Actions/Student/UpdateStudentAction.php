@@ -55,3 +55,13 @@ class UpdateStudentAction extends StudentAction
         return $this->respondWithData();
     }
 }
+/**
+ * @OA\Put(
+ *     path="/students/{studentId}",
+ *     tags={"students"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="student data updated",
+ *     )
+ * )
+ */
