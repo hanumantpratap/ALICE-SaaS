@@ -38,3 +38,13 @@ class SetVisitorSettingsAction extends PersonAction
         return $this->respondWithData($settings);
     }
 }
+/**
+ * @OA\Put(
+ *     path="/persons/{personId}/visitorSettings",
+ *     tags={"persons"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Update VisitorSettings",
+ *     )
+ * )
+ */

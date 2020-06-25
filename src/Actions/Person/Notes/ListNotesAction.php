@@ -19,3 +19,13 @@ class ListNotesAction extends PersonAction
     return $this->respondWithData($notes);
   }
 }
+/**
+     * @OA\Get(
+     *     path="/persons/{personId}/notes",
+     *     tags={"persons"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="Notes List",
+     *  )
+     * )
+     */

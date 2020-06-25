@@ -20,3 +20,13 @@ class GetNoteAction extends PersonAction
     return $this->respondWithData($note);
   }
 }
+/**
+     * @OA\Get(
+     *     path="/persons/{personId}/notes/{noteId}",
+     *     tags={"persons"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="View Note",
+     *     )
+     * )
+     */

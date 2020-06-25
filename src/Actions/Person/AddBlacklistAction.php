@@ -33,3 +33,35 @@ class AddBlacklistAction extends PersonAction
     return $this->response->withStatus(201);
   }
 }
+ /**
+ * @OA\POST(
+ *     path="/persons/{personId}/blacklist",
+ *     tags={"persons"},
+ *      @OA\Parameter(
+ *         name="personId",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="Blacklisted.",
+ *     ),
+ *     @OA\RequestBody(
+ *         description="Add into BlackList",
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                  @OA\Property(
+ *                     property="persontId",
+ *                     description="person ID (required)",
+ *                     type="integer"
+ *                 ),
+ *              )
+ *         ),
+ *     )
+ * )
+ */
