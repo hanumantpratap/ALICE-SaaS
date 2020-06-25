@@ -51,3 +51,21 @@ class ResetPasswordAction extends Action
      * )
      */
 }
+ /**
+     * @OA\Post(
+     *     path="/reset-password",
+     *     tags={"reset-password"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Reset Password",
+     *         @OA\MediaType(
+     *             mediaType="application/json"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json"
+     *         )
+     *     )
+     * )
+     */

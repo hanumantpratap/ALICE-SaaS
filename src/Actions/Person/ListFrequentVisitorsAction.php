@@ -25,6 +25,7 @@ class ListFrequentVisitorsAction extends PersonAction
 
         return $this->respondWithData($persons);
     }
+
     /**
      * @OA\Get(
      *     path="/persons/frequent",

@@ -56,15 +56,7 @@ class CreateBuildingAction extends BuildingAction
 /**
  * @OA\Post(
  *     path="/buildings",
- *     tags={"buildings"},
- *     @OA\Parameter(
- *         name="Buildings",
- *         in="path",
- *         required=true,
- *         @OA\Schema(
- *             type="integer"
- *         )
- *     ),
+ *     tags={"buildings"},   
  *     @OA\Response(
  *         response=201,
  *         description="create building",

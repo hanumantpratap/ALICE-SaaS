@@ -43,10 +43,10 @@ class DeleteBlacklistAction extends PersonAction
     return $this->response->withStatus(204);
   }
 
-   /**
+  /**
  * @OA\Delete(
  *     path="/blacklist/{blacklistId}",
- *     tags={"delete-blacklist"},
+ *     tags={"blacklist"},
  *      @OA\Parameter(
  *         name="blacklistid",
  *         in="path",
@@ -61,5 +61,4 @@ class DeleteBlacklistAction extends PersonAction
  *     )
  * )
  */
-
 }

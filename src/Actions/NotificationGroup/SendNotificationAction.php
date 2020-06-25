@@ -66,19 +66,6 @@ class SendNotificationAction extends NotificationGroupAction
  *         response=201,
  *         description="Notification send",
  *     ),
- *     @OA\RequestBody(
- *         description="Notification send",
- *         required=true,
- *         @OA\MediaType(
- *             mediaType="application/json",
- *             @OA\Schema(
- *                  @OA\Property(
- *                     property="Notification Id",
- *                     description="Notification ID (required)",
- *                     type="integer"
- *                 ),
- *              )
- *         ),
- *     )
+ *     @OA\RequestBody( )
  * )
  */

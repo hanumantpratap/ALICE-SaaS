@@ -30,3 +30,30 @@ class CreateVisitReasonAction extends VisitReasonAction
     return $this->respondWithData(['message' => 'Visit Reason created', 'id' => $visitReason->id], 201);
   }
 }
+/**
+ * @OA\Post(
+ *     path="/visitreason",
+ *     tags={"visit-reason"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="New Visit Reason",
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             example={"statusCode": 200, 
+ *                      "data": {
+ *                          
+ *                       }}
+ *         )
+ *     ),
+ *     @OA\RequestBody(
+ *         description="Create new Visit Reason",
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                  
+ *              )
+ *         ),
+ *     )
+ * )
+ */

@@ -38,8 +38,6 @@ class SetVisitorSettingsAction extends PersonAction
         return $this->respondWithData($settings);
     }
 }
-
-
 /**
  * @OA\Put(
  *     path="/persons/{personId}/visitorSettings",

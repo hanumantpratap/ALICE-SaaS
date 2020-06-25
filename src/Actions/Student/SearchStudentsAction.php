@@ -20,7 +20,7 @@ class SearchStudentsAction extends StudentAction
         return $this->respondWithData($students);
     }
 
-    /**
+     /**
      * @OA\Get(
      *     path="/students/search/query",
      *     tags={"students"},

@@ -61,7 +61,7 @@ class UpdateStudentAction extends StudentAction
  *     tags={"students"},
  *     @OA\Response(
  *         response=200,
- *         description="student updated",
+ *         description="student data updated",
  *     )
  * )
  */

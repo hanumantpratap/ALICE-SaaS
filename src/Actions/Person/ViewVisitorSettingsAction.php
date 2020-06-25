@@ -62,3 +62,38 @@ class ViewVisitorSettingsAction extends PersonAction
      * )
      */
 }
+ /**
+     * @OA\Get(
+     *     path="/persons/{personId}/visitorSettings",
+     *     tags={"persons"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="View Visitor Settings",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             example={"statusCode": 200,
+     *                      "data": {
+     *                          {
+     *                              "personId": 3461,
+     *                              "status": 1,
+     *                              "displayName": "McKellen, Sean",
+     *                              "externalId": null,
+     *                              "type": null,
+     *                              "name": {
+     *                                  "id": 3396,
+     *                                  "personId": 3461,
+     *                                  "nameType": 2,
+     *                                  "givenName": "Sean",
+     *                                  "middleName": null,
+     *                                  "familyName": "McKellen",
+     *                                  "nickName": null,
+     *                                  "suffix": null,
+     *                                  "title": null
+     *                              },
+     *                          },
+     *                      }
+     *                  }
+     *         )
+     *     )
+     * )
+     */

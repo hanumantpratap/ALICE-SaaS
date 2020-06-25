@@ -54,3 +54,13 @@ class ListNotesAction extends PersonAction
      * )
      */
 }
+/**
+     * @OA\Get(
+     *     path="/persons/{personId}/notes",
+     *     tags={"persons"},
+     *      @OA\Response(
+     *         response=200,
+     *         description="Notes List",
+     *  )
+     * )
+     */

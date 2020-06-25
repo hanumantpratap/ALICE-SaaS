@@ -47,6 +47,7 @@ class UpdateBuildingAction extends BuildingAction
 
         return $this->respondWithData(null, 200);
     }
+}
 /**
  * @OA\Put(
  *     path="/buildings/{buildingsId}",
