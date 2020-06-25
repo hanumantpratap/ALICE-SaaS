@@ -31,6 +31,7 @@ class SelectBuildingAction extends Action
         
         $token = $this->token;
         $token->building = $buildingId;
+        unset($token->encoded);
         $new_token = $this->tokenProcessor->create($token, 60*10, true);
 
         return $this->respondWithData(['token' => $new_token, 'tokenDecoded' => $token]);
