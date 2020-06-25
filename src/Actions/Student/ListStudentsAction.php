@@ -11,7 +11,7 @@ class ListStudentsAction extends StudentAction
     {
         $params = $this->request->getQueryParams();
 
-        $students = $this->studentRepository->findAll();
+        $students = $this->studentRepository->findActive();
 
         $this->logger->info("Students list was viewed.");
 

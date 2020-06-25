@@ -11,6 +11,11 @@ interface StudentRepository
     public function findAll(): array;
 
     /**
+     * @return Student[]
+     */
+    public function findActive(): array;
+
+    /**
      * @param int $id
      * @return Student
      */
