@@ -11,6 +11,20 @@ class RedisListAction extends RedisAction
     {
         $params = $this->request->getQueryParams();
         $keys = $this->redis->keys($params['pattern'] ?? "*");
+
+        if ($params['detailed'] == 't') {
+            $detailedKeys = [];
+            foreach ($keys as $key) {
+                $detailedKeys[] = [
+                    'key' => $key,
+                    'value' => $this->redis->get($key),
+                    'expiration' =>  (string) $this->redis->getExpire($key) . ' seconds'
+                ];
+            }
+
+            $keys = $detailedKeys;
+        }
+
         return $this->respondWithData(['keys' => $keys]);
     }
 }

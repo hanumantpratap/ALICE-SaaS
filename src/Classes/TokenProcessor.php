@@ -28,8 +28,9 @@ class TokenProcessor {
         "type" => null
     ];
 
-    function __construct(RedisConnector $redis) {
+    function __construct(RedisConnector $redis, $environment) {
         $this->redis = $redis;
+        $this->environment = $environment;
         $this->secret = "hereisanexamplesecret_v2";
     }
 
@@ -57,7 +58,9 @@ class TokenProcessor {
     }
 
     public function validate($token) {
-        return true;
+        if ($this->environment == 'dev') {
+            return true;
+        }
         
         // check if token has expired in redis
         if ($this->redis->exists($token->encoded)) {
