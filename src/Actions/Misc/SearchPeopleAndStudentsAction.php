@@ -75,6 +75,8 @@ class SearchPeopleAndStudentsAction extends Action
                  OR (Name.family_name ILIKE '$name')";
         }
 
+        $sql .= "ORDER BY \"firstName\" ASC;";
+
         $query = $this->entityManager->getConnection()->query($sql);
         $results = $query->fetchAll();
 
