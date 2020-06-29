@@ -37,7 +37,7 @@ use App\Actions\Person\Notes\UpdateNoteAction;
 use App\Actions\SexOffender\{SexOffenderCheckAction, PositiveMatchAction, NonMatchesAction};
 use App\Actions\NotificationGroup\ListNotificationGroupsAction;
 use App\Actions\NotificationGroup\SendNotificationAction;
-use App\Actions\Building\{ListBuildingsAction, UpdateBuildingAction, CreateBuildingAction};
+use App\Actions\Building\{ListBuildingsAction, UpdateBuildingAction, CreateBuildingAction, ViewBuildingAction, SelectBuildingAction};
 use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
 use App\Actions\Person\ListCurrentVisitorsAction;
 use App\Actions\Person\ListFrequentVisitorsAction;
@@ -142,7 +142,9 @@ return function (App $app) {
         $group->group('/buildings', function (Group $group) {
             $group->get('', ListBuildingsAction::class);
             $group->post('', CreateBuildingAction::class);
+            $group->get('/{id}', ViewBuildingAction::class);
             $group->put('/{id}', UpdateBuildingAction::class);
+            $group->post('/{id}/tokens', SelectBuildingAction::class);
         });
 
         $group->post('/id-scan', IDScanAction::class);
