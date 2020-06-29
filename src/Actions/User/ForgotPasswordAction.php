@@ -50,21 +50,3 @@ class ForgotPasswordAction extends Action
      * )
      */
 }
- /**
-     * @OA\Post(
-     *     path="/forgot-password",
-     *     tags={"forgot-password"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="forgot-password",
-     *         @OA\MediaType(
-     *             mediaType="application/json"
-     *         )
-     *     ),
-     *     @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="application/json"
-     *         )
-     *     )
-     * )
-     */

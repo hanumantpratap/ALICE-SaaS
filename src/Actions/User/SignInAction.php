@@ -71,21 +71,3 @@ class SignInAction extends Action
      * )
      */
 }
-/**
-     * @OA\Post(
-     *     path="/sign-in",
-     *     tags={"Sign-in"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Sign In",
-     *         @OA\MediaType(
-     *             mediaType="application/json"
-     *         )
-     *     ),
-     *     @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="application/json"
-     *         )
-     *     )
-     * )
-     */
