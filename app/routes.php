@@ -21,6 +21,8 @@ use App\Actions\Visit\CreateVisitReasonAction;
 use App\Actions\Visit\UpdateVisitReasonAction;
 use App\Actions\Visit\ListVisitorTypesAction;
 use App\Actions\Visit\ListVisitReasonsAction;
+use App\Actions\Visit\AddPersonToVisitAction;
+use App\Actions\Visit\AddStudentToVisitAction;
 use App\Actions\Visit\ResetScenarioData;
 use App\Actions\User\{SignInAction, ForgotPasswordAction, ResetPasswordAction, ListUsersAction, ViewUserAction, AddNotificationGroupAction, CreateNewUserAction, UpdateUserAction, UpdateUserNotificationGroups, ToggleUserEnabled, ResendUserInviteAction};
 use App\Actions\Visit\AddVisitBadgeAction;
@@ -71,6 +73,8 @@ return function (App $app) {
             $group->post('', CreateVisitAction::class);
             $group->put('/{id}', UpdateVisitAction::class);
             $group->post('/{id}/badge', AddVisitBadgeAction::class);
+            $group->post('/{id}/people', AddPersonToVisitAction::class);
+            $group->post('/{id}/students', AddStudentToVisitAction::class);
             $group->put('/{id}/checkout', CheckOutAction::class);
             $group->put('/{id}/approvevisit', ApproveVisitAction::class);
             $group->delete('/scenarioData', ResetScenarioData::class);
