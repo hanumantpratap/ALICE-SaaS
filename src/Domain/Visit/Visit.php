@@ -6,6 +6,7 @@ namespace App\Domain\Visit;
 use DateTime;
 use App\Domain\Building\Building;
 use App\Domain\Person\Person;
+use App\Domain\Student\Student;
 use App\Domain\User\User;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
@@ -109,6 +110,16 @@ class Visit {
   protected Collection $badges;
 
   public array $badgeArray;
+  
+  /** @OneToMany(targetEntity="\App\Domain\Visit\VisitHasPeople", mappedBy="visit", cascade={"persist", "remove"}, orphanRemoval=true) */
+  protected Collection $visitPeople;
+
+  public array $visitPeopleArray;
+ 
+  /** @OneToMany(targetEntity="\App\Domain\Visit\VisitHasStudents", mappedBy="visit", cascade={"persist", "remove"}, orphanRemoval=true) */
+  protected Collection $visitStudents;
+
+  public array $visitStudentsArray;
 
   /**
    * @ManyToOne(targetEntity="\App\Domain\Person\Person")
@@ -184,6 +195,41 @@ class Visit {
 
     return $visitor;
   }
+
+  
+
+  public function addPersonToVisit(Person $person) {
+    $visitHasPeople = new VisitHasPeople( $this, $person );
+    $this->visitPeople->add($visitHasPeople);
+  }
+
+  public function getVisitPeople() {
+    $visitPeople = new ArrayCollection();
+
+    foreach($this->$visitPeople as $visitHasPeople) {
+      $visitPeople->add($visitHasPeople->getPerson());
+    }
+
+    return $visitPeople;
+  }
+
+
+  public function addStudentToVisit(Student $person) {
+    $visitHasStudents = new VisitHasStudents( $this, $person );
+    $this->visitStudents->add($visitHasStudents);
+  }
+
+  public function getVisitStudents() {
+    $visitStudents = new ArrayCollection();
+
+    foreach($this->$visitStudents as $visitHasStudents) {
+      $visitStudents->add($visitHasStudents->getStudent());
+    }
+
+    return $visitStudents;
+  }
+
+
 
   public function getVisitor() {
     $person = $this->getPerson();
