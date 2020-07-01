@@ -21,7 +21,7 @@ class ResendUserInviteAction extends UserAction
             'type' => 'invite'
         ];
 
-        $token = $this->tokenProcessor->create((object) $token, 60*10);
+        $token = $this->tokenProcessor->create((object) $token, 60*60*72);
         $clientUrl = $this->container->get('settings')['clientUrl'];
 
         $sender = 'Visitor Management <noreply@navigate360.com>';

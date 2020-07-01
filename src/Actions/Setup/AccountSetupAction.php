@@ -49,7 +49,7 @@ class AccountSetupAction extends SetupAction
             'admin' => 'f'
         ];
 
-        $newToken = $this->tokenProcessor->create((object) $authToken, 60*10, true);
+        $newToken = $this->tokenProcessor->create((object) $authToken, 60*60*24, true);
 
         return $this->respondWithData(['token' => $newToken, 'tokenDecoded' => $authToken]);
     }

@@ -47,7 +47,8 @@ class SignInAction extends Action
         $token->iat = null;
         $token->exp = null;
 
-        $new_token = $this->tokenProcessor->create($token, 60*10, true);
+        // create auth tokens - 24 hour expiration
+        $new_token = $this->tokenProcessor->create($token, 60*60*24, true);
 
         return $this->respondWithData(['token' => $new_token, 'tokenDecoded' => $token]);
     }
