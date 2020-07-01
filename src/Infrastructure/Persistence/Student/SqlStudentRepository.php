@@ -5,6 +5,7 @@ namespace App\Infrastructure\Persistence\Student;
 
 use App\Exceptions;
 use App\Domain\Student\Student;
+use App\Domain\Student\StudentWithParents;
 use App\Domain\Student\StudentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Criteria;
@@ -82,7 +83,15 @@ final class SqlStudentRepository implements StudentRepository
       return $qb->getQuery()->getResult() ?? [];
   }
 
+    public function findStudentsWithParents(): array {
+      $query = $this->entityManager->createQueryBuilder()
+                    ->from(StudentWithParents::class, "s")
+                    ->leftJoin("s.parentAssociations", "p")
+                    ->select('s, p')
+                    ->where('s.inactive = false');
 
+      return $query->getQuery()->getResult() ?? [];
+    }
   
     /**
      * @inheritdoc

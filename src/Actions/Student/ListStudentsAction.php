@@ -11,7 +11,12 @@ class ListStudentsAction extends StudentAction
     {
         $params = $this->request->getQueryParams();
 
-        $students = $this->studentRepository->findActive();
+        if (isset($params['includeParents']) && $params['includeParents'] == true) {
+            $students = $this->studentRepository->findStudentsWithParents();
+        }
+        else {
+            $students = $this->studentRepository->findActive();
+        }
 
         $this->logger->info("Students list was viewed.");
 
