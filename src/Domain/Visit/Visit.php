@@ -261,6 +261,9 @@ class Visit {
 
     $visitor->notes = $person->getNotes();
 
+    $sexOffenderMatch = $person->getSexOffenderMatch();
+    $visitor->sexOffenderMatch = $sexOffenderMatch;
+
     return $visitor;
   }
 

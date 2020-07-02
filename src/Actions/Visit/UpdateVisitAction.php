@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Actions\Visit;
 
 use Psr\Http\Message\ResponseInterface as Response;
+use DateTime;
 
 class UpdateVisitAction extends VisitAction
 {
@@ -47,6 +48,10 @@ class UpdateVisitAction extends VisitAction
         }
         else {
             $visit->clearVisiting();
+        }
+
+        if (!$visit->checkIn) {
+            $visit->setCheckIn(new DateTime()); //check in if not already
         }
 
         $this->visitRepository->save($visit);
