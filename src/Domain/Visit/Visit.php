@@ -133,6 +133,14 @@ class Visit {
     return $this->id;
   }
 
+  public function getApproved() {
+    return $this->approved;
+  }
+
+  public function setApproved(bool $approved) {
+    $this->approved = $approved;
+  }
+
   public function getApprovedByUser() {
     return $this->approvedByUser;
   }

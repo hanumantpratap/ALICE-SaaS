@@ -5,6 +5,7 @@ namespace App\Actions\Visit;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use DateTime;
+use App\Exceptions\ForbiddenException;
 
 class UpdateVisitAction extends VisitAction
 {
@@ -16,8 +17,24 @@ class UpdateVisitAction extends VisitAction
 
         $visitId = (int) $this->resolveArg('id');
         $visit = $this->visitRepository->findVisitOfId($visitId);
+        $person = $visit->getPerson();
 
         $this->logger->info("Updating Visit of id `${visitId}`");
+
+        if (!$visit->checkIn) {
+            if ($person->getSexOffenderMatch() !== null && !$visit->getApproved()) {
+                if (isset($formData->approvedBy)) {
+                    $user = $this->userRepository->findUserOfId((int) $formData->approvedBy);
+                    $visit->setApprovedByUser( $user );
+                    $visit->setApproved(true);
+                }
+                else {
+                    throw new ForbiddenException("Visitor cannot be checked in without approval.");
+                }
+            }
+
+            $visit->setCheckIn(new DateTime()); //check in if not already
+        }
 
         $reasonId = $formData->reasonId;
         $reason = $this->visitReasonRepository->findVisitReasonOfId($reasonId);
