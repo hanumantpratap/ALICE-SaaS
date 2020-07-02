@@ -80,11 +80,13 @@ return function (App $app) {
             $group->put('/{id}/approvevisit', ApproveVisitAction::class);
             $group->delete('/scenarioData', ResetScenarioData::class);
         });
+
         $group->group('/visitortype', function (Group $group) {
             $group->get('', ListVisitorTypesAction::class);
             $group->put('/{id}', UpdateVisitorTypeAction::class);
             $group->post('', CreateVisitorTypeAction::class);
         });
+
         $group->group('/visitreason', function (Group $group) {
             $group->get('', ListVisitReasonsAction::class);
             $group->put('/{id}', UpdateVisitReasonAction::class);

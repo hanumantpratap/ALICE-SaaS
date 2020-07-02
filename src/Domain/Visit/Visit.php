@@ -196,8 +196,6 @@ class Visit {
     return $visitor;
   }
 
-  
-
   public function addPersonToVisit(Person $person) {
     $visitHasPeople = new VisitHasPeople( $this, $person );
     $this->visitPeople->add($visitHasPeople);
@@ -212,7 +210,6 @@ class Visit {
 
     return $visitPeople;
   }
-
 
   public function addStudentToVisit(Student $person) {
     $visitHasStudents = new VisitHasStudents( $this, $person );
@@ -229,7 +226,10 @@ class Visit {
     return $visitStudents;
   }
 
-
+  public function clearVisiting() {
+    $this->visitPeople->clear();
+    $this->visitStudents->clear();
+  }
 
   public function getVisitor() {
     $person = $this->getPerson();
