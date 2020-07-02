@@ -36,6 +36,14 @@ class ParentAssociation {
   /** @Column(name="association_type_id") */
   public int $associationTypeId;
 
+  
+  public function __construct(Student $student, Person $person, int $associationTypeId )
+  {
+      $this->student = $student;
+      $this->person = $person;
+      $this->associationTypeId = $associationTypeId;
+  }
+
 
   public function getStudent() {
     return $this->student;

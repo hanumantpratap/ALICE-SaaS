@@ -8,6 +8,7 @@ use App\Actions\Student\ListStudentsAction;
 use App\Actions\Student\SearchStudentsAction;
 use App\Actions\Student\ViewStudentAction;
 use App\Actions\Student\UpdateStudentAction;
+use App\Actions\Student\AddParentToStudentAction;
 use App\Actions\Person\ViewVisitorSettingsAction;
 use App\Actions\Person\SetVisitorSettingsAction;
 use App\Actions\Person\AddStudentAction;
@@ -140,6 +141,7 @@ return function (App $app) {
             $group->get('/{id}', ViewStudentAction::class);
             $group->get('/search/query', SearchStudentsAction::class);
             $group->put('/{id}', UpdateStudentAction::class);
+            $group->post('/{id}/people', AddParentToStudentAction::class);
         });
 
         $group->group('/notificationGroups', function (Group $group) {
