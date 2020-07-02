@@ -27,6 +27,7 @@ use App\Actions\Visit\ResetScenarioData;
 use App\Actions\User\{SignInAction, ForgotPasswordAction, ResetPasswordAction, ListUsersAction, ViewUserAction, AddNotificationGroupAction, CreateNewUserAction, UpdateUserAction, UpdateUserNotificationGroups, ToggleUserEnabled, ResendUserInviteAction};
 use App\Actions\Visit\AddVisitBadgeAction;
 use App\Actions\Visit\UpdateVisitAction;
+use App\Actions\Visit\CheckOutAction;
 use App\Actions\ID\IDScanAction;
 use App\Actions\Person\AddBlacklistAction;
 use App\Actions\Person\DeleteBlacklistAction;
