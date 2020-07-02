@@ -30,6 +30,25 @@ class UpdateVisitAction extends VisitAction
             $visit->setNotes($formData->notes);
         }
 
+        //if (isset($formData->visiting) && is_array($formData->visiting)) {
+        if (isset($formData->visiting)) {
+            $visiting = $formData->visiting;
+            $visit->clearVisiting();
+            $this->visitRepository->save($visit);
+
+            if ($visiting->type == "person") {
+                $person = $this->personRepository->findPersonOfId((int) $visiting->id);
+                $visit->addPersonToVisit($person);
+            }
+            else {
+                $student = $this->studentRepository->findStudentOfId((int) $visiting->id);
+                $visit->addStudentToVisit($student);
+            }
+        }
+        else {
+            $visit->clearVisiting();
+        }
+
         $this->visitRepository->save($visit);
 
         return $this->respondWithData();
@@ -72,6 +91,11 @@ class UpdateVisitAction extends VisitAction
  *                     property="notes",
  *                     description="Visit notes.",
  *                     type="string"
+ *                 ),
+ *                  @OA\Property(
+ *                     property="visiting",
+ *                     description="Who visitor is visiting.",
+ *                     type="object"
  *                 ),
  *              )
  *         ),
