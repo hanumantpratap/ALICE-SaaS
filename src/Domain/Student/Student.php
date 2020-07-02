@@ -14,12 +14,13 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use JsonSerializable;
 
 /**
  * @Entity
  * @Table(name="students", schema="respond")
  */
-class Student {
+class Student implements JsonSerializable{
   /**
    * @Id
    * @GeneratedValue
@@ -67,8 +68,6 @@ class Student {
     return $this->id;
   }
 
-
-
   public function getParentAssociations() {
     if( $this->parentAssociationArray === null ) {
       $this->parentAssociationArray = array();
@@ -88,5 +87,20 @@ class Student {
     $this->parentAssociations->add($parentAssociation);
   }
 
+  public function jsonSerialize() {
+      return [
+        'id' => $this->id,
+        'firstName' => $this->firstName,
+        'lastName' => $this->lastName,
+        'middleInitial' => $this->middleInitial,
+        'suffix' => $this->suffix,
+        'studentNumber' => $this->studentNumber,
+        'gender' => $this->gender,
+        'dob' => $this->dob,
+        'grade' => $this->grade,
+        'inactive' => $this->inactive,
+        'parentAssociationArray' => $this->parentAssociationArray
+      ];
+  }
 
 }

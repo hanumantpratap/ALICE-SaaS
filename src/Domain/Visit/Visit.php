@@ -133,6 +133,14 @@ class Visit {
     return $this->id;
   }
 
+  public function getApproved() {
+    return $this->approved;
+  }
+
+  public function setApproved(bool $approved) {
+    $this->approved = $approved;
+  }
+
   public function getApprovedByUser() {
     return $this->approvedByUser;
   }
@@ -196,8 +204,6 @@ class Visit {
     return $visitor;
   }
 
-  
-
   public function addPersonToVisit(Person $person) {
     $visitHasPeople = new VisitHasPeople( $this, $person );
     $this->visitPeople->add($visitHasPeople);
@@ -212,7 +218,6 @@ class Visit {
 
     return $visitPeople;
   }
-
 
   public function addStudentToVisit(Student $person) {
     $visitHasStudents = new VisitHasStudents( $this, $person );
@@ -229,7 +234,10 @@ class Visit {
     return $visitStudents;
   }
 
-
+  public function clearVisiting() {
+    $this->visitPeople->clear();
+    $this->visitStudents->clear();
+  }
 
   public function getVisitor() {
     $person = $this->getPerson();
@@ -260,6 +268,9 @@ class Visit {
     $visitor->students = $students->isEmpty() ? null : $students->toArray();
 
     $visitor->notes = $person->getNotes();
+
+    $sexOffenderMatch = $person->getSexOffenderMatch();
+    $visitor->sexOffenderMatch = $sexOffenderMatch;
 
     return $visitor;
   }

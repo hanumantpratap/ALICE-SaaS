@@ -313,5 +313,6 @@ class Person {
     $this->studentAssociations = new ArrayCollection();
     $this->sexOffenderNonMatches = new ArrayCollection();
     $this->address = null;
+    $this->sexOffenderMatch = null;
   }
 }

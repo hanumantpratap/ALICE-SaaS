@@ -63,7 +63,7 @@ class CreateVisitAction extends Action
                 }
                 catch (\Exception $e) {
                     $formData->firstName = "Charles";
-                    $formData->lastName = "Morgan";
+                    $formData->lastName = "Morgano";
                     $formData->email = "cmorgan@email.com";
                     $formData->birthDate = "12-13-1985";
                     $formData->address = "123 West Main Street Boston, MA 12345";

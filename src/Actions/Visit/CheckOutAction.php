@@ -16,7 +16,7 @@ class CheckOutAction extends VisitAction
         $this->logger->info("Checking out visitId: " . $visitId);
 
         $visit = $this->visitRepository->findVisitOfId($visitId);
-        $visit->checkedOutBy = $formData->userId;
+        $visit->checkedOutBy = $this->token->id;
 
         if (!isset($formData->checkOut)) {
           $visit->checkOut = new DateTime();
