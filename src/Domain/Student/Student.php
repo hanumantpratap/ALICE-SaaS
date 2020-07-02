@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Domain\Student;
 
 use DateTime;
+use App\Domain\Person\Person;
+use App\Domain\Person\ParentAssociation;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
@@ -79,4 +81,12 @@ class Student {
 
     return $this->parentAssociationArray;
   }
+
+
+  public function addParentAssociation(Person $person, int $associationTypeId ) {
+    $parentAssociation = new ParentAssociation( $this, $person, $associationTypeId );
+    $this->parentAssociations->add($parentAssociation);
+  }
+
+
 }
