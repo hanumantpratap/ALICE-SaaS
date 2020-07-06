@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: 837238518041.dkr.ecr.us-east-2.amazonaws.com/vms/visitor-management-service
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 env:
   - name: "LOG_TARGET"
@@ -44,6 +44,12 @@ service:
   port: 80
   annotations:
     external-dns.alpha.kubernetes.io/hostname: api.navigate360vm.com
+    # Note that the backend talks over HTTP.
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    # TODO: Fill in with the ARN of your certificate.
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: 	arn:aws:acm:us-east-2:837238518041:certificate/b38f7266-2d52-4a62-a4fc-76ba1d5e81a0
+    # Only run SSL on the port named "https" below.
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
 
 ingress:
   enabled: false
