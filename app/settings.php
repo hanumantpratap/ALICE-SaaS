@@ -9,40 +9,40 @@ return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions(
         [
             'settings' => [
-                'environment' => $_ENV['ENV'] ?? 'production',
-                'clientUrl' => $_ENV['CLIENT_URL'] ?? 'http://localhost:3000',
-                'authUrl' => $_ENV['AUTH_URL'] ?? 'https://test-auth.navigatep.com',
-                'displayErrorDetails' => $_ENV['ENV'] == 'dev',
-                'logSql' => $_ENV['LOG_SQL'] == 'true',
+                'environment' => getenv('ENV') ?? 'production',
+                'clientUrl' => getenv('CLIENT_URL') ?? 'http://localhost:3000',
+                'authUrl' => getenv('AUTH_URL') ?? 'https://test-auth.navigatep.com',
+                'displayErrorDetails' => getenv('ENV') == 'dev',
+                'logSql' => getenv('LOG_SQL') != 'true',
                 'logger' => [
                     'name' => 'visitor-management-service',
-                    'path' => $_ENV['LOG_TARGET'] ?? 'php://stdout',
-                    'level' => $_ENV['LOG_LEVEL'] ?? Logger::DEBUG,
+                    'path' => getenv('LOG_TARGET') ?? 'php://stdout',
+                    'level' => getenv('LOG_LEVEL') ?? Logger::DEBUG,
                 ],
                 'doctrine' => [
-                    'dev_mode' => $_ENV['ENV'] ?? 'dev',
+                    'dev_mode' => getenv('ENV') ?? 'dev',
                     'cache_dir' => APP_ROOT . 'var/doctrine',
                     'metadata_dirs' => [APP_ROOT . 'src/Domain'],
                     'connection' => [
                         'driver' => 'pdo_pgsql',
                         'charset' => 'utf-8',
-                        'host' => $_ENV['POSTGRES_HOST'] ?? 'localhost',
-                        'port' => $_ENV['POSTGRES_PORT'] ?? 3306,
-                        'dbname' => $_ENV['POSTGRES_DB'] ?? 'navigate',
-                        'user' => $_ENV['POSTGRES_USER'] ?? 'user',
-                        'password' => $_ENV['POSTGRES_PASSWORD'] ?? 'password'
+                        'host' => getenv('POSTGRES_HOST') ?? 'localhost',
+                        'port' => getenv('POSTGRES_PORT') ?? 3306,
+                        'dbname' => getenv('POSTGRES_DB') ?? 'navigate',
+                        'user' => getenv('POSTGRES_USER') ?? 'user',
+                        'password' => getenv('POSTGRES_PASSWORD') ?? 'password'
                     ]
                 ],
                 'database' => [
-                    'host' => $_ENV['POSTGRES_HOST'] ?? 'localhost',
-                    'port' => $_ENV['POSTGRES_PORT'] ?? 3306,
-                    'dbname' => $_ENV['POSTGRES_DB'] ?? 'navigate',
-                    'user' => $_ENV['POSTGRES_USER'] ?? 'user',
-                    'password' => $_ENV['POSTGRES_PASSWORD'] ?? 'password'
+                    'host' => getenv('POSTGRES_HOST') ?? 'localhost',
+                    'port' => getenv('POSTGRES_PORT') ?? 3306,
+                    'dbname' => getenv('POSTGRES_DB') ?? 'navigate',
+                    'user' => getenv('POSTGRES_USER') ?? 'user',
+                    'password' => getenv('POSTGRES_PASSWORD') ?? 'password'
                 ],
                 'redis' => [
-                    'host' => $_ENV['REDIS_HOST'] ?? 'localhost',
-                    'port' => $_ENV['REDIS_PORT'] ?? '6379'
+                    'host' => getenv('REDIS_HOST') ?? 'localhost',
+                    'port' => getenv('REDIS_PORT') ?? '6379'
                 ]
             ],
         ]
