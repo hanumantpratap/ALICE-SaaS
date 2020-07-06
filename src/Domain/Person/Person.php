@@ -71,7 +71,7 @@ class Person {
   public ?PersonAddress $address;
 
   /** @OneToOne(targetEntity="VisitorSettings", mappedBy="person", cascade={"persist", "remove"}) */
-  protected ?VisitorSettings $visitorSettings;
+  public ?VisitorSettings $visitorSettings;
 
   /** @OneToMany(targetEntity="\App\Domain\Visit\Visit", mappedBy="person", cascade={"persist", "remove"}) */
   protected Collection $visits;
