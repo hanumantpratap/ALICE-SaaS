@@ -28,13 +28,19 @@ final class SqlUserRepository implements UserRepository
     }
 
     public function findAll(): array {
-      return $this->repository->findAll();
+      $query = $this->entityManager->createQueryBuilder("u")
+                    ->from(User::class, "u")
+                    ->select('u')
+                    ->where('u.accessType = 2')
+                    ->orWhere('u.accessType = 4');
+
+      return $query->getQuery()->getResult();
     }
 
     // Retrieving a list of users with their notification group is very slow through doctrine, as it makes a separate query call for every single user.
     // This function grabs everything in two calls and merges them together.
     public function findAllWithNotificationGroups(): array {
-      $users = $this->repository->findAll();
+      $users = $this->findAll();
 
       // get notification groups assignments
       $sql = "SELECT
