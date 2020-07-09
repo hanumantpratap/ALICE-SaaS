@@ -174,6 +174,7 @@ final class SqlPersonRepository implements PersonRepository
                         ->from(Person::class, "p")
                         ->join("p.visits", "v")
                         ->where("v.checkOut IS NULL")
+                        ->andWhere("v.checkIn IS NOT NULL")
                         ->andWhere("v.buildingId = :buildingId")
                         ->setParameter("buildingId", $buildingId)
                         ->groupBy("p.personId")
