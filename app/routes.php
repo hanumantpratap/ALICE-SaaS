@@ -45,7 +45,7 @@ use App\Actions\Building\{ListBuildingsAction, UpdateBuildingAction, CreateBuild
 use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
 use App\Actions\Person\ListCurrentVisitorsAction;
 use App\Actions\Person\ListFrequentVisitorsAction;
-use App\Actions\Misc\SearchPeopleAndStudentsAction;
+use App\Actions\Misc\{SearchPeopleAndStudentsAction, AppInitialDataAction};
 use App\Actions\Visit\ApproveVisitAction;
 use App\Actions\Setup\{AccountSetupAction};
 use App\Middleware\AuthMiddleware;
@@ -70,6 +70,8 @@ return function (App $app) {
 
     /* Routes that require signed in user */
     $app->group('', function (Group $group) {
+        $group->get('/app-init', AppInitialDataAction::class);
+
         $group->group('/visits', function (Group $group) {
             $group->get('', ListVisitsAction::class);
             $group->get('/{id}', ViewVisitAction::class);
