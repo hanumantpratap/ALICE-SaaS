@@ -33,7 +33,7 @@ class UpdateVisitorTypeAction extends VisitorTypeAction
 }
 /**
  * @OA\Put(
- *     path="/visitortype/{visitortypeId}",
+ *     path="/visitor-types/{visitortypeId}",
  *     tags={"visitor-type"},
  *      @OA\Parameter(
  *         name="visitortypeId",

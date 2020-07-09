@@ -32,7 +32,7 @@ class CreateVisitorTypeAction extends VisitorTypeAction
 }
 /**
  * @OA\Post(
- *     path="/visitortype",
+ *     path="/visitor-types",
  *     tags={"visitor-type"},
  *     @OA\Response(
  *         response=200,
