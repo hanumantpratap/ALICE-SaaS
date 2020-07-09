@@ -31,10 +31,9 @@ class UpdateBlacklistAction extends PersonAction
 
     $blItem = $this->repo->findOneBy(["id" => $data->id]);
 
-    $blItem->notes = $data->notes;
+    $blItem->reason = $data->reason;
     $blItem->userId = (int) $this->token->id;
     $blItem->buildingId = (int) $this->token->building;
-    $blItem->reason = "";
     $blItem->updatedAt = new DateTime();
 
     $this->em->flush();
