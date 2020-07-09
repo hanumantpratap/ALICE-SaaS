@@ -83,13 +83,13 @@ return function (App $app) {
             $group->delete('/scenarioData', ResetScenarioData::class);
         });
 
-        $group->group('/visitortype', function (Group $group) {
+        $group->group('/visitor-types', function (Group $group) {
             $group->get('', ListVisitorTypesAction::class);
             $group->put('/{id}', UpdateVisitorTypeAction::class);
             $group->post('', CreateVisitorTypeAction::class);
         });
 
-        $group->group('/visitreason', function (Group $group) {
+        $group->group('/visit-reasons', function (Group $group) {
             $group->get('', ListVisitReasonsAction::class);
             $group->put('/{id}', UpdateVisitReasonAction::class);
             $group->post('', CreateVisitReasonAction::class);

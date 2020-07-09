@@ -3,20 +3,11 @@ declare(strict_types=1);
 
 namespace App\Domain\Visit;
 
-use DateTime;
-use App\Domain\Person\Person;
-use App\Domain\User\User;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\DBAL\Types\VarDateTimeType;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Entity
@@ -55,5 +46,8 @@ class VisitorType {
   public function setInactive(bool $inactive) {
     $this->inactive = $inactive;
   }
-  
+
+  public function __construct() {
+    $this->inactive = false;
+  }
 }
