@@ -45,7 +45,7 @@ use App\Actions\Building\{ListBuildingsAction, UpdateBuildingAction, CreateBuild
 use App\Actions\Dev\Redis\{RedisSetAction, RedisGetAction, RedisListAction};
 use App\Actions\Person\ListCurrentVisitorsAction;
 use App\Actions\Person\ListFrequentVisitorsAction;
-use App\Actions\Misc\SearchPeopleAndStudentsAction;
+use App\Actions\Misc\{SearchPeopleAndStudentsAction, AppInitialDataAction};
 use App\Actions\Visit\ApproveVisitAction;
 use App\Actions\Setup\{AccountSetupAction};
 use App\Middleware\AuthMiddleware;
@@ -70,6 +70,8 @@ return function (App $app) {
 
     /* Routes that require signed in user */
     $app->group('', function (Group $group) {
+        $group->get('/app-init', AppInitialDataAction::class);
+
         $group->group('/visits', function (Group $group) {
             $group->get('', ListVisitsAction::class);
             $group->get('/{id}', ViewVisitAction::class);
@@ -83,13 +85,13 @@ return function (App $app) {
             $group->delete('/scenarioData', ResetScenarioData::class);
         });
 
-        $group->group('/visitortype', function (Group $group) {
+        $group->group('/visitor-types', function (Group $group) {
             $group->get('', ListVisitorTypesAction::class);
             $group->put('/{id}', UpdateVisitorTypeAction::class);
             $group->post('', CreateVisitorTypeAction::class);
         });
 
-        $group->group('/visitreason', function (Group $group) {
+        $group->group('/visit-reasons', function (Group $group) {
             $group->get('', ListVisitReasonsAction::class);
             $group->put('/{id}', UpdateVisitReasonAction::class);
             $group->post('', CreateVisitReasonAction::class);

@@ -18,7 +18,7 @@ class ListVisitReasonsAction extends VisitReasonAction
 
     /**
      * @OA\Get(
-     *     path="/visitreason",
+     *     path="/visit-reasons",
      *     tags={"visit-reason"},
      *     @OA\Parameter(
      *         name="visitor_name",

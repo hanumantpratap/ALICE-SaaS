@@ -32,7 +32,7 @@ class CreateVisitReasonAction extends VisitReasonAction
 }
 /**
  * @OA\Post(
- *     path="/visitreason",
+ *     path="/visit-reasons",
  *     tags={"visit-reason"},
  *     @OA\Response(
  *         response=200,

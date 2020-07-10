@@ -34,7 +34,7 @@ class BlacklistItem {
   public ?string $reason;
 
   /** @Column */
-  public ?string $notes;
+  protected ?string $notes;
 
   /** @Column(name="user_id") */
   public int $userId;

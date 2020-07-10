@@ -176,7 +176,6 @@ class CreateVisitAction extends Action
             if (isset($formData->blacklist)) {
                 $blItem = new BlacklistItem();
                 $blItem->personId = $person->getPersonId();
-                $blItem->notes = 'Notes';
                 $blItem->userId = (int) $this->token->id;
                 $blItem->buildingId = (int) $this->token->building;
                 $blItem->reason = "Reason";

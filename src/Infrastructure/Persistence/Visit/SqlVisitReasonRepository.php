@@ -31,7 +31,7 @@ final class SqlVisitReasonRepository implements VisitReasonRepository
      * @inheritdoc
      */
     public function findAll(): array {
-        return $this->repository->findAll();
+        return $this->repository->findBy([], ['id' => 'ASC']);
     }
 
     /**

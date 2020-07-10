@@ -18,7 +18,7 @@ class ListVisitorTypesAction extends VisitorTypeAction
   
     /**
      * @OA\Get(
-     *     path="/visitortype",
+     *     path="/visitor-types",
      *     tags={"visitor-type"},
      *     @OA\Parameter(
      *         name="visitor_name",
