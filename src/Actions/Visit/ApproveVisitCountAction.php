@@ -21,14 +21,13 @@ class ApproveVisitCountAction extends VisitAction
 
         if (!isset($building->id)) throw new HttpBadRequestException( $this->request, "Wrong Parameter, building_id" );
         $filterData['building_id'] = $buildingId;
-        if(isset($this->request->get('start_date'))){
+        if($this->request->get('start_date')){
             $filterData['start_date'] = $this->request->get('start_date');
         }
-        if(isset($this->request->get('end_date'))){
+        if($this->request->get('end_date')){
             $filterData['end_date'] = $this->request->get('end_date');
         }
-        if(isset($this->request->get('start_date')) && isset($this->request->get('end_date')) && 
-        $this->request->get('start_date') > $this->request->get('end_date')){
+        if($this->request->get('start_date') > $this->request->get('end_date')){
             throw new HttpBadRequestException( $this->request, "start_date could be smaller that end_date" );
         }
         $totalCount = $this->visitRepository->findAllowedVisitOfBuildingId($filterData);

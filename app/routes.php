@@ -24,6 +24,7 @@ use App\Actions\Visit\ListVisitorTypesAction;
 use App\Actions\Visit\ListVisitReasonsAction;
 use App\Actions\Visit\AddPersonToVisitAction;
 use App\Actions\Visit\AddStudentToVisitAction;
+use App\Actions\Visit\ApproveVisitCountAction;
 use App\Actions\Visit\ResetScenarioData;
 use App\Actions\User\{SignInAction, ForgotPasswordAction, ResetPasswordAction, ListUsersAction, ViewUserAction, AddNotificationGroupAction, CreateNewUserAction, UpdateUserAction, UpdateUserNotificationGroups, ToggleUserEnabled, ResendUserInviteAction};
 use App\Actions\Visit\AddVisitBadgeAction;
