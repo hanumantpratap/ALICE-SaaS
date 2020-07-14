@@ -75,4 +75,28 @@ final class SqlVisitRepository implements VisitRepository
             throw $ex;
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function findAllowedVisitOfBuildingId($filter_data):int{      
+        $sql="Select 
+        count(*) AS user_count
+        FROM visitor_management.visits AS visitor
+        where visitor.approved=true";
+        if(count($filter_data) > 0) {
+            if(!empty($filter_data['building_id'])) {
+                $sql .= " AND visitor.building_id = {$filter_data['building_id']}"; 
+            }
+            if(!empty($filter_data['start_date'])) {
+                $sql .= " AND visitor.date_created >= {$filter_data['start_date']}"; 
+            }
+            if(!empty($filter_data['end_date'])) {
+                $sql .= " AND visitor.building_id <= {$filter_data['end_date']}"; 
+            }
+        }
+        $query = $this->entityManager->getConnection()->query($sql);
+        $totalVisitors = $query->fetchAll();
+        return $totalVisitors;
+    }
 }

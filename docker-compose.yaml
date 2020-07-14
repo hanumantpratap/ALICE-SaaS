@@ -9,7 +9,7 @@ services:
             docker: "true"
             ENV: "dev"
         ports:
-            - "${SERVICE_PORT:-8080}:80"
+            - "${SERVICE_PORT:-8085}:80"
         volumes:
             - ./app:/var/www/app
             - ./logs:/var/www/logs

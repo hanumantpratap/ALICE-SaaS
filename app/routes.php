@@ -82,6 +82,7 @@ return function (App $app) {
             $group->post('/{id}/students', AddStudentToVisitAction::class);
             $group->put('/{id}/checkout', CheckOutAction::class);
             $group->put('/{id}/approvevisit', ApproveVisitAction::class);
+            $group->get('/{building_id}/approvevisitcount', ApproveVisitCountAction::class);
             $group->delete('/scenarioData', ResetScenarioData::class);
         });
 

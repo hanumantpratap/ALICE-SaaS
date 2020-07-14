@@ -15,4 +15,10 @@ interface VisitRepository
      * @return Visit
      */
     public function findVisitOfId(int $id): Visit;
+
+    /**
+     * @param mixed $filter_data     
+     * @return int
+     */
+    public function findAllowedVisitOfBuildingId($filter_data): int;
 }
