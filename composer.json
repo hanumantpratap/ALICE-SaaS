@@ -6,7 +6,7 @@
         "aws/aws-sdk-php": "^3.140",
         "doctrine/collections": "1.6.4",
         "doctrine/orm": "^2.7",
-        "firebase/php-jwt": "^5.2",
+        "firebase/php-jwt": "^6.0",
         "guzzlehttp/guzzle": "~6.0",
         "monolog/monolog": "^1.24",
         "php-di/php-di": "^6.0",
